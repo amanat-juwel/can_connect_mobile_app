@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "extends": ["@react-native", "plugin:prettier/recommended"],
+  "rules": {
+    "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
+    "react/react-in-jsx-scope": "off"
+  }
+}
