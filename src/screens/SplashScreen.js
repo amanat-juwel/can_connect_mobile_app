@@ -7,10 +7,10 @@ const SplashScreen = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('WelcomeScree'); // Navigate to WelcomeScreen after 5 seconds
-    }, 5000); // 5000 milliseconds = 5 seconds
+      navigation.replace('WelcomeScree'); 
+    }, 10000); 
 
-    return () => clearTimeout(timer); // Clear the timer on component unmount
+    return () => clearTimeout(timer); 
   }, [navigation]);
 
   return (
