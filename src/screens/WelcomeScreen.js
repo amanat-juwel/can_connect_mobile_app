@@ -6,15 +6,23 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import CustomButton from '../components/CustomButton';
+import ClickableTextButton from '../components/ClickableTextButton';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 const WelcomeScreen = () => {
   const { width, height } = Dimensions.get('window');
+  const navigation = useNavigation(); // Access navigation object
 
   const imageWidth = width * 0.38 * 0.7;
   const imageHeight = imageWidth * (138 / 184);
+
+  const handleCreateAccountPress = () => {
+    navigation.navigate('CreatAccountScreen'); // Navigate to 'CreatAccountScreen'
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -36,14 +44,18 @@ const WelcomeScreen = () => {
         style={styles.gradient}
       />
       <View style={styles.iconContainer}>
-        
-        <View style={[styles.banner, {height: height/2.1, width: width, alignItems: 'center'}]} >
-            <Image
-              source={require('../../assets/bannerImg.png')}
-              style={[styles.banner, { width: width * 0.9 }]}
-              resizeMode="contain"
-            />
-        </View>    
+        <View
+          style={[
+            styles.banner,
+            { height: height / 2.1, width: width, alignItems: 'center' },
+          ]}
+        >
+          <Image
+            source={require('../../assets/bannerImg.png')}
+            style={[styles.banner, { width: width * 0.9 }]}
+            resizeMode="contain"
+          />
+        </View>
         <Image
           source={require('../../assets/icon.png')}
           style={[{ width: imageWidth, height: imageHeight }]}
@@ -51,10 +63,21 @@ const WelcomeScreen = () => {
         {/* Welcome Text and Message */}
         <Text style={styles.welcomeText}>Welcome to Can Connect</Text>
         <Text style={styles.welcomeMsg}>Connecting People To Recycle</Text>
-        
       </View>
 
-      
+      <View style={styles.bottomView}>
+      <CustomButton
+        level="Create account"
+        onPress={handleCreateAccountPress}
+      />
+
+        <View style={styles.bottomPosition}>
+          <ClickableTextButton 
+            text="Log In" 
+            navigationPage="LoginScreen" 
+          />
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -67,7 +90,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'center',
     zIndex: 1,
-    marginTop: 0
+    marginTop: 0,
   },
   welcomeText: {
     fontSize: 30,
@@ -82,7 +105,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width, 
+    height: Dimensions.get('window').width,
   },
   topLeftImage: {
     position: 'absolute',
@@ -98,8 +121,17 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   banner: {
-    height: Dimensions.get('window').height/1.75
+    height: Dimensions.get('window').height / 1.75,
   },
+  bottomView: {
+    position: 'absolute',
+    bottom: 25, // Adjust as needed
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  bottomPosition: {
+    alignItems: 'center'
+  }
 });
 
 export default WelcomeScreen;
