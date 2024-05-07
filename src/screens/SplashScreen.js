@@ -25,19 +25,19 @@ const SplashScreen = () => {
       {/* Icon */}
 
       <Image
-        source={require('../../assets/icon.png')}
+        source={require('../../assets/images/icon.png')}
         style={[styles.image, { width: imageWidth, height: imageHeight }]}
       />
 
       {/* Image in top right corner */}
       <Image
-        source={require('../../assets/splashTopRight.png')}
+        source={require('../../assets/images/splashTopRight.png')}
         style={[styles.topRightImage, { opacity: 1.0 }]}
       />
 
       {/* Image in top left corner */}
       <Image
-        source={require('../../assets/splashTopLeft.png')}
+        source={require('../../assets/images/splashTopLeft.png')}
         style={[styles.topLeftImage, { opacity: 1.0 }]}
       />
 

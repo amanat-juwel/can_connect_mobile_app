@@ -28,13 +28,13 @@ const WelcomeScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Image in top right corner */}
       <Image
-        source={require('../../assets/splashTopRight.png')}
+        source={require('../../assets/images/splashTopRight.png')}
         style={[styles.topRightImage, { opacity: 1.0 }]}
       />
 
       {/* Image in top left corner */}
       <ImageBackground
-        source={require('../../assets/splashTopLeft.png')}
+        source={require('../../assets/images/splashTopLeft.png')}
         style={[styles.topLeftImage, { opacity: 1.0 }]}
       />
 
@@ -51,13 +51,13 @@ const WelcomeScreen = () => {
           ]}
         >
           <Image
-            source={require('../../assets/bannerImg.png')}
+            source={require('../../assets/images/bannerImg.png')}
             style={[styles.banner, { width: width * 0.9 }]}
             resizeMode="contain"
           />
         </View>
         <Image
-          source={require('../../assets/icon.png')}
+          source={require('../../assets/images/icon.png')}
           style={[{ width: imageWidth, height: imageHeight }]}
         />
         {/* Welcome Text and Message */}
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     position: 'absolute',
-    bottom: 25, // Adjust as needed
+    bottom: 20, // Adjust as needed
     width: '100%',
     paddingHorizontal: 20,
   },

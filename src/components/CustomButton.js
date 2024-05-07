@@ -24,7 +24,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff', // Adjust color as needed
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 20,
+    //fontFamily: 'DMSans'
+
   },
 });
 
