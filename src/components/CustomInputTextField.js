@@ -14,11 +14,14 @@ const CustomInputTextField = ({ placeholder, onChangeText, secureTextEntry }) =>
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 60,
+    borderColor: '#00A75A',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+    marginBottom: 15,
+    //paddingHorizontal: 10,
+    padding: 20,
+    flex:1,
+    borderRadius: 10,
   },
 });
 

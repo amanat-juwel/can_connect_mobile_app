@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView, Image, Dimensions  } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, Image, Dimensions } from 'react-native';
 import CustomInputTextField from '../components/CustomInputTextField';
 import CustomButton from '../components/CustomButton';
 
 const CreateAccount = () => {
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -22,47 +23,55 @@ const CreateAccount = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
-      <Image
-          source={require('../../assets/images/icon.png')}
-          style={[{ width: imageWidth, height: imageHeight }]}
-        />
 
-      <Text style={styles.headingLabel}>Create account</Text>
+      <Image
+        source={require('../../assets/images/icon.png')}
+        style={[{ width: imageWidth, height: imageHeight }]}
+      />
+
+      <Text style={[styles.headingLabel]}>Create account</Text>
       <View style={styles.formContainer}>
-      
+        <View style={styles.nameContainer}>
+          <CustomInputTextField
+            placeholder="First Name"
+            onChangeText={setFirstName}
+            style={[styles.nameInput]} // Added marginRight for space
+          />
+          <View style={{ width: 20 }}></View>
+          <CustomInputTextField
+            placeholder="Last Name"
+            onChangeText={setLastName}
+            style={styles.nameInput}
+          />
+        </View>
+
         <CustomInputTextField
-          placeholder="Enter your first name"
-          onChangeText={setFirstName}
-        />
-        
-        <CustomInputTextField
-          placeholder="Enter your email"
+          placeholder="Email"
           onChangeText={setEmail}
         />
-        
+
         <CustomInputTextField
-          placeholder="Enter your phone number"
+          placeholder="Phone Number"
           onChangeText={setPhoneNumber}
         />
-        
+
         <CustomInputTextField
-          placeholder="Enter your password"
+          placeholder="Password"
           onChangeText={setPassword}
           secureTextEntry={true}
         />
-        
+
         <CustomInputTextField
-          placeholder="Confirm your password"
+          placeholder="Confirm Password"
           onChangeText={setConfirmPassword}
           secureTextEntry={true}
         />
-        
+
         <CustomInputTextField
           placeholder="Select your city"
           onChangeText={setCity}
         />
-        
+
         <CustomInputTextField
           placeholder="Select your state"
           onChangeText={setState}
@@ -79,22 +88,25 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 60,
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
   },
   headingLabel: {
     fontSize: 25,
-    textAlign: 'left', // Align text to the left
+    textAlign: 'left',
     marginBottom: 20,
     fontWeight: '500',
     marginTop: 10,
-    //alignItems: 'left' // Add some bottom margin for spacing
   },
   formContainer: {
-    width: '100%', // Take up full width
+    width: '100%',
   },
-  label: {
-    marginBottom: 5,
-    textAlign: 'center', // Align text to the center
+  nameContainer: {
+    flexDirection: 'row',
+    //justifyContent: 'space-between',
+  },
+  nameInput: {
+    //width: '48%',
+    flex: 1
   },
 });
 
