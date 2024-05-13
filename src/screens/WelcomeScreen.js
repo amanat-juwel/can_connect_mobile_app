@@ -62,6 +62,8 @@ const WelcomeScreen = () => {
         />
         {/* Welcome Text and Message */}
         <Text style={styles.welcomeText}>Welcome to Can Connect</Text>
+
+
         <Text style={styles.welcomeMsg}>Connecting People To Recycle</Text>
       </View>
 
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   welcomeText: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: 'normal',
   },
   welcomeMsg: {
