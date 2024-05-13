@@ -14,15 +14,15 @@ const CustomInputTextField = ({ placeholder, onChangeText, secureTextEntry }) =>
 
 const styles = StyleSheet.create({
   input: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 15,
     height: 60,
     borderColor: '#00A75A',
     borderWidth: 1,
-    marginBottom: 15,
     borderRadius: 10,
-    paddingLeft: 20
+    paddingLeft: 20,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
   },
 });
 

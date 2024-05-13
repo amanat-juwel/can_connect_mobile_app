@@ -13,11 +13,14 @@ import CustomInputTextField from '../components/CustomInputTextField';
 import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
 import CustomCheckBox from '../components/CustomCheckBox';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
   const { width, height } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
+  const navigation = useNavigation();
+
 
   const handleSignIn = () => {
     // Implement signin logic here
@@ -75,7 +78,10 @@ const LoginScreen = () => {
         <View style={styles.bottomContainer}>
           <Text style={styles.createAccountContainer}>
             Don't have an account?
-            <Text style={styles.createAccountText}> Create Account</Text>
+            <Text style={styles.createAccountText} onPress={() => navigation.navigate('CreatAccountScreen')}>
+  Create Account
+</Text>
+
           </Text>
         </View>
       </View>

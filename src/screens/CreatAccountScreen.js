@@ -14,6 +14,7 @@ import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 import CustomCheckBox from '../components/CustomCheckBox'; // Import your CheckBox component
+import { useNavigation } from '@react-navigation/native';
 
 const CreateAccount = () => {
   const [firstName, setFirstName] = useState('');
@@ -30,6 +31,7 @@ const CreateAccount = () => {
   const { width, height } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
+  const navigation = useNavigation();
 
   const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
   const states = ['New York', 'California', 'Texas', 'Florida', 'Illinois'];
@@ -55,17 +57,24 @@ const CreateAccount = () => {
           <Text style={styles.headingLabel}>Create account</Text>
         </View>
         <View style={styles.formContainer}>
-          <View style={styles.nameContainer}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: (width-50)/2,
+              
+            }}
+          >
             <CustomInputTextField
               placeholder="First Name"
               onChangeText={setFirstName}
-              style={[styles.nameInput]} // Added marginRight for space
+              style={{  flex: 1}} // Set width to 100%
             />
-            <View style={{ width: 20 }}></View>
+            <View style={{ marginRight: 10 }}/>
             <CustomInputTextField
               placeholder="Last Name"
               onChangeText={setLastName}
-              style={styles.nameInput}
+              style={{ flex:1}} // Set width to 100%
             />
           </View>
 
@@ -140,12 +149,17 @@ const CreateAccount = () => {
             <Text style={styles.terms}>Terms & Conditions</Text>
           </TouchableOpacity>
         </Text>
-       <View style={styles.bottomContainer}>
-       <Text style={styles.logInContainer}>
-          Already have an account?
-          <Text style={styles.logInText}> Log In</Text>
-        </Text>
-       </View>
+        <View style={styles.bottomContainer}>
+          <Text style={styles.logInContainer}>
+            Already have an account?
+            <Text
+              style={styles.logInText}
+              onPress={() => navigation.navigate('LoginScreen')}
+            >
+              Log In
+            </Text>
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -175,9 +189,10 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     flexDirection: 'row',
+    width: '100%',
   },
   nameInput: {
-    flex: 1,
+    //flex: 1,
   },
   pickerContainer: {
     borderWidth: 1,
@@ -212,9 +227,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#00A75A',
   },
-  bottomContainer:{
+  bottomContainer: {
     marginBottom: 40,
-  }
+  },
 });
 
 export default CreateAccount;
