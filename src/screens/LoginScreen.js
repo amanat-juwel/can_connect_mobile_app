@@ -3,87 +3,135 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
+  ScrollView,
   Image,
-  TextInput,
+  Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
-import CustomCheckBox from '../components/CustomCheckBox'; // Import your CheckBox component
-import CustomButton from '../components/CustomButton';
 import CustomInputTextField from '../components/CustomInputTextField';
+import CustomButton from '../components/CustomButton';
+import CustomInputPasswordField from '../components/CustomInputPasswordField';
+import CustomCheckBox from '../components/CustomCheckBox';
 
 const LoginScreen = () => {
-  const { width } = Dimensions.get('window');
-  const LOGO_WIDTH_RATIO = 0.38;
-  const LOGO_HEIGHT_RATIO = 138 / 184;
+  const { width, height } = Dimensions.get('window');
+  const imageWidth = width * 0.38 * 0.8;
+  const imageHeight = imageWidth * (138 / 184);
 
-  const logoWidth = width * LOGO_WIDTH_RATIO * 0.8;
-  const logoHeight = logoWidth * LOGO_HEIGHT_RATIO;
+  const handleSignIn = () => {
+    // Implement signin logic here
+  };
+
+  const handlePress = () => {
+    // Open the link in the browser
+    Linking.openURL('https://www.google.com/');
+  };
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.imageContainer}>
-        <View style={{ alignItems: 'center' }}>
+    //<ScrollView>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
           <Image
             source={require('../../assets/images/icon.png')}
-            style={{ width: logoWidth, height: logoHeight }}
+            style={{ width: imageWidth, height: imageHeight }}
           />
         </View>
-        <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            // Add onChangeText handler here
-          />
-          <TextInput
-            placeholder="Password"
-            secureTextEntry={true}
-            style={[styles.input, styles.passwordInput]}
-            // Add onChangeText handler here
-          />
+
+        {/* Login Container */}
+        <View style={styles.loginContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.headingLabel}>Log In</Text>
+          </View>
+          <View style={styles.formContainer}>
+            <CustomInputTextField placeholder="Email/ Phone Number" style={styles.input} />
+            <CustomInputPasswordField
+              placeholder="Password"
+              style={styles.input}
+            />
+          </View>
+
           <View style={styles.rememberContainer}>
-            <CustomCheckBox title="Remember me" checked={false} onPress={() => {}} />
+            <CustomCheckBox
+              title="Remember me"
+              checked={false}
+              onPress={() => {}}
+            />
             <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.forgetPassword}>Forget Password?</Text>
+              <Text style={[styles.forgetPassword, { color: 'blue' }]}>
+                Forget Password?
+              </Text>
             </TouchableOpacity>
           </View>
-          <CustomButton level="Log In" onPress={() => {}} />
+
+          <CustomButton
+            level="Log In"
+            onPress={handleSignIn}
+            style={styles.button}
+          />
+        </View>
+
+        {/* Bottom Container */}
+        <View style={styles.bottomContainer}>
+          <Text style={styles.createAccountContainer}>
+            Don't have an account?
+            <Text style={styles.createAccountText}> Create Account</Text>
+          </Text>
         </View>
       </View>
-      <View style={styles.bottomContainer}>
-        <Text>This is Bottom Container.</Text>
-      </View>
-    </View>
+    //</ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  imageContainer: {
+  container: {
     flexGrow: 1,
     marginTop: 60,
-    alignItems: 'center',
     paddingHorizontal: 20,
   },
-  formContainer: {
+  loginContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1, // Take remaining space
-    width: '100%',
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#00A75A',
-    borderRadius: 10,
-    marginBottom: 15,
-    paddingHorizontal: 15,
-    height: 50,
-    width: '100%',
+  imageContainer: {
+    alignItems: 'center', // Center the image horizontally
   },
-  passwordInput: {
+  textContainer: {
+    alignSelf: 'flex-start', // Align the text to the left
     marginBottom: 20,
+  },
+  headingLabel: {
+    fontSize: 25,
+    fontWeight: '500',
+    marginTop: 10,
+  },
+  formContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  termsContainer: {
+    marginTop: 10,
+    marginBottom: 40,
+    flexDirection: 'row',
+  },
+  terms: {
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+  },
+  createAccountContainer: {
+    fontSize: 16,
+  },
+  createAccountText: {
+    fontWeight: 'bold',
+    color: '#00A75A',
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 40,
   },
   rememberContainer: {
     flexDirection: 'row',
@@ -92,19 +140,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
   },
-  forgetPassword: {
-    color: '#00A75A',
-    textDecorationLine: 'underline',
-  },
-  bottomContainer: {
-    backgroundColor: 'red',
-    paddingVertical: 10,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center'
-  },
+  input:{
+    flex: 1
+  }
 });
 
 export default LoginScreen;
