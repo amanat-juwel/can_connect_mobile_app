@@ -20,10 +20,14 @@ const LoginScreen = () => {
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
   const navigation = useNavigation();
+  
 
-
-  const handleSignIn = () => {
+  const handleLogIn = () => {
     // Implement signin logic here
+
+    // If Successful Log In
+    navigation.navigate('VerifyPhoneNumberScreen');
+
   };
 
   const handlePress = () => {
@@ -69,7 +73,7 @@ const LoginScreen = () => {
 
           <CustomButton
             level="Log In"
-            onPress={handleSignIn}
+            onPress={handleLogIn}
             style={styles.button}
           />
         </View>
@@ -77,7 +81,7 @@ const LoginScreen = () => {
         {/* Bottom Container */}
         <View style={styles.bottomContainer}>
           <Text style={styles.createAccountContainer}>
-            Don't have an account?
+            Don't have an account? {''}
             <Text style={styles.createAccountText} onPress={() => navigation.navigate('CreatAccountScreen')}>
   Create Account
 </Text>

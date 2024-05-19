@@ -151,12 +151,12 @@ const CreateAccount = () => {
         </Text>
         <View style={styles.bottomContainer}>
           <Text style={styles.logInContainer}>
-            Already have an account?
+            Already have an account? {''}  {/* Add space after "?" */}
             <Text
               style={styles.logInText}
               onPress={() => navigation.navigate('LoginScreen')}
             >
-              Log In
+               Log In
             </Text>
           </Text>
         </View>

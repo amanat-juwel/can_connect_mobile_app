@@ -7,7 +7,7 @@ import SplashScreen from './src/screens/SplashScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import CreatAccountScreen from './src/screens/CreatAccountScreen';
 import LoginScreen from './src/screens/LoginScreen';
-
+import VerifyPhoneNumberScreen from './src/screens/VerifyPhoneNumberScreen'
 
 const Stack = createStackNavigator();
 
@@ -19,6 +19,7 @@ const App = () => {
         <Stack.Screen name="WelcomeScree" component={WelcomeScreen} />
         <Stack.Screen name="CreatAccountScreen" component={CreatAccountScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+        <Stack.Screen name="VerifyPhoneNumberScreen" component={VerifyPhoneNumberScreen}/>
       </Stack.Navigator>
       {/* <SplashScreen/> */}
     </NavigationContainer>
