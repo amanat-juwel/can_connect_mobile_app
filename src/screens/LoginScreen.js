@@ -1,14 +1,5 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity, Linking } from 'react-native';
 import CustomInputTextField from '../components/CustomInputTextField';
 import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
@@ -16,18 +7,16 @@ import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const { width, height } = Dimensions.get('window');
+  const { width } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
   const navigation = useNavigation();
-  
 
   const handleLogIn = () => {
     // Implement signin logic here
 
     // If Successful Log In
     navigation.navigate('VerifyPhoneNumberScreen');
-
   };
 
   const handlePress = () => {
@@ -36,60 +25,42 @@ const LoginScreen = () => {
   };
 
   return (
-    //<ScrollView>
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('../../assets/images/icon.png')}
-            style={{ width: imageWidth, height: imageHeight }}
-          />
-        </View>
-
-        {/* Login Container */}
-        <View style={styles.loginContainer}>
-          <View style={styles.textContainer}>
-            <Text style={styles.headingLabel}>Log In</Text>
-          </View>
-          <View style={styles.formContainer}>
-            <CustomInputTextField placeholder="Email/ Phone Number" style={styles.input} />
-            <CustomInputPasswordField
-              placeholder="Password"
-              style={styles.input}
-            />
-          </View>
-
-          <View style={styles.rememberContainer}>
-            <CustomCheckBox
-              title="Remember me"
-              checked={false}
-              onPress={() => {}}
-            />
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={[styles.forgetPassword, { color: 'blue' }]}>
-                Forget Password?
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <CustomButton
-            level="Log In"
-            onPress={handleLogIn}
-            style={styles.button}
-          />
-        </View>
-
-        {/* Bottom Container */}
-        <View style={styles.bottomContainer}>
-          <Text style={styles.createAccountContainer}>
-            Don't have an account? {''}
-            <Text style={styles.createAccountText} onPress={() => navigation.navigate('CreatAccountScreen')}>
-  Create Account
-</Text>
-
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../../assets/images/icon.png')}
+          style={{ width: imageWidth, height: imageHeight }}
+        />
       </View>
-    //</ScrollView>
+
+      <View style={styles.loginContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.headingLabel}>Log In</Text>
+        </View>
+        <View style={styles.formContainer}>
+          <CustomInputTextField placeholder="Email/ Phone Number" style={styles.input} />
+          <CustomInputPasswordField placeholder="Password" style={styles.input} />
+        </View>
+
+        <View style={styles.rememberContainer}>
+          <CustomCheckBox title="Remember me" checked={false} onPress={() => {}} />
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={[styles.forgetPassword, { color: 'blue' }]}>Forget Password?</Text>
+          </TouchableOpacity>
+        </View>
+
+        <CustomButton label="Log In" onPress={handleLogIn} style={styles.button} />
+      </View>
+
+      <View style={styles.bottomContainer}>
+        <Text style={styles.createAccountContainer}>
+          Don't have an account?{' '}
+          <Text style={styles.createAccountText} onPress={() => navigation.navigate('CreatAccountScreen')}>
+            Create Account
+          </Text>
+        </Text>
+      </View>
+    </View>
   );
 };
 
@@ -150,9 +121,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
   },
-  input:{
-    flex: 1
-  }
+  input: {
+    flex: 1,
+  },
+  button: {
+    width: '100%',
+  },
 });
 
 export default LoginScreen;

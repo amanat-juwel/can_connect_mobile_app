@@ -142,7 +142,7 @@ const CreateAccount = () => {
           </View>
         </View>
 
-        <CustomButton level="Create account " onPress={handleSignUp} />
+        <CustomButton label="Create account" onPress={handleSignUp} />
         <Text style={[styles.termsContainer, { fontSize: 16 }]}>
           By signing up you agree to all the{' '}
           <TouchableOpacity onPress={handlePress}>

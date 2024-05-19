@@ -69,7 +69,7 @@ const WelcomeScreen = () => {
 
       <View style={styles.bottomView}>
       <CustomButton
-        level="Create account"
+        label="Create account"
         onPress={handleCreateAccountPress}
       />
 
