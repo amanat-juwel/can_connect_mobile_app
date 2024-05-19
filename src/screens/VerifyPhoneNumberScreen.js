@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 const VerifyPhoneNumber = () => {
   return (
     <View style={styles.container}>
-    <Text> This is Phone Numer Input Screen.</Text>
+      <Text> This is Phone Numer Input Screen.</Text>
     </View>
   )
 }
