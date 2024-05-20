@@ -68,13 +68,13 @@ const CreateAccount = () => {
             <CustomInputTextField
               placeholder="First Name"
               onChangeText={setFirstName}
-              style={{  flex: 1}} // Set width to 100%
+              style={{  flex: 1}} 
             />
             <View style={{ marginRight: 10 }}/>
             <CustomInputTextField
               placeholder="Last Name"
               onChangeText={setLastName}
-              style={{ flex:1}} // Set width to 100%
+              style={{ flex:1}} 
             />
           </View>
 
@@ -168,15 +168,17 @@ const CreateAccount = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    marginTop: 60,
+    marginTop: 0,
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#fff'
   },
   imageContainer: {
-    alignItems: 'center', // Center the image horizontally
+    marginTop: 60,
+    alignItems: 'center', 
   },
   textContainer: {
-    alignSelf: 'flex-start', // Align the text to the left
+    alignSelf: 'flex-start', 
     marginBottom: 20,
   },
   headingLabel: {

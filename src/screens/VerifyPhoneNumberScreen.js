@@ -1,13 +1,18 @@
+// VerifyPhoneNumberScreen.js
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import CustomInputTextField from '../components/CustomInputTextField'; // Ensure the path is correct
 import { Picker } from '@react-native-picker/picker';
 import { TextInput } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const VerifyPhoneNumber = () => {
   const [selectedCountryCode, setSelectedCountryCode] = useState('+61');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const navigation = useNavigation();
+ 
 
   const countryCodes = [
     { label: 'Australia (+61)', value: '+61', flag: '🇦🇺' },
@@ -18,6 +23,9 @@ const VerifyPhoneNumber = () => {
 
   const handleSubmit = () => {
     console.log('Phone Number Submitted:', selectedCountryCode + phoneNumber);
+  // If Successful Log In
+  navigation.navigate('OtpScreen');  
+  
   };
 
   return (
@@ -61,6 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#fff'
   },
   inputContainer: {
     flexDirection: 'row',
