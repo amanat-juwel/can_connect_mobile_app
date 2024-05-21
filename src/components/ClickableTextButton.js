@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     //textDecorationLine: 'underline',
     fontSize: 18,
     padding: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });
 

@@ -23,7 +23,8 @@ const OtpScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.infoText}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry.
       </Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -84,14 +85,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   infoText: {
     fontSize: 15,
     color: '#555',
     textAlign: 'center',
     marginVertical: 5,
-    marginBottom: 30
+    marginBottom: 30,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#00A75A',
     borderRadius: 10,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   buttonContainer: {
     width: '100%',

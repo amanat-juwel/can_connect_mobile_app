@@ -22,8 +22,15 @@ const CustomInputPasswordField = ({ placeholder, onChangeText }) => {
         onChangeText={onChangeText}
         secureTextEntry={!isPasswordVisible}
       />
-      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
-        <Ionicons name={isPasswordVisible ? 'eye-off' : 'eye'} size={24} color="gray" />
+      <TouchableOpacity
+        onPress={togglePasswordVisibility}
+        style={styles.iconContainer}
+      >
+        <Ionicons
+          name={isPasswordVisible ? 'eye-off' : 'eye'}
+          size={24}
+          color="gray"
+        />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -39,7 +46,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     borderRadius: 10,
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   input: {
     flex: 1,
