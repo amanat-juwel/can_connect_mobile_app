@@ -1,0 +1,12 @@
+{
+  "welcomeMessage": "Welcome to Can Connect",
+  "tagline":"Connecting People To Recycle",
+  "createAccountButtonText":"Create Account",
+  "loginText":"Log In",
+  "emailPhonePlaceHolder":"Email/ Phone Number",
+  "PasswordPlaceHolder":"Password",
+  "rememberMeText":"Remember me",
+  "forgetPasswordText":"Forget Password?",
+  "doNotHaveAccountText":"Don't have an account?",
+  "createAccountText":"Create Account"
+}

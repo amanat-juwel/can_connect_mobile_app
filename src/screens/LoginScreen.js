@@ -14,8 +14,10 @@ import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const LoginScreen = () => {
+  const { t } = useTranslation();
   const { width } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
@@ -44,34 +46,34 @@ const LoginScreen = () => {
 
       <View style={styles.loginContainer}>
         <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>Log In</Text>
+          <Text style={styles.headingLabel}>{t('loginText')}</Text>
         </View>
         <View style={styles.formContainer}>
           <CustomInputTextField
-            placeholder="Email/ Phone Number"
+            placeholder={t('emailPhonePlaceHolder')}
             style={styles.input}
           />
           <CustomInputPasswordField
-            placeholder="Password"
+            placeholder={t('PasswordPlaceHolder')}
             style={styles.input}
           />
         </View>
 
         <View style={styles.rememberContainer}>
           <CustomCheckBox
-            title="Remember me"
+            title={t('rememberMeText')}
             checked={false}
             onPress={() => {}}
           />
           <TouchableOpacity onPress={() => {}}>
             <Text style={[styles.forgetPassword, { color: 'blue' }]}>
-              Forget Password?
+              {t('forgetPasswordText')}
             </Text>
           </TouchableOpacity>
         </View>
 
         <CustomButton
-          label="Log In"
+          label={t('loginText')}
           onPress={handleLogIn}
           style={styles.button}
         />
@@ -79,12 +81,12 @@ const LoginScreen = () => {
 
       <View style={styles.bottomContainer}>
         <Text style={styles.createAccountContainer}>
-          Don't have an account?{' '}
+          {t('doNotHaveAccountText')}{' '}
           <Text
             style={styles.createAccountText}
             onPress={() => navigation.navigate('CreatAccountScreen')}
           >
-            Create Account
+            {t('createAccountText')}
           </Text>
         </Text>
       </View>
