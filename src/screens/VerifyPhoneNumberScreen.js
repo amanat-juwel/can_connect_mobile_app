@@ -8,24 +8,22 @@ import { Picker } from '@react-native-picker/picker';
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
-const VerifyPhoneNumber = () => {
+const VerifyPhoneNumberScreen = () => {
   const [selectedCountryCode, setSelectedCountryCode] = useState('+61');
   const [phoneNumber, setPhoneNumber] = useState('');
   const navigation = useNavigation();
- 
 
   const countryCodes = [
     { label: 'Australia (+61)', value: '+61', flag: '🇦🇺' },
     { label: 'USA (+1)', value: '+1', flag: '🇺🇸' },
     { label: 'UK (+44)', value: '+44', flag: '🇬🇧' },
-    { label: 'Bangladesh (+88)', value: '+88', flag: '🇧🇩' } // Add more country codes as needed
+    { label: 'Bangladesh (+88)', value: '+88', flag: '🇧🇩' }, // Add more country codes as needed
   ];
 
   const handleSubmit = () => {
     console.log('Phone Number Submitted:', selectedCountryCode + phoneNumber);
-  // If Successful Log In
-  navigation.navigate('OtpScreen');  
-  
+    // If Successful Log In
+    navigation.navigate('OtpScreen');
   };
 
   return (
@@ -39,10 +37,9 @@ const VerifyPhoneNumber = () => {
           {countryCodes.map((code) => (
             <Picker.Item
               key={code.value}
-              label={`${code.flag }`}
+              label={`${code.flag}`}
               value={code.value}
               style={styles.pickerItem}
-              
             />
           ))}
         </Picker>
@@ -55,7 +52,8 @@ const VerifyPhoneNumber = () => {
         />
       </View>
       <Text style={styles.infoText}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry.
       </Text>
       <View style={styles.buttonContainer}>
         <CustomButton label="Continue" onPress={handleSubmit} />
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 20,
     width: '100%',
-    borderRadius: 10
+    borderRadius: 10,
   },
   picker: {
     width: 115,
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     height: 50,
-    fontSize: 20
+    fontSize: 20,
   },
   infoText: {
     fontSize: 15,
@@ -106,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VerifyPhoneNumber;
+export default VerifyPhoneNumberScreen;
