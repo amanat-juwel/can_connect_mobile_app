@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, Dimensions, TouchableOpacity, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import CustomInputTextField from '../components/CustomInputTextField';
 import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
@@ -38,24 +47,43 @@ const LoginScreen = () => {
           <Text style={styles.headingLabel}>Log In</Text>
         </View>
         <View style={styles.formContainer}>
-          <CustomInputTextField placeholder="Email/ Phone Number" style={styles.input} />
-          <CustomInputPasswordField placeholder="Password" style={styles.input} />
+          <CustomInputTextField
+            placeholder="Email/ Phone Number"
+            style={styles.input}
+          />
+          <CustomInputPasswordField
+            placeholder="Password"
+            style={styles.input}
+          />
         </View>
 
         <View style={styles.rememberContainer}>
-          <CustomCheckBox title="Remember me" checked={false} onPress={() => {}} />
+          <CustomCheckBox
+            title="Remember me"
+            checked={false}
+            onPress={() => {}}
+          />
           <TouchableOpacity onPress={() => {}}>
-            <Text style={[styles.forgetPassword, { color: 'blue' }]}>Forget Password?</Text>
+            <Text style={[styles.forgetPassword, { color: 'blue' }]}>
+              Forget Password?
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <CustomButton label="Log In" onPress={handleLogIn} style={styles.button} />
+        <CustomButton
+          label="Log In"
+          onPress={handleLogIn}
+          style={styles.button}
+        />
       </View>
 
       <View style={styles.bottomContainer}>
         <Text style={styles.createAccountContainer}>
           Don't have an account?{' '}
-          <Text style={styles.createAccountText} onPress={() => navigation.navigate('CreatAccountScreen')}>
+          <Text
+            style={styles.createAccountText}
+            onPress={() => navigation.navigate('CreatAccountScreen')}
+          >
             Create Account
           </Text>
         </Text>
@@ -69,13 +97,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 0,
     paddingHorizontal: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   imageContainer: {
     marginTop: 60,

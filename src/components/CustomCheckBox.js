@@ -1,7 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 
-const CustomCheckBox = ({ title, checked = false, onPress = () => {}, checkedColor = '#00A75A' }) => {
+const CustomCheckBox = ({
+  title,
+  checked = false,
+  onPress = () => {},
+  checkedColor = '#00A75A',
+}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
