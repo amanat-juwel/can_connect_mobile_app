@@ -7,8 +7,8 @@ import AppNavigator from './src/Navigation/AppNavigator';
 const App = () => {
   return (
     <NavigationContainer theme={navigationTheme}>
-      <AuthNavigator />
-      {/* <AppNavigator /> */}
+      {/* <AuthNavigator /> */}
+      <AppNavigator />
     </NavigationContainer>
   );
 };
