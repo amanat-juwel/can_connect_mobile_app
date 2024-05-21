@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
 import ClickableTextButton from '../components/ClickableTextButton';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import routes from '../Navigation/routes';
 
 const WelcomeScreen = () => {
   const { width, height } = Dimensions.get('window');
@@ -21,7 +22,7 @@ const WelcomeScreen = () => {
   const imageHeight = imageWidth * (138 / 184);
 
   const handleCreateAccountPress = () => {
-    navigation.navigate('CreatAccountScreen'); // Navigate to 'CreatAccountScreen'
+    navigation.navigate(routes.CREATE_ACCOUNT_SCREEN); // Navigate to 'CreatAccountScreen'
   };
 
   return (
@@ -63,21 +64,17 @@ const WelcomeScreen = () => {
         {/* Welcome Text and Message */}
         <Text style={styles.welcomeText}>Welcome to Can Connect</Text>
 
-
         <Text style={styles.welcomeMsg}>Connecting People To Recycle</Text>
       </View>
 
       <View style={styles.bottomView}>
-      <CustomButton
-        label="Create account"
-        onPress={handleCreateAccountPress}
-      />
+        <CustomButton
+          label="Create account"
+          onPress={handleCreateAccountPress}
+        />
 
         <View style={styles.bottomPosition}>
-          <ClickableTextButton 
-            text="Log In" 
-            navigationPage="LoginScreen" 
-          />
+          <ClickableTextButton text="Log In" navigationPage="LoginScreen" />
         </View>
       </View>
     </ScrollView>
@@ -132,8 +129,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   bottomPosition: {
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
 
 export default WelcomeScreen;

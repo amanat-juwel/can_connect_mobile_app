@@ -16,7 +16,7 @@ import { Picker } from '@react-native-picker/picker'; // Import Picker from @rea
 import CustomCheckBox from '../components/CustomCheckBox'; // Import your CheckBox component
 import { useNavigation } from '@react-navigation/native';
 
-const CreateAccount = () => {
+const CreateAccountScreen = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -61,20 +61,19 @@ const CreateAccount = () => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              width: (width-50)/2,
-              
+              width: (width - 50) / 2,
             }}
           >
             <CustomInputTextField
               placeholder="First Name"
               onChangeText={setFirstName}
-              style={{  flex: 1}} 
+              style={{ flex: 1 }}
             />
-            <View style={{ marginRight: 10 }}/>
+            <View style={{ marginRight: 10 }} />
             <CustomInputTextField
               placeholder="Last Name"
               onChangeText={setLastName}
-              style={{ flex:1}} 
+              style={{ flex: 1 }}
             />
           </View>
 
@@ -151,12 +150,12 @@ const CreateAccount = () => {
         </Text>
         <View style={styles.bottomContainer}>
           <Text style={styles.logInContainer}>
-            Already have an account? {''}  {/* Add space after "?" */}
+            Already have an account? {''} {/* Add space after "?" */}
             <Text
               style={styles.logInText}
               onPress={() => navigation.navigate('LoginScreen')}
             >
-               Log In
+              Log In
             </Text>
           </Text>
         </View>
@@ -171,14 +170,14 @@ const styles = StyleSheet.create({
     marginTop: 0,
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   imageContainer: {
     marginTop: 60,
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   textContainer: {
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
     marginBottom: 20,
   },
   headingLabel: {
@@ -234,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateAccount;
+export default CreateAccountScreen;

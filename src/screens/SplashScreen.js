@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import routes from '../Navigation/routes';
 const SplashScreen = () => {
   // Navigtion.
   const navigation = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('WelcomeScree');
-    }, 5000);
+      navigation.replace(routes.WELCOME_SCREEN);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [navigation]);
