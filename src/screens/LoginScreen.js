@@ -67,15 +67,18 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    marginTop: 60,
+    marginTop: 0,
     paddingHorizontal: 20,
+    backgroundColor: '#fff'
   },
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff'
   },
   imageContainer: {
+    marginTop: 60,
     alignItems: 'center', // Center the image horizontally
   },
   textContainer: {
