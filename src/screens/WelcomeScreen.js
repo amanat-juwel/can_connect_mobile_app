@@ -11,18 +11,20 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
 import ClickableTextButton from '../components/ClickableTextButton';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useNavigation } from '@react-navigation/native';
 import routes from '../Navigation/routes';
+import { useTranslation } from 'react-i18next';
 
 const WelcomeScreen = () => {
+  const { t } = useTranslation();
   const { width, height } = Dimensions.get('window');
-  const navigation = useNavigation(); // Access navigation object
+  const navigation = useNavigation();
 
   const imageWidth = width * 0.38 * 0.7;
   const imageHeight = imageWidth * (138 / 184);
 
   const handleCreateAccountPress = () => {
-    navigation.navigate(routes.CREATE_ACCOUNT_SCREEN); // Navigate to 'CreatAccountScreen'
+    navigation.navigate(routes.CREATE_ACCOUNT_SCREEN);
   };
 
   return (
@@ -61,20 +63,23 @@ const WelcomeScreen = () => {
           source={require('../../assets/images/icon.png')}
           style={[{ width: imageWidth, height: imageHeight }]}
         />
-        {/* Welcome Text and Message */}
-        <Text style={styles.welcomeText}>Welcome to Can Connect</Text>
 
-        <Text style={styles.welcomeMsg}>Connecting People To Recycle</Text>
+        <Text style={styles.welcomeText}>{t('welcomeMessage')}</Text>
+
+        <Text style={styles.welcomeMsg}>{t('tagline')}</Text>
       </View>
 
       <View style={styles.bottomView}>
         <CustomButton
-          label="Create account"
+          label={t('createAccountButtonText')}
           onPress={handleCreateAccountPress}
         />
 
         <View style={styles.bottomPosition}>
-          <ClickableTextButton text="Log In" navigationPage="LoginScreen" />
+          <ClickableTextButton
+            text={t('loginText')}
+            navigationPage="LoginScreen"
+          />
         </View>
       </View>
     </ScrollView>
@@ -111,7 +116,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width * 1.25, // Adjust height if needed
+    height: Dimensions.get('window').width * 1.25,
   },
   gradient: {
     position: 'absolute',
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     position: 'absolute',
-    bottom: 20, // Adjust as needed
+    bottom: 20,
     width: '100%',
     paddingHorizontal: 20,
   },
