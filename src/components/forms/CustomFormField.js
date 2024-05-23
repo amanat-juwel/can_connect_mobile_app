@@ -1,9 +1,9 @@
 import React from 'react';
-import CustomInputTextField from './CustomInputTextField';
 import { useFormikContext } from 'formik';
-import ErrorMessage from './ErrorMessage';
 import { useTranslation } from 'react-i18next';
-import CustomInputPasswordField from './CustomInputPasswordField';
+import CustomInputPasswordField from '../CustomInputPasswordField';
+import CustomInputTextField from '../CustomInputTextField';
+import ErrorMessage from './ErrorMessage';
 
 const CustomFormField = ({ name, isPasswordField = false, ...otherProps }) => {
   const { handleChange, errors, setFieldTouched, touched } = useFormikContext();

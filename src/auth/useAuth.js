@@ -5,9 +5,9 @@ import authStorage from './storage';
 export default useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
 
-  const login = (session) => {
+  const login = (session, rememberUser) => {
     setUser(session.data.user);
-    authStorage.storeSession(session.data);
+    authStorage.storeSession(session.data, rememberUser);
   };
 
   const logout = () => {
@@ -15,5 +15,5 @@ export default useAuth = () => {
     authStorage.removeSession();
   };
 
-  return { user, setUser, login, logout };
+  return { user, login, logout };
 };

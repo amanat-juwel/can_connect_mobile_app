@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import CustomInputTextField from '../components/CustomInputTextField';
-import CustomButton from '../components/CustomButton';
-import CustomInputPasswordField from '../components/CustomInputPasswordField';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +11,14 @@ import CustomLabel from '../components/CustomLabel';
 import CustomLinkButton from '../components/CustomLinkButton';
 import CustomFooter from '../components/CustomFooter';
 import routes from '../Navigation/routes';
-import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { emailOrPhoneSchema } from '../utility/validation.helper';
-import ErrorMessage from '../components/ErrorMessage';
-import CustomFormField from '../components/CustomFormField';
-import CustomSubmitButton from '../components/CustomSubmitButton';
-import CustomForm from '../components/CustomForm';
+import {
+  CustomForm,
+  CustomSubmitButton,
+  CustomFormField,
+  ErrorMessage,
+} from '../components/forms';
 
 const validationSchema = Yup.object().shape({
   id: emailOrPhoneSchema,
@@ -36,13 +34,11 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-  const handleLogIn = async () => {
-    // navigation.navigate('VerifyPhoneNumberScreen');
-    const result = await authApi.login('01675711885', '123456');
+  const handleLogIn = async ({ id, password }) => {
+    const result = await authApi.login(id, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
-    console.log(result.data.data);
-    login(result.data);
+    login(result.data, isRememberMeChecked);
   };
 
   return (
@@ -53,10 +49,11 @@ const LoginScreen = () => {
 
       <View style={styles.loginContainer}>
         <CustomLabel text={t('loginText')} />
+
         <View style={styles.formContainer}>
           <CustomForm
             initialValues={{ id: '', password: '' }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={handleLogIn}
             validationSchema={validationSchema}
           >
             <CustomFormField
@@ -82,6 +79,10 @@ const LoginScreen = () => {
               />
             </View>
 
+            <ErrorMessage
+              error={t('loginFailedMessage')}
+              visible={loginFailed}
+            />
             <CustomSubmitButton label={t('loginText')} />
           </CustomForm>
         </View>
