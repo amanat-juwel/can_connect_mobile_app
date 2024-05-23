@@ -23,6 +23,7 @@
     "expo-secure-store": "~13.0.1",
     "expo-splash-screen": "~0.27.4",
     "expo-status-bar": "~1.12.1",
+    "formik": "^2.4.6",
     "i18next": "^23.11.5",
     "react": "18.2.0",
     "react-i18next": "^14.1.1",
@@ -34,7 +35,8 @@
     "react-native-radial-gradient": "^1.1.4",
     "react-native-safe-area-context": "4.10.1",
     "react-native-screens": "3.31.1",
-    "react-native-vector-icons": "^10.1.0"
+    "react-native-vector-icons": "^10.1.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

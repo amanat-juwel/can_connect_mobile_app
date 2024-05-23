@@ -8,16 +8,20 @@ const CustomInputTextField = ({
   secureTextEntry,
   value,
   keyboardType,
+  onBlur,
   height = 60,
   width = '100%',
+  marginBottom = 15,
+  marginTop = 0,
 }) => {
   return (
     <TextInput
-      style={[styles.input, { height: height, width: width }]}
+      style={[styles.input, { height, width, marginBottom, marginTop }]}
       placeholder={placeholder}
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       value={value}
+      onBlur={onBlur}
       keyboardType={keyboardType}
     />
   );
@@ -25,7 +29,6 @@ const CustomInputTextField = ({
 
 const styles = StyleSheet.create({
   input: {
-    marginBottom: 15,
     borderColor: colors.primary,
     borderWidth: 1,
     borderRadius: 10,

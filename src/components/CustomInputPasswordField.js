@@ -3,7 +3,16 @@ import { TextInput, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/colors';
 
-const CustomInputPasswordField = ({ placeholder, onChangeText, value }) => {
+const CustomInputPasswordField = ({
+  placeholder,
+  onChangeText,
+  value,
+  onBlur,
+  height = 60,
+  width = '100%',
+  marginBottom = 15,
+  marginTop = 0,
+}) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -11,13 +20,16 @@ const CustomInputPasswordField = ({ placeholder, onChangeText, value }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { height, width, marginBottom, marginTop }]}
+    >
       <TextInput
         style={styles.input}
         placeholder={placeholder}
         onChangeText={onChangeText}
         secureTextEntry={!isPasswordVisible}
         value={value}
+        onBlur={onBlur}
       />
       <TouchableOpacity
         onPress={togglePasswordVisibility}
@@ -39,11 +51,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-    height: 60,
     borderColor: colors.primary,
     borderWidth: 1,
-    marginBottom: 15,
     borderRadius: 10,
     paddingLeft: 20,
   },

@@ -14,6 +14,18 @@ import CustomLabel from '../components/CustomLabel';
 import CustomLinkButton from '../components/CustomLinkButton';
 import CustomFooter from '../components/CustomFooter';
 import routes from '../Navigation/routes';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { emailOrPhoneSchema } from '../utility/validation.helper';
+import ErrorMessage from '../components/ErrorMessage';
+import CustomFormField from '../components/CustomFormField';
+import CustomSubmitButton from '../components/CustomSubmitButton';
+import CustomForm from '../components/CustomForm';
+
+const validationSchema = Yup.object().shape({
+  id: emailOrPhoneSchema,
+  password: Yup.string().required(),
+});
 
 const LoginScreen = () => {
   const [loginFailed, setLoginFailed] = useState();
@@ -42,24 +54,37 @@ const LoginScreen = () => {
       <View style={styles.loginContainer}>
         <CustomLabel text={t('loginText')} />
         <View style={styles.formContainer}>
-          <CustomInputTextField placeholder={t('emailPhonePlaceHolder')} />
-          <CustomInputPasswordField placeholder={t('PasswordPlaceHolder')} />
-        </View>
+          <CustomForm
+            initialValues={{ id: '', password: '' }}
+            onSubmit={(values) => console.log(values)}
+            validationSchema={validationSchema}
+          >
+            <CustomFormField
+              name="id"
+              placeholder={t('emailPhonePlaceHolder')}
+            />
 
-        <View style={styles.rememberContainer}>
-          <CustomCheckBox
-            title={t('rememberMeText')}
-            isChecked={isRememberMeChecked}
-            onPress={setRememberMeChecked}
-          />
-          <CustomLinkButton text={t('forgetPasswordText')} onPress={() => {}} />
-        </View>
+            <CustomFormField
+              name="password"
+              isPasswordField
+              placeholder={t('PasswordPlaceHolder')}
+            />
 
-        <CustomButton
-          label={t('loginText')}
-          onPress={handleLogIn}
-          style={styles.button}
-        />
+            <View style={styles.rememberContainer}>
+              <CustomCheckBox
+                title={t('rememberMeText')}
+                isChecked={isRememberMeChecked}
+                onPress={setRememberMeChecked}
+              />
+              <CustomLinkButton
+                text={t('forgetPasswordText')}
+                onPress={() => {}}
+              />
+            </View>
+
+            <CustomSubmitButton label={t('loginText')} />
+          </CustomForm>
+        </View>
       </View>
 
       <CustomFooter
