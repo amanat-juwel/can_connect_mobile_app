@@ -8,5 +8,7 @@
   "rememberMeText":"Remember me",
   "forgetPasswordText":"Forget Password?",
   "doNotHaveAccountText":"Don't have an account?",
-  "createAccountText":"Create Account"
+  "createAccountText":"Create Account",
+  "noInternetMessage":"No Internet Connection"
+
 }

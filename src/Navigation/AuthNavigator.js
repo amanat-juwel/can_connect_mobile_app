@@ -13,10 +13,9 @@ const Stack = createStackNavigator();
 
 const AuthNavigator = () => (
   <Stack.Navigator
-    initialRouteName={routes.SPLASH_SCREEN}
+    initialRouteName={routes.WELCOME_SCREEN}
     screenOptions={{ headerShown: false }}
   >
-    <Stack.Screen name={routes.SPLASH_SCREEN} component={SplashScreen} />
     <Stack.Screen name={routes.WELCOME_SCREEN} component={WelcomeScreen} />
     <Stack.Screen
       name={routes.CREATE_ACCOUNT_SCREEN}
