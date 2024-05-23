@@ -11,12 +11,16 @@
     "lint": "eslint --fix . --ext .js"
   },
   "dependencies": {
+    "@react-native-community/netinfo": "11.3.1",
     "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
+    "apisauce": "^3.0.1",
     "expo": "~51.0.8",
     "expo-linear-gradient": "~13.0.2",
+    "expo-secure-store": "~13.0.1",
+    "expo-splash-screen": "~0.27.4",
     "expo-status-bar": "~1.12.1",
     "i18next": "^23.11.5",
     "react": "18.2.0",

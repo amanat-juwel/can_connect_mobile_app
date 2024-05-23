@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   Image,
   Dimensions,
@@ -15,19 +14,26 @@ import CustomInputPasswordField from '../components/CustomInputPasswordField';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import authApi from '../api/auth';
+import useAuth from '../auth/useAuth';
 
 const LoginScreen = () => {
+  const [loginFailed, setLoginFailed] = useState();
+
   const { t } = useTranslation();
+  const { login } = useAuth();
   const { width } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
   const navigation = useNavigation();
 
-  const handleLogIn = () => {
-    // Implement signin logic here
-
-    // If Successful Log In
-    navigation.navigate('VerifyPhoneNumberScreen');
+  const handleLogIn = async () => {
+    // navigation.navigate('VerifyPhoneNumberScreen');
+    const result = await authApi.login('01675711885', '123456');
+    if (!result.ok) return setLoginFailed(true);
+    setLoginFailed(false);
+    console.log(result.data.data);
+    login(result.data);
   };
 
   const handlePress = () => {
