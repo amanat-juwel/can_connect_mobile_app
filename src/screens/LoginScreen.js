@@ -1,101 +1,100 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
-import CustomInputTextField from '../components/CustomInputTextField';
-import CustomButton from '../components/CustomButton';
-import CustomInputPasswordField from '../components/CustomInputPasswordField';
+import { View, StyleSheet } from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
+import CanConnectLogo from '../components/CanConnectLogo';
+import colors from '../constants/colors';
+import CustomLabel from '../components/CustomLabel';
+import CustomLinkButton from '../components/CustomLinkButton';
+import CustomFooter from '../components/CustomFooter';
+import routes from '../Navigation/routes';
+import * as Yup from 'yup';
+import { emailOrPhoneSchema } from '../utility/validation.helper';
+import {
+  CustomForm,
+  CustomSubmitButton,
+  CustomFormField,
+  ErrorMessage,
+} from '../components/forms';
+
+const validationSchema = Yup.object().shape({
+  id: emailOrPhoneSchema,
+  password: Yup.string().required(),
+});
 
 const LoginScreen = () => {
   const [loginFailed, setLoginFailed] = useState();
+  const [isRememberMeChecked, setRememberMeChecked] = useState(true);
 
   const { t } = useTranslation();
   const { login } = useAuth();
-  const { width } = Dimensions.get('window');
-  const imageWidth = width * 0.38 * 0.8;
-  const imageHeight = imageWidth * (138 / 184);
+
   const navigation = useNavigation();
 
-  const handleLogIn = async () => {
-    // navigation.navigate('VerifyPhoneNumberScreen');
-    const result = await authApi.login('01675711885', '123456');
+  const handleLogIn = async ({ id, password }) => {
+    const result = await authApi.login(id, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
-    console.log(result.data.data);
-    login(result.data);
-  };
-
-  const handlePress = () => {
-    // Open the link in the browser
-    Linking.openURL('https://www.google.com/');
+    login(result.data, isRememberMeChecked);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          source={require('../../assets/images/icon.png')}
-          style={{ width: imageWidth, height: imageHeight }}
-        />
+        <CanConnectLogo />
       </View>
 
       <View style={styles.loginContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('loginText')}</Text>
-        </View>
+        <CustomLabel text={t('loginText')} />
+
         <View style={styles.formContainer}>
-          <CustomInputTextField
-            placeholder={t('emailPhonePlaceHolder')}
-            style={styles.input}
-          />
-          <CustomInputPasswordField
-            placeholder={t('PasswordPlaceHolder')}
-            style={styles.input}
-          />
-        </View>
-
-        <View style={styles.rememberContainer}>
-          <CustomCheckBox
-            title={t('rememberMeText')}
-            checked={false}
-            onPress={() => {}}
-          />
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={[styles.forgetPassword, { color: 'blue' }]}>
-              {t('forgetPasswordText')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <CustomButton
-          label={t('loginText')}
-          onPress={handleLogIn}
-          style={styles.button}
-        />
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <Text style={styles.createAccountContainer}>
-          {t('doNotHaveAccountText')}{' '}
-          <Text
-            style={styles.createAccountText}
-            onPress={() => navigation.navigate('CreatAccountScreen')}
+          <CustomForm
+            initialValues={{ id: '', password: '' }}
+            onSubmit={handleLogIn}
+            validationSchema={validationSchema}
           >
-            {t('createAccountText')}
-          </Text>
-        </Text>
+            <CustomFormField
+              name="id"
+              placeholder={t('emailPhonePlaceHolder')}
+            />
+
+            <CustomFormField
+              name="password"
+              isPasswordField
+              placeholder={t('PasswordPlaceHolder')}
+            />
+
+            <View style={styles.rememberContainer}>
+              <CustomCheckBox
+                title={t('rememberMeText')}
+                isChecked={isRememberMeChecked}
+                onPress={setRememberMeChecked}
+              />
+              <CustomLinkButton
+                text={t('forgetPasswordText')}
+                onPress={() => {}}
+              />
+            </View>
+
+            <ErrorMessage
+              error={t('loginFailedMessage')}
+              visible={loginFailed}
+            />
+            <CustomSubmitButton label={t('loginText')} />
+          </CustomForm>
+        </View>
       </View>
+
+      <CustomFooter
+        text={t('doNotHaveAccountText')}
+        actionButtonText={t('createAccountText')}
+        onActionButtonPress={() =>
+          navigation.navigate(routes.CREATE_ACCOUNT_SCREEN)
+        }
+      />
     </View>
   );
 };
@@ -105,53 +104,21 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 0,
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   imageContainer: {
     marginTop: 60,
-    alignItems: 'center', // Center the image horizontally
-  },
-  textContainer: {
-    alignSelf: 'flex-start', // Align the text to the left
-    marginBottom: 20,
-  },
-  headingLabel: {
-    fontSize: 25,
-    fontWeight: '500',
-    marginTop: 10,
+    alignItems: 'center',
   },
   formContainer: {
     width: '100%',
     marginBottom: 10,
-  },
-  termsContainer: {
-    marginTop: 10,
-    marginBottom: 40,
-    flexDirection: 'row',
-  },
-  terms: {
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  createAccountContainer: {
-    fontSize: 16,
-  },
-  createAccountText: {
-    fontWeight: 'bold',
-    color: '#00A75A',
-  },
-  bottomContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 40,
   },
   rememberContainer: {
     flexDirection: 'row',
@@ -159,9 +126,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     width: '100%',
-  },
-  input: {
-    flex: 1,
   },
   button: {
     width: '100%',

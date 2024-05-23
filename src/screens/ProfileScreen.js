@@ -6,9 +6,7 @@ import useAuth from '../auth/useAuth';
 const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
   const handleLogout = async () => {
-    console.log('logging out');
-    const result = await authApi.logout();
-    console.log(result.data);
+    await authApi.logout();
     logout();
   };
   return (

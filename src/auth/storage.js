@@ -3,10 +3,12 @@ import * as SecureStore from 'expo-secure-store';
 const tokenKey = 'authToken';
 const userKey = 'user';
 
-const storeSession = async (session) => {
+const storeSession = async (session, rememberUser) => {
   try {
     storeToken(session.token);
-    storeUser(session.user);
+    if (rememberUser) {
+      storeUser(session.user);
+    }
   } catch (error) {
     console.log('Error storing the auth token', error);
   }

@@ -3,12 +3,14 @@
   "tagline":"Connecting People To Recycle",
   "createAccountButtonText":"Create Account",
   "loginText":"Log In",
-  "emailPhonePlaceHolder":"Email/ Phone Number",
+  "emailPhonePlaceHolder":"Email/Phone Number",
   "PasswordPlaceHolder":"Password",
   "rememberMeText":"Remember me",
-  "forgetPasswordText":"Forget Password?",
+  "forgetPasswordText":"Forgot Password?",
   "doNotHaveAccountText":"Don't have an account?",
   "createAccountText":"Create Account",
-  "noInternetMessage":"No Internet Connection"
-
+  "noInternetMessage":"No Internet Connection",
+  "idErrorMessage":"Must be a valid Email or Phone Number",
+  "passwordErrorMessage":"Password is a required field",
+  "loginFailedMessage":"Authentication failed"
 }

@@ -1,10 +1,18 @@
-// CustomInputPasswordField.js
-
 import React, { useState } from 'react';
-import { TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Assuming you're using Expo for vector icons
+import { TextInput, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import colors from '../constants/colors';
 
-const CustomInputPasswordField = ({ placeholder, onChangeText }) => {
+const CustomInputPasswordField = ({
+  placeholder,
+  onChangeText,
+  value,
+  onBlur,
+  height = 60,
+  width = '100%',
+  marginBottom = 15,
+  marginTop = 0,
+}) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -12,27 +20,30 @@ const CustomInputPasswordField = ({ placeholder, onChangeText }) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={togglePasswordVisibility}
+    <View
+      style={[styles.container, { height, width, marginBottom, marginTop }]}
     >
       <TextInput
         style={styles.input}
         placeholder={placeholder}
         onChangeText={onChangeText}
         secureTextEntry={!isPasswordVisible}
+        value={value}
+        onBlur={onBlur}
       />
       <TouchableOpacity
         onPress={togglePasswordVisibility}
         style={styles.iconContainer}
       >
-        <Ionicons
-          name={isPasswordVisible ? 'eye-off' : 'eye'}
-          size={24}
-          color="gray"
-        />
+        <TouchableOpacity onPress={togglePasswordVisibility}>
+          <Ionicons
+            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -40,11 +51,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-    height: 60,
-    borderColor: '#00A75A',
+    borderColor: colors.primary,
     borderWidth: 1,
-    marginBottom: 15,
     borderRadius: 10,
     paddingLeft: 20,
   },
