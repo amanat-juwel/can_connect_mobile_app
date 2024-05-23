@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import CustomInputTextField from '../components/CustomInputTextField';
 import CustomButton from '../components/CustomButton';
 import CustomInputPasswordField from '../components/CustomInputPasswordField';
@@ -16,15 +8,20 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
+import CanConnectLogo from '../components/CanConnectLogo';
+import colors from '../constants/colors';
+import CustomLabel from '../components/CustomLabel';
+import CustomLinkButton from '../components/CustomLinkButton';
+import CustomFooter from '../components/CustomFooter';
+import routes from '../Navigation/routes';
 
 const LoginScreen = () => {
   const [loginFailed, setLoginFailed] = useState();
+  const [isRememberMeChecked, setRememberMeChecked] = useState(true);
 
   const { t } = useTranslation();
   const { login } = useAuth();
-  const { width } = Dimensions.get('window');
-  const imageWidth = width * 0.38 * 0.8;
-  const imageHeight = imageWidth * (138 / 184);
+
   const navigation = useNavigation();
 
   const handleLogIn = async () => {
@@ -36,46 +33,26 @@ const LoginScreen = () => {
     login(result.data);
   };
 
-  const handlePress = () => {
-    // Open the link in the browser
-    Linking.openURL('https://www.google.com/');
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          source={require('../../assets/images/icon.png')}
-          style={{ width: imageWidth, height: imageHeight }}
-        />
+        <CanConnectLogo />
       </View>
 
       <View style={styles.loginContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('loginText')}</Text>
-        </View>
+        <CustomLabel text={t('loginText')} />
         <View style={styles.formContainer}>
-          <CustomInputTextField
-            placeholder={t('emailPhonePlaceHolder')}
-            style={styles.input}
-          />
-          <CustomInputPasswordField
-            placeholder={t('PasswordPlaceHolder')}
-            style={styles.input}
-          />
+          <CustomInputTextField placeholder={t('emailPhonePlaceHolder')} />
+          <CustomInputPasswordField placeholder={t('PasswordPlaceHolder')} />
         </View>
 
         <View style={styles.rememberContainer}>
           <CustomCheckBox
             title={t('rememberMeText')}
-            checked={false}
-            onPress={() => {}}
+            isChecked={isRememberMeChecked}
+            onPress={setRememberMeChecked}
           />
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={[styles.forgetPassword, { color: 'blue' }]}>
-              {t('forgetPasswordText')}
-            </Text>
-          </TouchableOpacity>
+          <CustomLinkButton text={t('forgetPasswordText')} onPress={() => {}} />
         </View>
 
         <CustomButton
@@ -85,17 +62,13 @@ const LoginScreen = () => {
         />
       </View>
 
-      <View style={styles.bottomContainer}>
-        <Text style={styles.createAccountContainer}>
-          {t('doNotHaveAccountText')}{' '}
-          <Text
-            style={styles.createAccountText}
-            onPress={() => navigation.navigate('CreatAccountScreen')}
-          >
-            {t('createAccountText')}
-          </Text>
-        </Text>
-      </View>
+      <CustomFooter
+        text={t('doNotHaveAccountText')}
+        actionButtonText={t('createAccountText')}
+        onActionButtonPress={() =>
+          navigation.navigate(routes.CREATE_ACCOUNT_SCREEN)
+        }
+      />
     </View>
   );
 };
@@ -105,53 +78,21 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 0,
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   imageContainer: {
     marginTop: 60,
-    alignItems: 'center', // Center the image horizontally
-  },
-  textContainer: {
-    alignSelf: 'flex-start', // Align the text to the left
-    marginBottom: 20,
-  },
-  headingLabel: {
-    fontSize: 25,
-    fontWeight: '500',
-    marginTop: 10,
+    alignItems: 'center',
   },
   formContainer: {
     width: '100%',
     marginBottom: 10,
-  },
-  termsContainer: {
-    marginTop: 10,
-    marginBottom: 40,
-    flexDirection: 'row',
-  },
-  terms: {
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  createAccountContainer: {
-    fontSize: 16,
-  },
-  createAccountText: {
-    fontWeight: 'bold',
-    color: '#00A75A',
-  },
-  bottomContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 40,
   },
   rememberContainer: {
     flexDirection: 'row',
@@ -159,9 +100,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     width: '100%',
-  },
-  input: {
-    flex: 1,
   },
   button: {
     width: '100%',
