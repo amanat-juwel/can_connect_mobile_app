@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import colors from '../constants/colors';
 
 const CustomButton = ({ label, onPress }) => {
   return (
@@ -11,7 +12,7 @@ const CustomButton = ({ label, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#00A75A', // Adjust color as needed
+    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 14,
     paddingHorizontal: 10,
@@ -20,10 +21,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff', // Ensure text color contrasts with button color
+    color: colors.white,
     fontWeight: 'bold',
     fontSize: 20,
-    // fontFamily: 'DMSans'
   },
 });
 

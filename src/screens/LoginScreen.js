@@ -17,7 +17,7 @@ import {
   CustomForm,
   CustomSubmitButton,
   CustomFormField,
-  ErrorMessage,
+  CustomErrorMessage,
 } from '../components/forms';
 
 const validationSchema = Yup.object().shape({
@@ -36,7 +36,7 @@ const LoginScreen = () => {
 
   const handleLogIn = async ({ id, password }) => {
     const result = await authApi.login(id, password);
-    if (!result.ok) return setLoginFailed(true);
+    if (!result.ok || !result.data.success) return setLoginFailed(true);
     setLoginFailed(false);
     login(result.data, isRememberMeChecked);
   };
@@ -79,7 +79,7 @@ const LoginScreen = () => {
               />
             </View>
 
-            <ErrorMessage
+            <CustomErrorMessage
               error={t('loginFailedMessage')}
               visible={loginFailed}
             />

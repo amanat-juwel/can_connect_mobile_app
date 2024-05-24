@@ -29,19 +29,16 @@ const WelcomeScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Image in top right corner */}
       <Image
         source={require('../../assets/images/splashTopRight.png')}
         style={[styles.topRightImage, { opacity: 1.0 }]}
       />
 
-      {/* Image in top left corner */}
       <ImageBackground
         source={require('../../assets/images/splashTopLeft.png')}
         style={[styles.topLeftImage, { opacity: 1.0 }]}
       />
 
-      {/* White gradient from bottom to top */}
       <LinearGradient
         colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
         style={styles.gradient}
@@ -78,7 +75,7 @@ const WelcomeScreen = () => {
         <View style={styles.bottomPosition}>
           <ClickableTextButton
             text={t('loginText')}
-            navigationPage="LoginScreen"
+            navigationPage={routes.VERIFY_PHONE_NUMBER_SCREEN}
           />
         </View>
       </View>

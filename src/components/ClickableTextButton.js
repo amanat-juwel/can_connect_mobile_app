@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import colors from '../constants/colors';
 
 const ClickableTextButton = ({ text, navigationPage }) => {
   const navigation = useNavigation();
@@ -18,8 +19,7 @@ const ClickableTextButton = ({ text, navigationPage }) => {
 
 const styles = StyleSheet.create({
   buttonText: {
-    color: '#00A75A',
-    //textDecorationLine: 'underline',
+    color: colors.primary,
     fontSize: 18,
     padding: 10,
     fontWeight: 'bold',
