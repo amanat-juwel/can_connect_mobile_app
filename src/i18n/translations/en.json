@@ -16,5 +16,7 @@
   "loginUsingPasswordMessage":"Login Using Password",
   "otpVerificationTitle":"Enter Email/Phone Number",
   "otpEntryTitle":"Enter OTP",
-  "ContinueText":"Continue"
+  "continueText":"Continue",
+  "submitText":"Submit",
+  "resendOtpText": "Resend OTP"
 }

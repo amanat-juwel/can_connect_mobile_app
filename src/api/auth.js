@@ -4,6 +4,7 @@ import client from './client';
 const loginEndpoint = '/login';
 const logoutEndpoint = '/logout';
 const requestOtpEndpoint = '/otp-request';
+const otpLoginEndpoint = '/otp-login';
 
 const login = (id, password) => {
   const idType = isEmail(id) ? 'email' : 'phone';
@@ -30,8 +31,20 @@ const requestOtp = (id) => {
   return client.post(requestOtpEndpoint, payload);
 };
 
+const loginByOtp = (id, code) => {
+  const idType = isEmail(id) ? 'email' : 'phone';
+  let payload = {
+    email: '',
+    phone: '',
+    code,
+    [idType]: id,
+  };
+  return client.post(otpLoginEndpoint, payload);
+};
+
 export default {
   login,
+  loginByOtp,
   logout,
   requestOtp,
 };

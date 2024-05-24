@@ -20,15 +20,20 @@ const validationSchema = Yup.object().shape({
 
 const VerifyPhoneNumberScreen = () => {
   const [otpRequestFailed, setOtpRequestFailed] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   const { t } = useTranslation();
   const navigation = useNavigation();
 
   const handleSubmit = async ({ id }) => {
     const result = await authApi.requestOtp(id);
-    if (!result.ok || !result.data.success) return setOtpRequestFailed(true);
+    if (!result.ok || !result.data.success) {
+      setOtpRequestFailed(true);
+      setErrorMessage(result.data.errorMessage[0]);
+      return;
+    }
     setOtpRequestFailed(false);
-    navigation.navigate(routes.OTP_SCREEN);
+    navigation.navigate(routes.OTP_SCREEN, { id });
   };
 
   return (
@@ -40,10 +45,7 @@ const VerifyPhoneNumberScreen = () => {
       >
         <CustomFormField name="id" placeholder={t('emailPhonePlaceHolder')} />
 
-        <CustomErrorMessage
-          error={t('loginFailedMessage')}
-          visible={otpRequestFailed}
-        />
+        <CustomErrorMessage error={errorMessage} visible={otpRequestFailed} />
         <View style={styles.linkButtonContainer}>
           <CustomLinkButton
             text={t('loginUsingPasswordMessage')}
@@ -51,7 +53,7 @@ const VerifyPhoneNumberScreen = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <CustomSubmitButton label={t('ContinueText')} />
+          <CustomSubmitButton label={t('continueText')} />
         </View>
       </CustomForm>
     </View>

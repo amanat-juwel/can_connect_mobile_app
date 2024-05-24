@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 const tokenKey = 'authToken';
 const userKey = 'user';
 
-const storeSession = async (session, rememberUser) => {
+const storeSession = async (session, rememberUser = true) => {
   try {
     storeToken(session.token);
     if (rememberUser) {
