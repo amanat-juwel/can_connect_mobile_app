@@ -12,5 +12,11 @@
   "noInternetMessage":"No Internet Connection",
   "idErrorMessage":"Must be a valid Email or Phone Number",
   "passwordErrorMessage":"Password is a required field",
-  "loginFailedMessage":"Authentication failed"
+  "loginFailedMessage":"Authentication failed",
+  "loginUsingPasswordMessage":"Login Using Password",
+  "otpVerificationTitle":"Enter Email/Phone Number",
+  "otpEntryTitle":"Enter OTP",
+  "continueText":"Continue",
+  "submitText":"Submit",
+  "resendOtpText": "Resend OTP"
 }

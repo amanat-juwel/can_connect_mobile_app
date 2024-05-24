@@ -1,31 +1,48 @@
-// OtpScreen.js
-
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import CustomButton from '../components/CustomButton';
+import { useTranslation } from 'react-i18next';
+import colors from '../constants/colors';
+import CustomLinkButton from '../components/CustomLinkButton';
+import authApi from '../api/auth';
+import useAuth from '../auth/useAuth';
+import { CustomErrorMessage } from '../components/forms';
 
-const OtpScreen = () => {
+const OtpScreen = ({ route }) => {
+  const [loginFailed, setLoginFailed] = useState();
+  const { login } = useAuth();
   const [otpCode1, setOtpCode1] = useState('');
   const [otpCode2, setOtpCode2] = useState('');
   const [otpCode3, setOtpCode3] = useState('');
   const [otpCode4, setOtpCode4] = useState('');
+  const [otpCode5, setOtpCode5] = useState('');
+  const [otpCode6, setOtpCode6] = useState('');
 
   const otpInput1 = useRef(null);
   const otpInput2 = useRef(null);
   const otpInput3 = useRef(null);
   const otpInput4 = useRef(null);
+  const otpInput5 = useRef(null);
+  const otpInput6 = useRef(null);
 
-  const handleSubmit = () => {
-    const otpCode = `${otpCode1}${otpCode2}${otpCode3}${otpCode4}`;
-    console.log('OTP Code Submitted:', otpCode);
+  const handleSubmit = async () => {
+    const otpCode = `${otpCode1}${otpCode2}${otpCode3}${otpCode4}${otpCode5}${otpCode6}`;
+    if (otpCode.length < 6) return;
+
+    const result = await authApi.loginByOtp(route.params.id, otpCode);
+    if (!result.ok || !result.data.success) return setLoginFailed(true);
+    setLoginFailed(false);
+    login(result.data);
   };
+
+  const resendCode = () => {
+    authApi.requestOtp(route.params.id);
+  };
+
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.infoText}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry.
-      </Text>
       <View style={styles.inputContainer}>
         <TextInput
           ref={otpInput1}
@@ -69,12 +86,43 @@ const OtpScreen = () => {
           placeholder="-"
           keyboardType="phone-pad"
           value={otpCode4}
-          onChangeText={setOtpCode4}
+          onChangeText={(text) => {
+            setOtpCode4(text);
+            if (text) otpInput5.current.focus();
+          }}
+          maxLength={1}
+        />
+        <TextInput
+          ref={otpInput5}
+          style={styles.textInput}
+          placeholder="-"
+          keyboardType="phone-pad"
+          value={otpCode5}
+          onChangeText={(text) => {
+            setOtpCode5(text);
+            if (text) otpInput6.current.focus();
+          }}
+          maxLength={1}
+        />
+        <TextInput
+          ref={otpInput6}
+          style={styles.textInput}
+          placeholder="-"
+          keyboardType="phone-pad"
+          value={otpCode6}
+          onChangeText={setOtpCode6}
           maxLength={1}
         />
       </View>
+      <CustomErrorMessage
+        error={t('loginFailedMessage')}
+        visible={loginFailed}
+      />
       <View style={styles.buttonContainer}>
-        <CustomButton label="Verify" onPress={handleSubmit} />
+        <CustomButton label={t('submitText')} onPress={handleSubmit} />
+      </View>
+      <View style={styles.linkButtonContainer}>
+        <CustomLinkButton text={t('resendOtpText')} onPress={resendCode} />
       </View>
     </View>
   );
@@ -85,14 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     padding: 20,
-    backgroundColor: '#fff',
-  },
-  infoText: {
-    fontSize: 15,
-    color: '#555',
-    textAlign: 'center',
-    marginVertical: 5,
-    marginBottom: 30,
+    backgroundColor: colors.white,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -106,13 +147,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     borderWidth: 1,
-    borderColor: '#00A75A',
+    borderColor: colors.primary,
     borderRadius: 10,
-    marginHorizontal: 5,
   },
   buttonContainer: {
     width: '100%',
     marginTop: 10,
+  },
+  linkButtonContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+    width: '100%',
   },
 });
 
