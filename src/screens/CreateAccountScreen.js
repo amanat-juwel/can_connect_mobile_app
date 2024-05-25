@@ -4,39 +4,105 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Image,
   Dimensions,
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import CustomInputTextField from '../components/CustomInputTextField';
-import CustomButton from '../components/CustomButton';
-import CustomInputPasswordField from '../components/CustomInputPasswordField';
-import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
-import CustomCheckBox from '../components/CustomCheckBox'; // Import your CheckBox component
+import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
+import CanConnectLogo from '../components/CanConnectLogo';
+import { useTranslation } from 'react-i18next';
+import {
+  CustomForm,
+  CustomFormField,
+  CustomFormPicker,
+  CustomSubmitButton,
+} from '../components/forms';
+import * as Yup from 'yup';
+import CustomFooter from '../components/CustomFooter';
+import routes from '../Navigation/routes';
+import colors from '../constants/colors';
+
+const validationSchema = Yup.object().shape({
+  first_name: Yup.string().required(),
+  last_name: Yup.string().required(),
+  email: Yup.string().email().required(),
+  phone: Yup.string()
+    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/)
+    .required(),
+  password: Yup.string().required(),
+  c_password: Yup.string().required(),
+  state: Yup.object().required(),
+  city: Yup.object().required(),
+  postal_code: Yup.number().required(),
+  street_address: Yup.string().required(),
+});
+
+const initialFormValues = {
+  first_name: '',
+  last_name: '',
+  email: '',
+  phone: '',
+  password: '',
+  c_password: '',
+  state: null,
+  city: null,
+  postal_code: null,
+  street_address: '',
+};
 
 const CreateAccountScreen = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [isCollector, setIsCollector] = useState(false);
-  const [isUser, setIsUser] = useState(false);
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+
+  const [isCollector, setIsCollector] = useState(true);
+  const [isRecycle, setIsRecycle] = useState(false);
 
   const { width, height } = Dimensions.get('window');
   const imageWidth = width * 0.38 * 0.8;
   const imageHeight = imageWidth * (138 / 184);
-  const navigation = useNavigation();
 
-  const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
-  const states = ['New York', 'California', 'Texas', 'Florida', 'Illinois'];
+  const cities = [
+    {
+      id: 1,
+      name: 'Newcastle',
+      state_id: 1,
+    },
+    {
+      id: 2,
+      name: 'Wollongong',
+      state_id: 1,
+    },
+  ];
+  const states = [
+    {
+      id: 1,
+      name: 'New South Wales',
+    },
+    {
+      id: 2,
+      name: 'Victoria',
+    },
+    {
+      id: 3,
+      name: 'Queensland',
+    },
+    {
+      id: 4,
+      name: 'Western Australia',
+    },
+    {
+      id: 5,
+      name: 'South Australia',
+    },
+    {
+      id: 6,
+      name: 'Tasmania',
+    },
+  ];
 
-  const handleSignUp = () => {
+  const handleSignUp = (data) => {
+    console.log(data);
     // Implement signup logic here
   };
   const handlePress = () => {
@@ -44,121 +110,132 @@ const CreateAccountScreen = () => {
     Linking.openURL('https://www.google.com/');
   };
 
+  const handleUserType = () => {
+    setIsCollector((prev) => !prev);
+    setIsRecycle((prev) => !prev);
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../../assets/images/icon.png')}
-            style={{ width: imageWidth, height: imageHeight }}
-          />
+          <CanConnectLogo />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>Create account</Text>
+          <Text style={styles.headingLabel}>{t('createAccountText')}</Text>
         </View>
         <View style={styles.formContainer}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: (width - 50) / 2,
-            }}
+          <CustomForm
+            initialValues={initialFormValues}
+            onSubmit={handleSignUp}
+            validationSchema={validationSchema}
           >
-            <CustomInputTextField
-              placeholder="First Name"
-              onChangeText={setFirstName}
-              style={{ flex: 1 }}
-            />
-            <View style={{ marginRight: 10 }} />
-            <CustomInputTextField
-              placeholder="Last Name"
-              onChangeText={setLastName}
-              style={{ flex: 1 }}
-            />
-          </View>
-
-          <CustomInputTextField placeholder="Email" onChangeText={setEmail} />
-
-          <CustomInputTextField
-            placeholder="Phone Number"
-            onChangeText={setPhoneNumber}
-          />
-
-          <CustomInputPasswordField
-            placeholder="Password"
-            onChangeText={setPassword}
-            secureTextEntry={true}
-          />
-
-          <CustomInputPasswordField
-            placeholder="Confirm Password"
-            onChangeText={setConfirmPassword}
-            secureTextEntry={true}
-          />
-
-          {/* City Picker */}
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={city}
-              onValueChange={(itemValue, itemIndex) => setCity(itemValue)}
-              style={[styles.picker, { borderColor: '#00A75A' }]} // Green border color
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
             >
-              <Picker.Item label="Select City" value="" color="gray" />
-              {cities.map((city, index) => (
-                <Picker.Item label={city} value={city} key={index} />
-              ))}
-            </Picker>
-          </View>
+              <View style={{ width: '50%', paddingEnd: 4 }}>
+                <CustomFormField
+                  name="first_name"
+                  placeholder={t('firstNameText')}
+                  errorMessage={t('firstNameErrorMessage')}
+                />
+              </View>
+              <View style={{ width: '50%', paddingStart: 4 }}>
+                <CustomFormField
+                  name="last_name"
+                  placeholder={t('lastNameText')}
+                  errorMessage={t('LastNameErrorMessage')}
+                />
+              </View>
+            </View>
+            <CustomFormField
+              name="email"
+              placeholder={t('emailText')}
+              errorMessage={t('emailErrorMessage')}
+            />
+            <CustomFormField
+              name="phone"
+              placeholder={t('phoneText')}
+              errorMessage={t('phoneErrorMessage')}
+            />
+            <CustomFormField
+              name="password"
+              placeholder={t('PasswordText')}
+              isPasswordField
+              errorMessage={t('passwordErrorMessage')}
+            />
+            <CustomFormField
+              name="c_password"
+              placeholder={t('confirmPasswordText')}
+              isPasswordField
+              errorMessage={t('confirmPasswordErrorMessage')}
+            />
 
-          {/* State Picker */}
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={state}
-              onValueChange={(itemValue, itemIndex) => setState(itemValue)}
-              style={[styles.picker, { borderColor: '#00A75A' }]} // Green border color
+            <CustomFormPicker
+              name="state"
+              items={states}
+              label={t('statePickerLabel')}
+            />
+
+            <CustomFormPicker
+              name="city"
+              items={cities}
+              label={t('cityPickerLabel')}
+            />
+
+            <CustomFormField
+              name="postal_code"
+              placeholder={t('postalCodeText')}
+              errorMessage={t('postalCodeErrorMessage')}
+            />
+
+            <CustomFormField
+              name="street_address"
+              placeholder={t('streetAddressText')}
+              errorMessage={t('streetAddressErrorMessage')}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                marginBottom: 20,
+              }}
             >
-              <Picker.Item label="Select State" value="" color="gray" />
-              {states.map((state, index) => (
-                <Picker.Item label={state} value={state} key={index} />
-              ))}
-            </Picker>
-          </View>
-
-          {/* Checkboxes */}
-          <View style={styles.checkboxContainer}>
-            <CustomCheckBox
-              title="Collector"
-              checked={isCollector}
-              onPress={() => setIsCollector(!isCollector)}
-              checkedColor="#00A75A"
-            />
-            <CustomCheckBox
-              title="User (For Recycle)"
-              checked={isUser}
-              onPress={() => setIsUser(!isUser)}
-              checkedColor="#00A75A"
-            />
-          </View>
+              <View style={{ width: '50%', paddingEnd: 4 }}>
+                <CustomCheckBox
+                  title={t('collectorText')}
+                  isChecked={isCollector}
+                  onPress={handleUserType}
+                />
+              </View>
+              <View style={{ width: '50%', paddingEnd: 4 }}>
+                <CustomCheckBox
+                  title={t('requestorText')}
+                  isChecked={isRecycle}
+                  onPress={handleUserType}
+                />
+              </View>
+            </View>
+            <CustomSubmitButton label={t('createAccountButtonText')} />
+          </CustomForm>
         </View>
 
-        <CustomButton label="Create account" onPress={handleSignUp} />
-        <Text style={[styles.termsContainer, { fontSize: 16 }]}>
-          By signing up you agree to all the{' '}
-          <TouchableOpacity onPress={handlePress}>
-            <Text style={styles.terms}>Terms & Conditions</Text>
-          </TouchableOpacity>
-        </Text>
-        <View style={styles.bottomContainer}>
-          <Text style={styles.logInContainer}>
-            Already have an account? {''} {/* Add space after "?" */}
-            <Text
-              style={styles.logInText}
-              onPress={() => navigation.navigate('LoginScreen')}
-            >
-              Log In
-            </Text>
-          </Text>
-        </View>
+        <CustomFooter
+          text={t('agreementText')}
+          actionButtonText={t('termsAndConditionText')}
+          color={colors.black}
+          textDecorationLine="underline"
+          onActionButtonPress={() => {}}
+        />
+        <CustomFooter
+          text={t('alreadyHaveAccountText')}
+          actionButtonText={t('loginText')}
+          onActionButtonPress={() => navigation.navigate(routes.LOGIN_SCREEN)}
+        />
       </View>
     </ScrollView>
   );
@@ -188,48 +265,9 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
   },
-  nameContainer: {
-    flexDirection: 'row',
-    width: '100%',
-  },
-  nameInput: {
-    //flex: 1,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#00A75A',
-    borderRadius: 10,
-    marginBottom: 15,
-    height: 60,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
-  checkboxContainer: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
-  termsContainer: {
-    marginTop: 10,
-    marginBottom: 40,
-    flexDirection: 'row',
-  },
-  terms: {
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  logInContainer: {
-    fontSize: 16,
-  },
   logInText: {
     fontWeight: 'bold',
     color: '#00A75A',
-  },
-  bottomContainer: {
-    marginBottom: 40,
   },
 });
 

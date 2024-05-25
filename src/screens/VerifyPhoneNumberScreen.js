@@ -43,7 +43,11 @@ const VerifyPhoneNumberScreen = () => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <CustomFormField name="id" placeholder={t('emailPhonePlaceHolder')} />
+        <CustomFormField
+          name="id"
+          placeholder={t('emailPhonePlaceHolder')}
+          errorMessage={t('idErrorMessage')}
+        />
 
         <CustomErrorMessage error={errorMessage} visible={otpRequestFailed} />
         <View style={styles.linkButtonContainer}>

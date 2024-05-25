@@ -26,6 +26,7 @@ const CustomInputPasswordField = ({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor={colors.lightGrey}
         onChangeText={onChangeText}
         secureTextEntry={!isPasswordVisible}
         value={value}

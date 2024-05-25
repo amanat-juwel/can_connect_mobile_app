@@ -10,10 +10,11 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
-import ClickableTextButton from '../components/ClickableTextButton';
 import { useNavigation } from '@react-navigation/native';
 import routes from '../Navigation/routes';
 import { useTranslation } from 'react-i18next';
+import CustomLinkButton from '../components/CustomLinkButton';
+import colors from '../constants/colors';
 
 const WelcomeScreen = () => {
   const { t } = useTranslation();
@@ -73,9 +74,14 @@ const WelcomeScreen = () => {
         />
 
         <View style={styles.bottomPosition}>
-          <ClickableTextButton
+          <CustomLinkButton
             text={t('loginText')}
-            navigationPage={routes.VERIFY_PHONE_NUMBER_SCREEN}
+            onPress={() =>
+              navigation.navigate(routes.VERIFY_PHONE_NUMBER_SCREEN)
+            }
+            LinkColor={colors.primary}
+            fontSize={18}
+            fontWeight="bold"
           />
         </View>
       </View>

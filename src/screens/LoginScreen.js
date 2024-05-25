@@ -59,12 +59,14 @@ const LoginScreen = () => {
             <CustomFormField
               name="id"
               placeholder={t('emailPhonePlaceHolder')}
+              errorMessage={t('idErrorMessage')}
             />
 
             <CustomFormField
               name="password"
               isPasswordField
-              placeholder={t('PasswordPlaceHolder')}
+              placeholder={t('PasswordText')}
+              errorMessage={t('passwordErrorMessage')}
             />
 
             <View style={styles.rememberContainer}>
