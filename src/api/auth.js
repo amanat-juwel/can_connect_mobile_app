@@ -21,12 +21,10 @@ const logout = () => {
   return client.post(logoutEndpoint);
 };
 
-const requestOtp = (id) => {
-  const idType = isEmail(id) ? 'email' : 'phone';
+const requestOtp = (phone = '', email = '') => {
   let payload = {
-    email: '',
-    phone: '',
-    [idType]: id,
+    email,
+    phone,
   };
   return client.post(requestOtpEndpoint, payload);
 };

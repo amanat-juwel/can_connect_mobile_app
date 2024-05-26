@@ -91,7 +91,7 @@ const CreateAccountScreen = () => {
       if (!result.ok || !result.data.success)
         return setRegistrationFailed(true);
       setRegistrationFailed(false);
-      const requestOtpResult = await authApi.requestOtp(data.phone);
+      const requestOtpResult = await authApi.requestOtp(data.phone, data.email);
       console.log('requestOtpResult', result.data);
       if (!requestOtpResult.ok || !requestOtpResult.data.success)
         return setRegistrationFailed(true);

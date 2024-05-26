@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,6 @@ import {
   CustomFormField,
   CustomErrorMessage,
 } from '../components/forms';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const validationSchema = Yup.object().shape({
   id: emailOrPhoneSchema,

@@ -7,6 +7,7 @@ import CustomLinkButton from '../components/CustomLinkButton';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import { CustomErrorMessage } from '../components/forms';
+import { isEmail } from '../utility/validation.helper';
 
 const OtpScreen = ({ route }) => {
   const [loginFailed, setLoginFailed] = useState();
@@ -36,7 +37,8 @@ const OtpScreen = ({ route }) => {
   };
 
   const resendCode = () => {
-    authApi.requestOtp(route.params.id);
+    const id = route.params.id;
+    isEmail(id) ? authApi.requestOtp('', id) : authApi.requestOtp(id);
   };
 
   const { t } = useTranslation();
