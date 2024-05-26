@@ -43,5 +43,6 @@
   "requestorText":"Requestor",
   "alreadyHaveAccountText":"Already have an account?",
   "agreementText":"By signing up you agree to all the",
-  "termsAndConditionText":"Terms & Conditions"
+  "termsAndConditionText":"Terms & Conditions",
+  "registrationFailedMessage":"Registration Failed."
 }

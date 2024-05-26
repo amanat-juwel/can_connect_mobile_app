@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import CanConnectLogo from '../components/CanConnectLogo';
 import { useTranslation } from 'react-i18next';
 import {
+  CustomErrorMessage,
   CustomForm,
   CustomFormField,
   CustomFormPicker,
@@ -22,6 +15,10 @@ import * as Yup from 'yup';
 import CustomFooter from '../components/CustomFooter';
 import routes from '../Navigation/routes';
 import colors from '../constants/colors';
+import userTypes from '../constants/userType';
+import publicApi from '../api/public';
+import registrationApi from '../api/registration';
+import authApi from '../api/auth';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -55,64 +52,66 @@ const CreateAccountScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const [isCollector, setIsCollector] = useState(true);
-  const [isRecycle, setIsRecycle] = useState(false);
+  const [registrationFailed, setRegistrationFailed] = useState();
+  const [userType, setUserType] = useState(userTypes.COLLECTOR);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
 
-  const { width, height } = Dimensions.get('window');
-  const imageWidth = width * 0.38 * 0.8;
-  const imageHeight = imageWidth * (138 / 184);
-
-  const cities = [
-    {
-      id: 1,
-      name: 'Newcastle',
-      state_id: 1,
-    },
-    {
-      id: 2,
-      name: 'Wollongong',
-      state_id: 1,
-    },
-  ];
-  const states = [
-    {
-      id: 1,
-      name: 'New South Wales',
-    },
-    {
-      id: 2,
-      name: 'Victoria',
-    },
-    {
-      id: 3,
-      name: 'Queensland',
-    },
-    {
-      id: 4,
-      name: 'Western Australia',
-    },
-    {
-      id: 5,
-      name: 'South Australia',
-    },
-    {
-      id: 6,
-      name: 'Tasmania',
-    },
-  ];
-
-  const handleSignUp = (data) => {
-    console.log(data);
-    // Implement signup logic here
+  const getStates = async () => {
+    const result = await publicApi.getStates();
+    if (result.ok && result.data.success) {
+      setStates(result.data.data);
+    }
   };
-  const handlePress = () => {
-    // Open the link in the browser
-    Linking.openURL('https://www.google.com/');
+
+  const getCities = async (stateId) => {
+    const result = await publicApi.getCities(stateId);
+    if (result.ok && result.data.success) {
+      setCities(result.data.data);
+    }
   };
+
+  useEffect(() => {
+    getStates();
+  }, []);
+  useEffect;
+
+  const handleSignUp = async (data) => {
+    if (userType === userTypes.REQUESTOR) {
+      const { state, city, ...otherFields } = data;
+      const payload = {
+        ...otherFields,
+        state_id: state.id,
+        city_id: city.id,
+        category: userTypes.REQUESTOR,
+      };
+      console.log(payload);
+      const result = await registrationApi.registerUser(payload);
+      console.log('result', result.data);
+      if (!result.ok || !result.data.success)
+        return setRegistrationFailed(true);
+      setRegistrationFailed(false);
+      const requestOtpResult = await authApi.requestOtp(data.phone);
+      console.log('requestOtpResult', result.data);
+      if (!requestOtpResult.ok || !requestOtpResult.data.success)
+        return setRegistrationFailed(true);
+      setRegistrationFailed(false);
+      navigation.navigate(routes.OTP_SCREEN, { id: data.phone });
+    } else {
+      // navigate to collector details form
+    }
+  };
+
+  const showTermsAndConditions = () => {};
 
   const handleUserType = () => {
-    setIsCollector((prev) => !prev);
-    setIsRecycle((prev) => !prev);
+    setUserType((prev) => {
+      if (prev === userTypes.COLLECTOR) {
+        return userTypes.REQUESTOR;
+      } else {
+        return userTypes.COLLECTOR;
+      }
+    });
   };
 
   return (
@@ -178,6 +177,8 @@ const CreateAccountScreen = () => {
               name="state"
               items={states}
               label={t('statePickerLabel')}
+              onchange={(data) => getCities(data.id)}
+              clearField="city"
             />
 
             <CustomFormPicker
@@ -208,18 +209,22 @@ const CreateAccountScreen = () => {
               <View style={{ width: '50%', paddingEnd: 4 }}>
                 <CustomCheckBox
                   title={t('collectorText')}
-                  isChecked={isCollector}
+                  isChecked={userType === userTypes.COLLECTOR}
                   onPress={handleUserType}
                 />
               </View>
               <View style={{ width: '50%', paddingEnd: 4 }}>
                 <CustomCheckBox
                   title={t('requestorText')}
-                  isChecked={isRecycle}
+                  isChecked={userType === userTypes.REQUESTOR}
                   onPress={handleUserType}
                 />
               </View>
             </View>
+            <CustomErrorMessage
+              error={t('registrationFailedMessage')}
+              visible={registrationFailed}
+            />
             <CustomSubmitButton label={t('createAccountButtonText')} />
           </CustomForm>
         </View>
@@ -229,12 +234,14 @@ const CreateAccountScreen = () => {
           actionButtonText={t('termsAndConditionText')}
           color={colors.black}
           textDecorationLine="underline"
-          onActionButtonPress={() => {}}
+          onActionButtonPress={showTermsAndConditions}
         />
         <CustomFooter
           text={t('alreadyHaveAccountText')}
           actionButtonText={t('loginText')}
-          onActionButtonPress={() => navigation.navigate(routes.LOGIN_SCREEN)}
+          onActionButtonPress={() =>
+            navigation.navigate(routes.VERIFY_PHONE_NUMBER_SCREEN)
+          }
         />
       </View>
     </ScrollView>
@@ -247,7 +254,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   imageContainer: {
     marginTop: 60,

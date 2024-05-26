@@ -15,6 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomPickerItem from './CustomPickerItem';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
+import CustomLinkButton from './CustomLinkButton';
 
 const CustomPicker = ({
   label,
@@ -30,7 +31,6 @@ const CustomPicker = ({
   const { t } = useTranslation();
 
   const onModalItemPress = (item) => {
-    console.log(item);
     setModalVisible(false);
     onSelectItem(item);
   };
@@ -58,10 +58,15 @@ const CustomPicker = ({
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modal}>
-          <CustomButton
-            label={t('closeText')}
-            onPress={() => setModalVisible(false)}
-          />
+          <View style={styles.modalButton}>
+            <CustomLinkButton
+              text={t('closeText')}
+              onPress={() => setModalVisible(false)}
+              fontSize={18}
+              fontWeight="bold"
+              LinkColor={colors.primary}
+            />
+          </View>
           <FlatList
             data={items}
             keyExtractor={(item) => item.id.toString()}
@@ -100,6 +105,10 @@ const styles = StyleSheet.create({
     marginTop: 60,
     paddingHorizontal: 20,
     backgroundColor: colors.white,
+  },
+  modalButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 
