@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -42,60 +42,64 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <CanConnectLogo />
-      </View>
-
-      <View style={styles.loginContainer}>
-        <CustomLabel text={t('loginText')} />
-
-        <View style={styles.formContainer}>
-          <CustomForm
-            initialValues={{ id: '', password: '' }}
-            onSubmit={handleLogIn}
-            validationSchema={validationSchema}
-          >
-            <CustomFormField
-              name="id"
-              placeholder={t('emailPhonePlaceHolder')}
-            />
-
-            <CustomFormField
-              name="password"
-              isPasswordField
-              placeholder={t('PasswordPlaceHolder')}
-            />
-
-            <View style={styles.rememberContainer}>
-              <CustomCheckBox
-                title={t('rememberMeText')}
-                isChecked={isRememberMeChecked}
-                onPress={setRememberMeChecked}
-              />
-              <CustomLinkButton
-                text={t('forgetPasswordText')}
-                onPress={() => {}}
-              />
-            </View>
-
-            <CustomErrorMessage
-              error={t('loginFailedMessage')}
-              visible={loginFailed}
-            />
-            <CustomSubmitButton label={t('loginText')} />
-          </CustomForm>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <CanConnectLogo />
         </View>
-      </View>
 
-      <CustomFooter
-        text={t('doNotHaveAccountText')}
-        actionButtonText={t('createAccountText')}
-        onActionButtonPress={() =>
-          navigation.navigate(routes.CREATE_ACCOUNT_SCREEN)
-        }
-      />
-    </View>
+        <View style={styles.loginContainer}>
+          <CustomLabel text={t('loginText')} />
+
+          <View style={styles.formContainer}>
+            <CustomForm
+              initialValues={{ id: '', password: '' }}
+              onSubmit={handleLogIn}
+              validationSchema={validationSchema}
+            >
+              <CustomFormField
+                name="id"
+                placeholder={t('emailPhonePlaceHolder')}
+                errorMessage={t('idErrorMessage')}
+              />
+
+              <CustomFormField
+                name="password"
+                isPasswordField
+                placeholder={t('PasswordText')}
+                errorMessage={t('passwordErrorMessage')}
+              />
+
+              <View style={styles.rememberContainer}>
+                <CustomCheckBox
+                  title={t('rememberMeText')}
+                  isChecked={isRememberMeChecked}
+                  onPress={setRememberMeChecked}
+                />
+                <CustomLinkButton
+                  text={t('forgetPasswordText')}
+                  onPress={() => {}}
+                />
+              </View>
+
+              <CustomErrorMessage
+                error={t('loginFailedMessage')}
+                visible={loginFailed}
+              />
+              <CustomSubmitButton label={t('loginText')} />
+            </CustomForm>
+          </View>
+        </View>
+
+        <CustomFooter
+          text={t('doNotHaveAccountText')}
+          actionButtonText={t('createAccountText')}
+          onActionButtonPress={() =>
+            navigation.navigate(routes.CREATE_ACCOUNT_SCREEN)
+          }
+        />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -111,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.white,
+    paddingTop: 150,
   },
   imageContainer: {
     marginTop: 60,

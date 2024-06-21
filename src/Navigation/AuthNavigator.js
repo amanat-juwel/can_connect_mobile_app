@@ -8,6 +8,7 @@ import { HeaderBackButton } from './HeaderBackButton';
 import HeaderStyle from './HeaderStyle';
 import LoginScreen from '../screens/LoginScreen';
 import { useTranslation } from 'react-i18next';
+import CollectorQuestionnaire from '../screens/CollectorQuestionnaire';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,10 @@ const AuthNavigator = () => {
         component={CreateAccountScreen}
       />
       <Stack.Screen name={routes.LOGIN_SCREEN} component={LoginScreen} />
+      <Stack.Screen
+        name={routes.COLLECTOR_QUESTIONNAIRE}
+        component={CollectorQuestionnaire}
+      />
       <Stack.Screen
         name={routes.VERIFY_PHONE_NUMBER_SCREEN}
         component={VerifyPhoneNumberScreen}

@@ -4,13 +4,18 @@ import { useTranslation } from 'react-i18next';
 import CustomInputPasswordField from '../CustomInputPasswordField';
 import CustomInputTextField from '../CustomInputTextField';
 import CustomErrorMessage from './CustomErrorMessage';
+import { StyleSheet, View } from 'react-native';
 
-const CustomFormField = ({ name, isPasswordField = false, ...otherProps }) => {
+const CustomFormField = ({
+  name,
+  isPasswordField = false,
+  errorMessage,
+  ...otherProps
+}) => {
   const { handleChange, errors, setFieldTouched, touched } = useFormikContext();
-  const { t } = useTranslation();
 
   return (
-    <>
+    <View style={styles.container}>
       {isPasswordField ? (
         <CustomInputPasswordField
           onBlur={() => setFieldTouched(name)}
@@ -25,11 +30,18 @@ const CustomFormField = ({ name, isPasswordField = false, ...otherProps }) => {
         />
       )}
       <CustomErrorMessage
-        error={errors[name] && t('idErrorMessage')}
+        error={errors[name] && errorMessage}
         visible={touched[name]}
       />
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+});
 
 export default CustomFormField;

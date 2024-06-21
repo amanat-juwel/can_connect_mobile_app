@@ -26,6 +26,7 @@ const CustomInputPasswordField = ({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor={colors.lightGrey}
         onChangeText={onChangeText}
         secureTextEntry={!isPasswordVisible}
         value={value}
@@ -37,7 +38,7 @@ const CustomInputPasswordField = ({
       >
         <TouchableOpacity onPress={togglePasswordVisibility}>
           <Ionicons
-            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            name={isPasswordVisible ? 'eye' : 'eye-off'}
             size={24}
             color="gray"
           />

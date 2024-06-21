@@ -18,6 +18,7 @@ const CustomInputTextField = ({
     <TextInput
       style={[styles.input, { height, width, marginBottom, marginTop }]}
       placeholder={placeholder}
+      placeholderTextColor={colors.lightGrey}
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       value={value}
