@@ -9,6 +9,7 @@ import HeaderStyle from './HeaderStyle';
 import LoginScreen from '../screens/LoginScreen';
 import { useTranslation } from 'react-i18next';
 import CollectorQuestionnaire from '../screens/CollectorQuestionnaire';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,18 @@ const AuthNavigator = () => {
       <Stack.Screen
         name={routes.COLLECTOR_QUESTIONNAIRE}
         component={CollectorQuestionnaire}
+      />
+      <Stack.Screen
+        name={routes.FORGOT_PASSWORD}
+        component={ForgotPasswordScreen}
+        options={() => ({
+          headerShown: true,
+          title: t('resetPasswordText'),
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerLeft: HeaderBackButton,
+          headerStyle: HeaderStyle,
+        })}
       />
       <Stack.Screen
         name={routes.VERIFY_PHONE_NUMBER_SCREEN}

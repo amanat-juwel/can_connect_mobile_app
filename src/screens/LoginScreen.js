@@ -78,7 +78,7 @@ const LoginScreen = () => {
                 />
                 <CustomLinkButton
                   text={t('forgetPasswordText')}
-                  onPress={() => {}}
+                  onPress={() => navigation.navigate(routes.FORGOT_PASSWORD)}
                 />
               </View>
 
