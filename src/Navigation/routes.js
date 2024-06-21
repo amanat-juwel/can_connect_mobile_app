@@ -13,4 +13,5 @@ export default Object.freeze({
   PROFILE_SCREEN: 'ProfileScreen',
   HOME: 'home',
   COLLECTOR_QUESTIONNAIRE: 'CollectorQuestionnaire',
+  PICKUP_APPOINTMENT_SCREEN: 'PickupAppointmentScreen',
 });
