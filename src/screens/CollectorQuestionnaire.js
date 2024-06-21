@@ -13,13 +13,26 @@ import {
 } from '../components/forms';
 import * as Yup from 'yup';
 import CustomCheckBox from '../components/CustomCheckBox';
+import CustomFormDatePicker from '../components/forms/CustomFormDatePicker';
+import { isAdult } from '../utility/date.helper';
+import registrationApi from '../api/registration';
+import authApi from '../api/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
   dob: Yup.string().required(),
-  parent_email: Yup.string().email().required(),
-  parent_mobile_no: Yup.string()
-    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/)
-    .required(),
+  parent_email: Yup.string()
+    .email()
+    .when('dob', {
+      is: (value) => !isAdult(value),
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema,
+    }),
+  parent_mobile_no: Yup.string().when('dob', {
+    is: (value) => !isAdult(value),
+    then: (schema) => schema.matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/).required(),
+    otherwise: (schema) => schema,
+  }),
 });
 
 const initialFormValues = {
@@ -30,11 +43,13 @@ const initialFormValues = {
 
 const CollectorQuestionnaire = ({ route }) => {
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const [questionnaire, setQuestionnaire] = useState([]);
   const [answerSet, setAnswerSet] = useState([]);
   const [registrationFailed, setRegistrationFailed] = useState();
   const [isEligible, setIsEligible] = useState(true);
   const [isMinor, setIsMinor] = useState(false);
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
 
   const getQuestionnaire = async () => {
     const result = await publicApi.getQuestionnaire();
@@ -51,8 +66,35 @@ const CollectorQuestionnaire = ({ route }) => {
     getQuestionnaire();
   }, []);
 
+  const filteredQuestions = questionnaire.filter(
+    (question) => Boolean(question.is_minor_question) === isMinor,
+  );
+
   const handleSignUp = async (data) => {
-    console.log(data);
+    let payload = { ...route.params?.payload, ...data };
+    payload.question_answers = filteredQuestions.map((question) => {
+      return {
+        question_id: question.id,
+        answer: question.answer,
+      };
+    });
+    payload.work_egilibity = isEligible;
+    payload.is_minor = isMinor;
+    await registerCollector(payload);
+  };
+
+  const registerCollector = async (payload) => {
+    const result = await registrationApi.registerUser(payload);
+    if (!result.ok || !result.data.success) return setRegistrationFailed(true);
+    setRegistrationFailed(false);
+    const requestOtpResult = await authApi.requestOtp(
+      payload.phone,
+      payload.email,
+    );
+    if (!requestOtpResult.ok || !requestOtpResult.data.success)
+      return setRegistrationFailed(true);
+    setRegistrationFailed(false);
+    navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
   };
 
   const handleAnswer = (id, newAnswer) => {
@@ -63,12 +105,11 @@ const CollectorQuestionnaire = ({ route }) => {
     );
   };
 
-  // console.log('questionnaire', questionnaire);
-  // console.log('answerSet', answerSet);
-  const filteredQuestions = questionnaire.filter(
-    (question) => Boolean(question.is_minor_question) === isMinor,
-  );
-  console.log('filteredQuestions', filteredQuestions);
+  const handleDobChange = (dob) => {
+    setIsMinor(!isAdult(dob));
+    setShowQuestionnaire(true);
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -84,10 +125,11 @@ const CollectorQuestionnaire = ({ route }) => {
             onSubmit={handleSignUp}
             validationSchema={validationSchema}
           >
-            <CustomFormField
+            <CustomFormDatePicker
               name="dob"
-              placeholder={t('emailText')}
-              errorMessage={t('emailErrorMessage')}
+              label={t('dateOfBirthText')}
+              errorMessage={t('dobErrorMessage')}
+              onchange={(dob) => handleDobChange(dob)}
             />
             {isMinor && (
               <CustomFormField
@@ -116,42 +158,51 @@ const CollectorQuestionnaire = ({ route }) => {
                 onPress={() => setIsEligible((prev) => !prev)}
               />
             </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.headingLabel}>
-                {t('collectorQuestionnaire')}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'column',
-                width: '100%',
-                marginBottom: 20,
-              }}
-            >
-              {filteredQuestions.map((question) => (
-                <View key={question.id} style={styles.questionItem}>
-                  <Text style={styles.question}>{question.question_text}</Text>
-                  {answerSet.map((answer) => (
-                    <View key={answer} style={styles.answerCheckbox}>
-                      <CustomCheckBox
-                        title={answer}
-                        isChecked={
-                          questionnaire.find((item) => item.id === question.id)
-                            .answer === answer
-                        }
-                        onPress={() => handleAnswer(question.id, answer)}
-                      />
+            {showQuestionnaire && (
+              <>
+                <View style={styles.textContainer}>
+                  <Text style={styles.headingLabel}>
+                    {t('collectorQuestionnaire')}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    width: '100%',
+                    marginBottom: 20,
+                  }}
+                >
+                  {filteredQuestions.map((question) => (
+                    <View key={question.id} style={styles.questionItem}>
+                      <Text style={styles.question}>
+                        {question.question_text}
+                      </Text>
+                      {answerSet.map((answer) => (
+                        <View key={answer} style={styles.answerCheckbox}>
+                          <CustomCheckBox
+                            title={answer}
+                            isChecked={
+                              questionnaire.find(
+                                (item) => item.id === question.id,
+                              ).answer === answer
+                            }
+                            onPress={() => handleAnswer(question.id, answer)}
+                          />
+                        </View>
+                      ))}
                     </View>
                   ))}
                 </View>
-              ))}
-            </View>
+              </>
+            )}
 
             <CustomErrorMessage
               error={t('registrationFailedMessage')}
               visible={registrationFailed}
             />
-            <CustomSubmitButton label={t('createAccountButtonText')} />
+            <View style={styles.submitButton}>
+              <CustomSubmitButton label={t('createAccountButtonText')} />
+            </View>
           </CustomForm>
         </View>
       </View>
@@ -194,9 +245,8 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
   },
-  logInText: {
-    fontWeight: 'bold',
-    color: '#00A75A',
+  submitButton: {
+    marginBottom: 20,
   },
 });
 

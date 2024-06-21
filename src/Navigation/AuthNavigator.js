@@ -17,7 +17,7 @@ const AuthNavigator = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={routes.COLLECTOR_QUESTIONNAIRE}
+      initialRouteName={routes.WELCOME_SCREEN}
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name={routes.WELCOME_SCREEN} component={WelcomeScreen} />

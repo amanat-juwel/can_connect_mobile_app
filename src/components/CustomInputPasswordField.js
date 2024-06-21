@@ -38,7 +38,7 @@ const CustomInputPasswordField = ({
       >
         <TouchableOpacity onPress={togglePasswordVisibility}>
           <Ionicons
-            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            name={isPasswordVisible ? 'eye' : 'eye-off'}
             size={24}
             color="gray"
           />

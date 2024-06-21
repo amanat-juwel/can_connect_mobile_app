@@ -49,6 +49,7 @@
   "collectorDetails": "Collector Details",
   "CollectorEligibilityText": "I am eligible to work",
   "parentEmailText":"Parent's Email",
-  "parentPhoneText":"Parent's Phone Number"
-
+  "parentPhoneText":"Parent's Phone Number",
+  "dateOfBirthText":"Date of Birth",
+  "dobErrorMessage": "Date of Birth is Required"
 }
