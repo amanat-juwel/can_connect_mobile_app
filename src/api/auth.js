@@ -5,6 +5,7 @@ const loginEndpoint = '/login';
 const logoutEndpoint = '/logout';
 const requestOtpEndpoint = '/otp-request';
 const otpLoginEndpoint = '/otp-login';
+const forgotPasswordEndpoint = '/forgot-password';
 
 const login = (id, password) => {
   const idType = isEmail(id) ? 'email' : 'phone';
@@ -40,9 +41,17 @@ const loginByOtp = (id, code) => {
   return client.post(otpLoginEndpoint, payload);
 };
 
+const requestForgotPassword = (email) => {
+  let payload = {
+    email,
+  };
+  return client.post(forgotPasswordEndpoint, payload);
+};
+
 export default {
   login,
   loginByOtp,
   logout,
   requestOtp,
+  requestForgotPassword,
 };

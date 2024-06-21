@@ -28,8 +28,8 @@
   "confirmPasswordText": "Confirm Password",
   "firstNameErrorMessage": "First Name is Required",
   "LastNameErrorMessage": "Last Name is Required",
-  "emailErrorMessage": "Email is Required",
-  "phoneErrorMessage": "Phone is Required",
+  "emailErrorMessage": "Valid Email is Required",
+  "phoneErrorMessage": "Valid Phone Number is Required",
   "confirmPasswordErrorMessage": "Password Confirmation is Required",
   "stateErrorMessage": "State is Required",
   "cityErrorMessage": "City is Required",
@@ -51,5 +51,8 @@
   "parentEmailText":"Parent's Email",
   "parentPhoneText":"Parent's Phone Number",
   "dateOfBirthText":"Date of Birth",
-  "dobErrorMessage": "Date of Birth is Required"
+  "dobErrorMessage": "Date of Birth is Required",
+  "resetPasswordText": "Reset Password",
+  "resetText": "Reset",
+  "passwordResetSuccessMessage":"New password has been sent to your email"
 }

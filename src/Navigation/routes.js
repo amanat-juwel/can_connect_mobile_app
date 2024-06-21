@@ -14,4 +14,5 @@ export default Object.freeze({
   HOME: 'home',
   COLLECTOR_QUESTIONNAIRE: 'CollectorQuestionnaire',
   PICKUP_APPOINTMENT_SCREEN: 'PickupAppointmentScreen',
+  FORGOT_PASSWORD: 'ForgotPassword',
 });
