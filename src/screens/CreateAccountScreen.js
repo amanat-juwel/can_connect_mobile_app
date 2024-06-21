@@ -74,32 +74,38 @@ const CreateAccountScreen = () => {
   useEffect(() => {
     getStates();
   }, []);
-  useEffect;
 
   const handleSignUp = async (data) => {
+    const { state, city, ...otherFields } = data;
+    const payload = {
+      ...otherFields,
+      state_id: state.id,
+      city_id: city.id,
+      category: userTypes.REQUESTOR,
+    };
+    console.log(payload);
+
     if (userType === userTypes.REQUESTOR) {
-      const { state, city, ...otherFields } = data;
-      const payload = {
-        ...otherFields,
-        state_id: state.id,
-        city_id: city.id,
-        category: userTypes.REQUESTOR,
-      };
-      console.log(payload);
-      const result = await registrationApi.registerUser(payload);
-      console.log('result', result.data);
-      if (!result.ok || !result.data.success)
-        return setRegistrationFailed(true);
-      setRegistrationFailed(false);
-      const requestOtpResult = await authApi.requestOtp(data.phone, data.email);
-      console.log('requestOtpResult', result.data);
-      if (!requestOtpResult.ok || !requestOtpResult.data.success)
-        return setRegistrationFailed(true);
-      setRegistrationFailed(false);
+      await registerRequestor(payload);
       navigation.navigate(routes.OTP_SCREEN, { id: data.phone });
     } else {
-      // navigate to collector details form
+      navigation.navigate(routes.COLLECTOR_QUESTIONNAIRE, { payload });
     }
+  };
+
+  const registerRequestor = async (payload) => {
+    const result = await registrationApi.registerUser(payload);
+    console.log('result', result.data);
+    if (!result.ok || !result.data.success) return setRegistrationFailed(true);
+    setRegistrationFailed(false);
+    const requestOtpResult = await authApi.requestOtp(
+      payload.phone,
+      payload.email,
+    );
+    console.log('requestOtpResult', result.data);
+    if (!requestOtpResult.ok || !requestOtpResult.data.success)
+      return setRegistrationFailed(true);
+    setRegistrationFailed(false);
   };
 
   const showTermsAndConditions = () => {};
@@ -225,7 +231,13 @@ const CreateAccountScreen = () => {
               error={t('registrationFailedMessage')}
               visible={registrationFailed}
             />
-            <CustomSubmitButton label={t('createAccountButtonText')} />
+            <CustomSubmitButton
+              label={
+                userType === userTypes.COLLECTOR
+                  ? t('continueText')
+                  : t('createAccountButtonText')
+              }
+            />
           </CustomForm>
         </View>
 
