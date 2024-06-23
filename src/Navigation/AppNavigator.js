@@ -3,30 +3,42 @@ import React from 'react';
 import routes from './routes';
 import HistoryScreen from '../screens/HistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import RecycleNavigator from './RecycleNavigator';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import colors from '../constants/colors';
+import DashboardScreen from '../screens/DashboardScreen';
+import RequestorNavigator from './RequestorNavigator';
+import CollectorNavigator from './CollectorNavigator';
+import userType from '../constants/userType';
+import ProfileNavigator from './ProfileNavigator';
 
 const Tab = createBottomTabNavigator();
-
-const AppNavigator = () => (
+const AppNavigator = ({ user }) => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
+      headerStyle: { backgroundColor: colors.primary },
+      headerTintColor: colors.white,
+      headerTitleAlign: 'center',
       tabBarStyle: {
         backgroundColor:
-          route.name === routes.PROFILE_SCREEN ? colors.primary : colors.white,
+          route.name === routes.PROFILE ? colors.primary : colors.white,
       },
       tabBarActiveTintColor:
-        route.name === routes.PROFILE_SCREEN ? colors.white : colors.primary,
+        route.name === routes.PROFILE ? colors.white : colors.primary,
       tabBarInactiveTintColor:
-        route.name === routes.PROFILE_SCREEN ? colors.white : colors.grey,
+        route.name === routes.PROFILE ? colors.white : colors.grey,
     })}
   >
     <Tab.Screen
       name={routes.HOME}
-      component={RecycleNavigator}
+      component={
+        user.category === userType.REQUESTOR
+          ? RequestorNavigator
+          : CollectorNavigator
+      }
       options={{
+        headerTitle: `Hello, ${user.first_name} ${user.last_name}!`,
+        headerTitleAlign: 'left',
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
             name="home-outline"
@@ -43,6 +55,30 @@ const AppNavigator = () => (
             }}
           >
             Home
+          </Text>
+        ),
+      }}
+    />
+    <Tab.Screen
+      name={routes.DASHBOARD_SCREEN}
+      component={DashboardScreen}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons
+            name="view-dashboard-outline"
+            color={color}
+            size={size}
+          />
+        ),
+        tabBarLabel: ({ focused, color }) => (
+          <Text
+            style={{
+              fontSize: 16,
+              color,
+              fontWeight: focused ? 'bold' : 'normal',
+            }}
+          >
+            Dashboard
           </Text>
         ),
       }}
@@ -68,33 +104,11 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
-      name={routes.SCHEDULE_SCREEN}
-      component={HistoryScreen}
+      name={routes.PROFILE}
+      component={ProfileNavigator}
       options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons
-            name="calendar-check-outline"
-            color={color}
-            size={size}
-          />
-        ),
-        tabBarLabel: ({ focused, color }) => (
-          <Text
-            style={{
-              fontSize: 16,
-              color,
-              fontWeight: focused ? 'bold' : 'normal',
-            }}
-          >
-            Schedule
-          </Text>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name={routes.PROFILE_SCREEN}
-      component={ProfileScreen}
-      options={{
+        headerTitle: '',
+        headerShadowVisible: false,
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
             name="account-circle-outline"

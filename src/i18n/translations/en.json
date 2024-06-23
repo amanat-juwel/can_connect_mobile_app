@@ -54,5 +54,9 @@
   "dobErrorMessage": "Date of Birth is Required",
   "resetPasswordText": "Reset Password",
   "resetText": "Reset",
-  "passwordResetSuccessMessage":"New password has been sent to your email"
+  "passwordResetSuccessMessage":"New password has been sent to your email",
+  "LogoutText":"Logout",
+  "EditProfileText":"Edit Profile",
+  "NotificationText":"Notifications"
+
 }

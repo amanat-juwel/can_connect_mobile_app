@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 import routes from '../Navigation/routes';
 
-const ScheduleScreen = ({ navigation }) => {
+const DashboardScreen = ({ navigation }) => {
   return (
     <View>
-      <Text>Schedule Screen</Text>
+      <Text>Dashboard Screen</Text>
       <Button
         title="Go to Home Screen"
         onPress={() => navigation.navigate(routes.HOME_SCREEN)}
@@ -14,4 +14,4 @@ const ScheduleScreen = ({ navigation }) => {
   );
 };
 
-export default ScheduleScreen;
+export default DashboardScreen;
