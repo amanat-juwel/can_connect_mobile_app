@@ -17,4 +17,5 @@ export default Object.freeze({
   PICKUP_APPOINTMENT_SCREEN: 'PickupAppointmentScreen',
   FORGOT_PASSWORD: 'ForgotPassword',
   EDIT_PROFILE: 'EditProfile',
+  NOTIFICATION_SCREEN: 'NotificationScreen',
 });

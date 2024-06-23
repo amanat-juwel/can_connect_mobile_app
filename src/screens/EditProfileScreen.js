@@ -102,11 +102,9 @@ const EditProfileScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('editAccountText')}</Text>
-        </View>
+        <View style={styles.textContainer}></View>
         <View style={styles.formContainer}>
-          {states.length > 2 && (
+          {states.length > 0 && (
             <CustomForm
               initialValues={initialFormValues}
               onSubmit={handleSignUp}
