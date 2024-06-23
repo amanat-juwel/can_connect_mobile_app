@@ -15,9 +15,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     fontSize: 16,
   },
-  iconContainer: {
-    padding: 10,
-  },
 });
 
 export default CustomPickerItem;

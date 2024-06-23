@@ -11,8 +11,10 @@ export default Object.freeze({
   APPOINTMENT_SCREEN: 'AppointmentScreen',
   HISTORY_SCREEN: 'HistoryScreen',
   PROFILE_SCREEN: 'ProfileScreen',
-  HOME: 'home',
+  HOME: 'Home',
+  PROFILE: 'Profile',
   COLLECTOR_QUESTIONNAIRE: 'CollectorQuestionnaire',
   PICKUP_APPOINTMENT_SCREEN: 'PickupAppointmentScreen',
   FORGOT_PASSWORD: 'ForgotPassword',
+  EDIT_PROFILE: 'EditProfile',
 });

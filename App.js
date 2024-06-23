@@ -50,7 +50,7 @@ const App = () => {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <AuthContext.Provider value={{ user, setUser }}>
         <NavigationContainer theme={navigationTheme}>
-          {user ? <AppNavigator /> : <AuthNavigator />}
+          {user ? <AppNavigator user={user} /> : <AuthNavigator />}
         </NavigationContainer>
         <OfflineNotice />
       </AuthContext.Provider>
