@@ -55,8 +55,10 @@
   "resetPasswordText": "Reset Password",
   "resetText": "Reset",
   "passwordResetSuccessMessage":"New password has been sent to your email",
-  "LogoutText":"Logout",
-  "EditProfileText":"Edit Profile",
-  "NotificationText":"Notifications"
-
+  "logoutText":"Logout",
+  "editProfileText":"Edit Profile",
+  "notificationText":"Notifications",
+  "editAccountText":"Edit Account",
+  "updateProfileText":"Update Profile",
+  "profileUpdateFailedMessage":"Profile Update Failed."
 }

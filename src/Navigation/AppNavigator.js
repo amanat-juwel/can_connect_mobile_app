@@ -39,6 +39,7 @@ const AppNavigator = ({ user }) => (
       options={{
         headerTitle: `Hello, ${user.first_name} ${user.last_name}!`,
         headerTitleAlign: 'left',
+        unmountOnBlur: true,
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
             name="home-outline"
@@ -109,6 +110,7 @@ const AppNavigator = ({ user }) => (
       options={{
         headerTitle: '',
         headerShadowVisible: false,
+        unmountOnBlur: true,
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
             name="account-circle-outline"

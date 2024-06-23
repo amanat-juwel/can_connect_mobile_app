@@ -12,7 +12,8 @@ const CustomFormField = ({
   errorMessage,
   ...otherProps
 }) => {
-  const { handleChange, errors, setFieldTouched, touched } = useFormikContext();
+  const { handleChange, errors, setFieldTouched, touched, values } =
+    useFormikContext();
 
   return (
     <View style={styles.container}>
@@ -26,6 +27,7 @@ const CustomFormField = ({
         <CustomInputTextField
           onBlur={() => setFieldTouched(name)}
           onChangeText={handleChange(name)}
+          value={values[name]}
           {...otherProps}
         />
       )}

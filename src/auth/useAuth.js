@@ -10,10 +10,15 @@ export default useAuth = () => {
     authStorage.storeSession(session.data, rememberUser);
   };
 
+  const setContextUser = (user) => {
+    console.log('result.data.user', user);
+    setUser(user);
+  };
+
   const logout = () => {
     setUser(null);
     authStorage.removeSession();
   };
 
-  return { user, login, logout };
+  return { user, login, logout, setContextUser };
 };

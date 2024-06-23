@@ -21,16 +21,20 @@ const CustomFormPicker = ({
 
     if (onchange) onchange(item);
 
-    if (clearField) setFieldValue(clearField, initialValues[clearField]);
+    if (clearField) {
+      setFieldValue(clearField, null);
+      initialValues[clearField] = null;
+    }
   };
 
+  const value = values[name]?.id ? values[name] : initialValues[name];
   return (
     <>
       <CustomPicker
         items={items}
         onSelectItem={onSelectItem}
         label={label}
-        selectedItem={values[name]}
+        selectedItem={value}
         {...otherProps}
       />
       <CustomErrorMessage

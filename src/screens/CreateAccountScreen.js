@@ -56,6 +56,7 @@ const CreateAccountScreen = () => {
   const [userType, setUserType] = useState(userTypes.COLLECTOR);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [errorMessage, setErrorMessage] = useState();
 
   const getStates = async () => {
     const result = await publicApi.getStates();
@@ -93,16 +94,23 @@ const CreateAccountScreen = () => {
 
   const registerRequestor = async (payload) => {
     const result = await registrationApi.registerUser(payload);
-    if (!result.ok || !result.data.success) return setRegistrationFailed(true);
+    console.log('result', result.data);
+    if (!result.ok || !result.data.success) {
+      setErrorMessage(result.data.errorMessage[0]);
+      setRegistrationFailed(true);
+      return;
+    }
     setRegistrationFailed(false);
     const requestOtpResult = await authApi.requestOtp(
       payload.phone,
       payload.email,
     );
+    console.log('requestOtpResult', requestOtpResult.data);
+
     if (!requestOtpResult.ok || !requestOtpResult.data.success)
       return setRegistrationFailed(true);
     setRegistrationFailed(false);
-    navigation.navigate(routes.OTP_SCREEN, { id: data.phone });
+    navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
   };
 
   const showTermsAndConditions = () => {};
@@ -225,7 +233,7 @@ const CreateAccountScreen = () => {
               </View>
             </View>
             <CustomErrorMessage
-              error={t('registrationFailedMessage')}
+              error={errorMessage}
               visible={registrationFailed}
             />
             <CustomSubmitButton
