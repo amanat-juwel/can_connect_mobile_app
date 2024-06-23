@@ -37,13 +37,13 @@ const ProfileScreen = ({ navigation }) => {
       </View>
       <View style={styles.middleComponent}>
         <CustomIconButton
-          label={t('EditProfileText')}
+          label={t('editProfileText')}
           onPress={handleEdit}
           iconName="edit-note"
           buttonType="top"
         />
         <CustomIconButton
-          label={t('NotificationText')}
+          label={t('notificationText')}
           onPress={() => {}}
           iconName="notifications"
           buttonType="bottom"
@@ -51,7 +51,7 @@ const ProfileScreen = ({ navigation }) => {
       </View>
       <View style={styles.bottomComponent}>
         <CustomIconButton
-          label={t('LogoutText')}
+          label={t('logoutText')}
           onPress={handleLogout}
           iconName="logout"
         />

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
-import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
-import CanConnectLogo from '../components/CanConnectLogo';
 import { useTranslation } from 'react-i18next';
 import {
   CustomErrorMessage,
@@ -12,50 +10,35 @@ import {
   CustomSubmitButton,
 } from '../components/forms';
 import * as Yup from 'yup';
-import CustomFooter from '../components/CustomFooter';
-import routes from '../Navigation/routes';
 import colors from '../constants/colors';
-import userTypes from '../constants/userType';
 import publicApi from '../api/public';
 import registrationApi from '../api/registration';
-import authApi from '../api/auth';
+import useAuth from '../auth/useAuth';
+import routes from '../Navigation/routes';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
   last_name: Yup.string().required(),
-  email: Yup.string().email().required(),
-  phone: Yup.string()
-    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/)
-    .required(),
-  password: Yup.string().required(),
-  c_password: Yup.string().required(),
+  password: Yup.string(),
+  c_password: Yup.string().when('password', {
+    is: (password) => password?.length > 0,
+    then: (schema) => schema.required(),
+    otherwise: (schema) => schema,
+  }),
   state: Yup.object().required(),
   city: Yup.object().required(),
   postal_code: Yup.number().required(),
   street_address: Yup.string().required(),
 });
 
-const initialFormValues = {
-  first_name: '',
-  last_name: '',
-  email: '',
-  phone: '',
-  password: '',
-  c_password: '',
-  state: null,
-  city: null,
-  postal_code: null,
-  street_address: '',
-};
-
 const EditProfileScreen = () => {
-  const { t } = useTranslation();
-  const navigation = useNavigation();
-
-  const [registrationFailed, setRegistrationFailed] = useState();
-  const [userType, setUserType] = useState(userTypes.COLLECTOR);
+  const [updateFailed, setUpdateFailed] = useState();
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const { user, setContextUser } = useAuth();
 
   const getStates = async () => {
     const result = await publicApi.getStates();
@@ -73,185 +56,131 @@ const EditProfileScreen = () => {
 
   useEffect(() => {
     getStates();
+    getCities(user.state_id);
   }, []);
 
   const handleSignUp = async (data) => {
-    const { state, city, ...otherFields } = data;
+    const { state, city, password, c_password, ...otherFields } = data;
     const payload = {
       ...otherFields,
+      phone: user.phone,
       state_id: state.id,
       city_id: city.id,
-      category: userType,
     };
-
-    if (userType === userTypes.REQUESTOR) {
-      await registerRequestor(payload);
-    } else {
-      navigation.navigate(routes.COLLECTOR_QUESTIONNAIRE, { payload });
+    if (password && c_password) {
+      payload.password = password;
+      payload.c_password = c_password;
     }
+    updateProfile(payload);
   };
 
-  const registerRequestor = async (payload) => {
-    const result = await registrationApi.registerUser(payload);
-    if (!result.ok || !result.data.success) return setRegistrationFailed(true);
-    setRegistrationFailed(false);
-    const requestOtpResult = await authApi.requestOtp(
-      payload.phone,
-      payload.email,
-    );
-    if (!requestOtpResult.ok || !requestOtpResult.data.success)
-      return setRegistrationFailed(true);
-    setRegistrationFailed(false);
-    navigation.navigate(routes.OTP_SCREEN, { id: data.phone });
+  const updateProfile = async (payload) => {
+    console.log('user', user);
+    const result = await registrationApi.updateProfile(payload);
+    if (!result.ok || !result.data.success) return setUpdateFailed(true);
+    setUpdateFailed(false);
+    console.log('result.data', result.data);
+    setContextUser(result.data.data.user);
+    navigation.navigate(routes.PROFILE_SCREEN);
   };
 
-  const showTermsAndConditions = () => {};
-
-  const handleUserType = () => {
-    setUserType((prev) => {
-      if (prev === userTypes.COLLECTOR) {
-        return userTypes.REQUESTOR;
-      } else {
-        return userTypes.COLLECTOR;
-      }
-    });
+  let initialFormValues = {
+    first_name: user.first_name,
+    last_name: user.last_name,
+    password: '',
+    c_password: '',
+    state: { id: user.state_id, name: user.state_name },
+    city: {
+      id: user.city_id,
+      name: user.city_name,
+      state_id: user.state_id,
+    },
+    postal_code: user.postal_code,
+    street_address: user.street_address,
   };
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <CanConnectLogo />
-        </View>
         <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('createAccountText')}</Text>
+          <Text style={styles.headingLabel}>{t('editAccountText')}</Text>
         </View>
         <View style={styles.formContainer}>
-          <CustomForm
-            initialValues={initialFormValues}
-            onSubmit={handleSignUp}
-            validationSchema={validationSchema}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
+          {states.length > 2 && (
+            <CustomForm
+              initialValues={initialFormValues}
+              onSubmit={handleSignUp}
+              validationSchema={validationSchema}
             >
-              <View style={{ width: '50%', paddingEnd: 4 }}>
-                <CustomFormField
-                  name="first_name"
-                  placeholder={t('firstNameText')}
-                  errorMessage={t('firstNameErrorMessage')}
-                />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <View style={{ width: '50%', paddingEnd: 4 }}>
+                  <CustomFormField
+                    name="first_name"
+                    placeholder={t('firstNameText')}
+                    errorMessage={t('firstNameErrorMessage')}
+                  />
+                </View>
+                <View style={{ width: '50%', paddingStart: 4 }}>
+                  <CustomFormField
+                    name="last_name"
+                    placeholder={t('lastNameText')}
+                    errorMessage={t('LastNameErrorMessage')}
+                  />
+                </View>
               </View>
-              <View style={{ width: '50%', paddingStart: 4 }}>
-                <CustomFormField
-                  name="last_name"
-                  placeholder={t('lastNameText')}
-                  errorMessage={t('LastNameErrorMessage')}
-                />
-              </View>
-            </View>
-            <CustomFormField
-              name="email"
-              placeholder={t('emailText')}
-              errorMessage={t('emailErrorMessage')}
-            />
-            <CustomFormField
-              name="phone"
-              placeholder={t('phoneText')}
-              errorMessage={t('phoneErrorMessage')}
-            />
-            <CustomFormField
-              name="password"
-              placeholder={t('PasswordText')}
-              isPasswordField
-              errorMessage={t('passwordErrorMessage')}
-            />
-            <CustomFormField
-              name="c_password"
-              placeholder={t('confirmPasswordText')}
-              isPasswordField
-              errorMessage={t('confirmPasswordErrorMessage')}
-            />
+              <CustomFormField
+                name="password"
+                placeholder={t('PasswordText')}
+                isPasswordField
+                errorMessage={t('passwordErrorMessage')}
+              />
+              <CustomFormField
+                name="c_password"
+                placeholder={t('confirmPasswordText')}
+                isPasswordField
+                errorMessage={t('confirmPasswordErrorMessage')}
+              />
 
-            <CustomFormPicker
-              name="state"
-              items={states}
-              label={t('statePickerLabel')}
-              onchange={(data) => getCities(data.id)}
-              clearField="city"
-            />
+              <CustomFormPicker
+                name="state"
+                items={states}
+                label={t('statePickerLabel')}
+                onchange={(data) => getCities(data.id)}
+                clearField="city"
+                clearFieldValue={null}
+              />
 
-            <CustomFormPicker
-              name="city"
-              items={cities}
-              label={t('cityPickerLabel')}
-            />
+              <CustomFormPicker
+                name="city"
+                items={cities}
+                label={t('cityPickerLabel')}
+              />
 
-            <CustomFormField
-              name="postal_code"
-              placeholder={t('postalCodeText')}
-              errorMessage={t('postalCodeErrorMessage')}
-            />
+              <CustomFormField
+                name="postal_code"
+                placeholder={t('postalCodeText')}
+                errorMessage={t('postalCodeErrorMessage')}
+              />
 
-            <CustomFormField
-              name="street_address"
-              placeholder={t('streetAddressText')}
-              errorMessage={t('streetAddressErrorMessage')}
-            />
+              <CustomFormField
+                name="street_address"
+                placeholder={t('streetAddressText')}
+                errorMessage={t('streetAddressErrorMessage')}
+              />
 
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                marginBottom: 20,
-              }}
-            >
-              <View style={{ width: '50%', paddingEnd: 4 }}>
-                <CustomCheckBox
-                  title={t('collectorText')}
-                  isChecked={userType === userTypes.COLLECTOR}
-                  onPress={handleUserType}
-                />
-              </View>
-              <View style={{ width: '50%', paddingEnd: 4 }}>
-                <CustomCheckBox
-                  title={t('requestorText')}
-                  isChecked={userType === userTypes.REQUESTOR}
-                  onPress={handleUserType}
-                />
-              </View>
-            </View>
-            <CustomErrorMessage
-              error={t('registrationFailedMessage')}
-              visible={registrationFailed}
-            />
-            <CustomSubmitButton
-              label={
-                userType === userTypes.COLLECTOR
-                  ? t('continueText')
-                  : t('createAccountButtonText')
-              }
-            />
-          </CustomForm>
+              <CustomErrorMessage
+                error={t('profileUpdateFailedMessage')}
+                visible={updateFailed}
+              />
+              <CustomSubmitButton label={t('updateProfileText')} />
+            </CustomForm>
+          )}
         </View>
-
-        <CustomFooter
-          text={t('agreementText')}
-          actionButtonText={t('termsAndConditionText')}
-          color={colors.black}
-          textDecorationLine="underline"
-          onActionButtonPress={showTermsAndConditions}
-        />
-        <CustomFooter
-          text={t('alreadyHaveAccountText')}
-          actionButtonText={t('loginText')}
-          onActionButtonPress={() =>
-            navigation.navigate(routes.VERIFY_PHONE_NUMBER_SCREEN)
-          }
-        />
       </View>
     </ScrollView>
   );
@@ -265,10 +194,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: colors.white,
   },
-  imageContainer: {
-    marginTop: 60,
-    alignItems: 'center',
-  },
   textContainer: {
     alignSelf: 'flex-start',
     marginBottom: 20,
@@ -280,10 +205,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-  },
-  logInText: {
-    fontWeight: 'bold',
-    color: '#00A75A',
   },
 });
 
