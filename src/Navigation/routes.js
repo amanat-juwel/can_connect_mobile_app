@@ -7,7 +7,7 @@ export default Object.freeze({
   OTP_SCREEN: 'OtpScreen',
   HOME_SCREEN: 'HomeScreen',
   RECYCLE_SCREEN: 'RecycleScreen',
-  SCHEDULE_SCREEN: 'ScheduleScreen',
+  DASHBOARD_SCREEN: 'Dashboard',
   APPOINTMENT_SCREEN: 'AppointmentScreen',
   HISTORY_SCREEN: 'HistoryScreen',
   PROFILE_SCREEN: 'ProfileScreen',

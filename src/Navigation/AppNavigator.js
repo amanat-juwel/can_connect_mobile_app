@@ -7,6 +7,7 @@ import RecycleNavigator from './RecycleNavigator';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import colors from '../constants/colors';
+import DashboardScreen from '../screens/DashboardScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +49,30 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
+      name={routes.DASHBOARD_SCREEN}
+      component={DashboardScreen}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons
+            name="view-dashboard-outline"
+            color={color}
+            size={size}
+          />
+        ),
+        tabBarLabel: ({ focused, color }) => (
+          <Text
+            style={{
+              fontSize: 16,
+              color,
+              fontWeight: focused ? 'bold' : 'normal',
+            }}
+          >
+            Dashboard
+          </Text>
+        ),
+      }}
+    />
+    <Tab.Screen
       name={routes.HISTORY_SCREEN}
       component={HistoryScreen}
       options={{
@@ -63,30 +88,6 @@ const AppNavigator = () => (
             }}
           >
             History
-          </Text>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name={routes.SCHEDULE_SCREEN}
-      component={HistoryScreen}
-      options={{
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons
-            name="calendar-check-outline"
-            color={color}
-            size={size}
-          />
-        ),
-        tabBarLabel: ({ focused, color }) => (
-          <Text
-            style={{
-              fontSize: 16,
-              color,
-              fontWeight: focused ? 'bold' : 'normal',
-            }}
-          >
-            Schedule
           </Text>
         ),
       }}
