@@ -20,6 +20,10 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(routes.EDIT_PROFILE);
   };
 
+  const handleNotification = () => {
+    navigation.navigate(routes.NOTIFICATION_SCREEN);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topComponent}>
@@ -44,7 +48,7 @@ const ProfileScreen = ({ navigation }) => {
         />
         <CustomIconButton
           label={t('notificationText')}
-          onPress={() => {}}
+          onPress={handleNotification}
           iconName="notifications"
           buttonType="bottom"
         />

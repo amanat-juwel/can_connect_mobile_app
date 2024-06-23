@@ -60,5 +60,10 @@
   "notificationText":"Notifications",
   "editAccountText":"Edit Account",
   "updateProfileText":"Update Profile",
-  "profileUpdateFailedMessage":"Profile Update Failed."
+  "profileUpdateFailedMessage":"Profile Update Failed.",
+  "homeText":"Home",
+  "dashboardText":"Dashboard",
+  "historyText":"History",
+  "profileText":"Profile",
+  "noNotificationsText":"No Notifications"
 }
