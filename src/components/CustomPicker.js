@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import {
-  TextInput,
   StyleSheet,
   View,
   TouchableWithoutFeedback,
   Modal,
-  Button,
   FlatList,
-  TouchableOpacity,
   Text,
 } from 'react-native';
 import colors from '../constants/colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomPickerItem from './CustomPickerItem';
-import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
 import CustomLinkButton from './CustomLinkButton';
 

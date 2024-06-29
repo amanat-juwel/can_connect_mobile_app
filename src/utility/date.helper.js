@@ -1,4 +1,5 @@
 export function isAdult(dobString) {
+  const adultAge = 15;
   const dob = new Date(dobString);
   const today = new Date();
 
@@ -9,5 +10,5 @@ export function isAdult(dobString) {
     age--;
   }
 
-  return age >= 18;
+  return age >= adultAge;
 }
