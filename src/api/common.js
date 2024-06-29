@@ -1,7 +1,7 @@
 import client from './client';
 
 const getNotificationsEndpoint = '/notification';
-const getDashboardDataEndpoint = '/notification';
+const getDashboardDataEndpoint = '/dashboard';
 
 const getNotifications = () => {
   return client.get(getNotificationsEndpoint);

@@ -65,5 +65,13 @@
   "dashboardText":"Dashboard",
   "historyText":"History",
   "profileText":"Profile",
-  "noNotificationsText":"No Notifications"
+  "noNotificationsText":"No Notifications",
+  "total_request":"Total Requests",
+  "pending_count":"Pending Requests",
+  "accept_count":"Accepted Requests",
+  "cancel_count":"Canceled Requests",
+  "complete_count":"Completed Requests",
+  "todays_scheduled_pickup":"Today's Scheduled Pickups",
+  "this_weeks_scheduled_pickup":"This Week's Scheduled Pickups",
+  "pending_notification": "Pending Notifications"
 }
