@@ -18,6 +18,7 @@ import { isAdult } from '../utility/date.helper';
 import registrationApi from '../api/registration';
 import authApi from '../api/auth';
 import { useNavigation } from '@react-navigation/native';
+import CustomLinkButton from '../components/CustomLinkButton';
 
 const validationSchema = Yup.object().shape({
   dob: Yup.string().required(),
@@ -200,6 +201,15 @@ const CollectorQuestionnaire = ({ route }) => {
               error={t('registrationFailedMessage')}
               visible={registrationFailed}
             />
+            <View style={styles.goBackContainer}>
+              <CustomLinkButton
+                text={t('goBackText')}
+                onPress={() => navigation.goBack()}
+                fontSize={18}
+                fontWeight="bold"
+                LinkColor={colors.primary}
+              />
+            </View>
             <View style={styles.submitButton}>
               <CustomSubmitButton label={t('createAccountButtonText')} />
             </View>
@@ -220,6 +230,10 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginTop: 60,
+    alignItems: 'center',
+  },
+  goBackContainer: {
+    marginVertical: 10,
     alignItems: 'center',
   },
   textContainer: {
