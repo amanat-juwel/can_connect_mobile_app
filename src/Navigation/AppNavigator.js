@@ -12,25 +12,31 @@ import CollectorNavigator from './CollectorNavigator';
 import userType from '../constants/userType';
 import ProfileNavigator from './ProfileNavigator';
 import { useTranslation } from 'react-i18next';
+import { HeaderNotificationIcon } from './HeaderNotificationIcon';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const AppNavigator = ({ user }) => {
   const { t } = useTranslation();
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.white,
-        headerTitleAlign: 'center',
-        tabBarStyle: {
-          backgroundColor:
-            route.name === routes.PROFILE ? colors.primary : colors.white,
-        },
-        tabBarActiveTintColor:
-          route.name === routes.PROFILE ? colors.white : colors.primary,
-        tabBarInactiveTintColor:
-          route.name === routes.PROFILE ? colors.white : colors.grey,
-      })}
+      screenOptions={({ route }) => {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
+        return {
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: colors.white,
+          headerTitleAlign: 'center',
+          headerShown: routeName === routes.NOTIFICATION_SCREEN ? false : true,
+          tabBarStyle: {
+            backgroundColor:
+              route.name === routes.PROFILE ? colors.primary : colors.white,
+          },
+          tabBarActiveTintColor:
+            route.name === routes.PROFILE ? colors.white : colors.primary,
+          tabBarInactiveTintColor:
+            route.name === routes.PROFILE ? colors.white : colors.grey,
+        };
+      }}
     >
       <Tab.Screen
         name={routes.HOME}
@@ -39,9 +45,11 @@ const AppNavigator = ({ user }) => {
             ? RequestorNavigator
             : CollectorNavigator
         }
-        options={{
+        options={({}) => ({
           headerTitle: `Hello, ${user.first_name} ${user.last_name}!`,
           headerTitleAlign: 'left',
+          headerRight: HeaderNotificationIcon,
+          headerRightContainerStyle: { paddingEnd: 15 },
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -61,12 +69,13 @@ const AppNavigator = ({ user }) => {
               {t('homeText')}
             </Text>
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name={routes.DASHBOARD_SCREEN}
         component={DashboardScreen}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="view-dashboard-outline"
@@ -91,6 +100,7 @@ const AppNavigator = ({ user }) => {
         name={routes.HISTORY_SCREEN}
         component={HistoryScreen}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="refresh" color={color} size={size} />
           ),
