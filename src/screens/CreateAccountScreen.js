@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import CanConnectLogo from '../components/CanConnectLogo';
@@ -19,6 +19,7 @@ import userTypes from '../constants/userType';
 import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import authApi from '../api/auth';
+import CustomPopUpWebView from '../components/CustomPopUpWebView';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -57,11 +58,20 @@ const CreateAccountScreen = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [errorMessage, setErrorMessage] = useState();
+  const [tnCVisible, setTnCVisible] = useState(false);
+  const [policies, setPolicies] = useState();
 
   const getStates = async () => {
     const result = await publicApi.getStates();
     if (result.ok && result.data.success) {
       setStates(result.data.data);
+    }
+  };
+
+  const getTnC = async () => {
+    const result = await publicApi.getPolicies();
+    if (result.ok && result.data.success) {
+      setPolicies(result.data.data.policies);
     }
   };
 
@@ -74,6 +84,7 @@ const CreateAccountScreen = () => {
 
   useEffect(() => {
     getStates();
+    getTnC();
   }, []);
 
   const handleSignUp = async (data) => {
@@ -113,7 +124,13 @@ const CreateAccountScreen = () => {
     navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
   };
 
-  const showTermsAndConditions = () => {};
+  const showTermsAndConditions = () => {
+    setTnCVisible(true);
+  };
+
+  const hideTermsAndConditions = () => {
+    setTnCVisible(false);
+  };
 
   const handleUserType = () => {
     setUserType((prev) => {
@@ -245,7 +262,12 @@ const CreateAccountScreen = () => {
             />
           </CustomForm>
         </View>
-
+        <CustomPopUpWebView
+          htmlString={policies?.terms_and_conditions}
+          onClose={hideTermsAndConditions}
+          modalVisible={tnCVisible}
+          title={t('termsAndConditionText')}
+        />
         <CustomFooter
           text={t('agreementText')}
           actionButtonText={t('termsAndConditionText')}
