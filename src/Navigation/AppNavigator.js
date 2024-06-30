@@ -23,7 +23,10 @@ const AppNavigator = ({ user }) => {
       screenOptions={({ route }) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
         return {
-          headerStyle: { backgroundColor: colors.primary },
+          headerStyle: {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+          },
           headerTintColor: colors.white,
           headerTitleAlign: 'center',
           headerShown: routeName === routes.NOTIFICATION_SCREEN ? false : true,

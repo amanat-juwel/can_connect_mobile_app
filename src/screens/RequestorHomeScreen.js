@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import routes from '../Navigation/routes';
+import colors from '../constants/colors';
 
 const RequestorHomeScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={styles.container}>
+      <View style={styles.topRectangle} />
       <Text>Requestor Home Screen</Text>
       <Button
         title="Go to Recycle Screen"
@@ -18,5 +20,18 @@ const RequestorHomeScreen = ({ navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  topRectangle: {
+    width: '100%',
+    height: 25,
+    backgroundColor: colors.primary,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+});
 
 export default RequestorHomeScreen;

@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 10,
-    height: 100,
+    height: 110,
   },
   iconValueContainer: {
     flexDirection: 'row',
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     width: '100%',
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
   },
   label: {
     fontSize: 14,
