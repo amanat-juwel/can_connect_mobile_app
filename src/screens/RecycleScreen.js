@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import routes from '../Navigation/routes';
 import CustomLabel from '../components/CustomLabel';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +21,7 @@ import * as Yup from 'yup';
 import CustomFormDatePicker from '../components/forms/CustomFormDatePicker';
 import publicApi from '../api/public';
 import useAuth from '../auth/useAuth';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const validationSchema = Yup.object().shape({
   preferred_pick_date: Yup.string().required(),
@@ -35,6 +43,9 @@ const RecycleScreen = ({ navigation, route }) => {
 
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [location, setLocation] = useState();
+
+  const { t } = useTranslation();
 
   const getStates = async () => {
     const result = await publicApi.getStates();
@@ -62,8 +73,6 @@ const RecycleScreen = ({ navigation, route }) => {
     console.log('data', data);
   };
 
-  const { t } = useTranslation();
-  console.log('user', user);
   const initialFormValues = {
     preferred_pick_date: '',
     preferred_pick_time: '',
@@ -155,6 +164,25 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
+        <View style={styles.mapRow}>
+          <TouchableOpacity style={styles.leftContainer}>
+            <MaterialIcons
+              name="location-pin"
+              size={24}
+              color={colors.primary}
+            />
+            <Text style={styles.text}>
+              {location ? t('changeLocation') : t('selectOnMapText')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setLocation(null);
+            }}
+          >
+            <Text style={styles.clearText}>{t('ClearText')}</Text>
+          </TouchableOpacity>
+        </View>
 
         <CustomLabel
           text={t('ContactDetailsText')}
@@ -198,8 +226,8 @@ const RecycleScreen = ({ navigation, route }) => {
           placeholder={t('notePlaceHolderText')}
           errorMessage={t('noteErrorMessage')}
           height={100}
-          multiline // Enables multiline input
-          numberOfLines={4} // Optionally limit number of lines
+          multiline
+          numberOfLines={4}
         />
         <CustomSubmitButton label={t('RequestText')} />
       </CustomForm>
@@ -217,6 +245,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   rowItem: { width: '50%', paddingEnd: 4 },
+  mapRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 10,
+    backgroundColor: colors.white,
+  },
+  leftContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.primary,
+  },
+  clearText: {
+    color: colors.primary,
+    paddingEnd: 10,
+  },
 });
 
 export default RecycleScreen;

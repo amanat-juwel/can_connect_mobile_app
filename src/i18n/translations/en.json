@@ -91,5 +91,8 @@
   "nameErrorMessage": "Name is Required",
   "additionalDetailsText": "Additional Details (Optional)",
   "notePlaceHolderText":"Add a note",
-  "noteErrorMessage":"Note is Mandatory"
+  "noteErrorMessage":"Note is Mandatory",
+  "selectOnMapText": "Select on Map",
+  "changeLocation": "Change Location",
+  "ClearText":"Clear"
 }
