@@ -73,5 +73,10 @@
   "complete_count":"Completed Requests",
   "todays_scheduled_pickup":"Today's Scheduled Pickups",
   "this_weeks_scheduled_pickup":"This Week's Scheduled Pickups",
-  "pending_notification": "Pending Notifications"
+  "pending_notification": "Pending Notifications",
+  "nextText": "Next",
+  "Bottles":"Bottles",
+  "Cans":"Cans",
+  "Cartons":"Cartons",
+  "Mix Bag":"Mix Bag"
 }

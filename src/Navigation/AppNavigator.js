@@ -23,7 +23,10 @@ const AppNavigator = ({ user }) => {
       screenOptions={({ route }) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
         return {
-          headerStyle: { backgroundColor: colors.primary },
+          headerStyle: {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+          },
           headerTintColor: colors.white,
           headerTitleAlign: 'center',
           headerShown: routeName === routes.NOTIFICATION_SCREEN ? false : true,
@@ -51,6 +54,13 @@ const AppNavigator = ({ user }) => {
           headerRight: HeaderNotificationIcon,
           headerRightContainerStyle: { paddingEnd: 15 },
           unmountOnBlur: true,
+          headerStyle: {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+            height: 125,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+          },
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="home-outline"
