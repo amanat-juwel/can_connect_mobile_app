@@ -117,20 +117,26 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
-        <CustomFormPicker
-          name="state"
-          items={states}
-          label={t('statePickerLabel')}
-          onchange={(data) => getCities(data.id)}
-          clearField="city"
-          height={40}
-        />
-        <CustomFormPicker
-          name="city"
-          items={cities}
-          label={t('cityPickerLabel')}
-          height={40}
-        />
+        <View style={styles.rowContainer}>
+          <View style={{ width: '50%', paddingEnd: 4 }}>
+            <CustomFormPicker
+              name="state"
+              items={states}
+              label={t('statePickerLabel')}
+              onchange={(data) => getCities(data.id)}
+              clearField="city"
+              height={40}
+            />
+          </View>
+          <View style={{ width: '50%', paddingStart: 4 }}>
+            <CustomFormPicker
+              name="city"
+              items={cities}
+              label={t('cityPickerLabel')}
+              height={40}
+            />
+          </View>
+        </View>
         <View style={styles.rowContainer}>
           <View style={{ width: '50%', paddingEnd: 4 }}>
             <CustomFormField
