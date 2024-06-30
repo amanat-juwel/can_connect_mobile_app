@@ -13,10 +13,15 @@ const CustomInputTextField = ({
   width = '100%',
   marginBottom = 15,
   marginTop = 0,
+  ...otherProps
 }) => {
+  const styleArray = [styles.input, { height, width, marginBottom, marginTop }];
+  if (otherProps.multiline) {
+    styleArray.push({ textAlignVertical: 'top', paddingTop: 10 });
+  }
   return (
     <TextInput
-      style={[styles.input, { height, width, marginBottom, marginTop }]}
+      style={styleArray}
       placeholder={placeholder}
       placeholderTextColor={colors.lightGrey}
       onChangeText={onChangeText}
@@ -24,6 +29,7 @@ const CustomInputTextField = ({
       value={value}
       onBlur={onBlur}
       keyboardType={keyboardType}
+      {...otherProps}
     />
   );
 };

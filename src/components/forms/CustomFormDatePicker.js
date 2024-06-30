@@ -10,10 +10,12 @@ const CustomFormDatePicker = ({
   label,
   errorMessage,
   onchange,
+  mode = 'date',
   height = 60,
   width = '100%',
   marginBottom = 15,
   marginTop = 0,
+  ...otherProps
 }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -27,10 +29,29 @@ const CustomFormDatePicker = ({
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
-    const dob = date.toISOString().split('T')[0];
-    if (onchange) onchange(dob);
-    setFieldValue(name, dob);
+  const getFormattedTime = (isoTime) => {
+    const date = new Date(`1970-01-01T${isoTime}`);
+
+    const options = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    };
+
+    return date.toLocaleTimeString(undefined, options);
+  };
+
+  const handleConfirm = (dateTime) => {
+    let result = dateTime;
+    if (mode === 'date') {
+      result = dateTime.toISOString().split('T')[0];
+    }
+    if (mode === 'time') {
+      result = getFormattedTime(dateTime.toISOString().split('T')[1]);
+    }
+
+    if (onchange) onchange(result);
+    setFieldValue(name, result);
     hideDatePicker();
   };
 
@@ -47,9 +68,10 @@ const CustomFormDatePicker = ({
       </TouchableWithoutFeedback>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode={mode}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        {...otherProps}
       />
       <CustomErrorMessage
         error={errors[name] && errorMessage}
@@ -68,10 +90,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginLeft: 0,
     marginRight: 0,
+    alignItems: 'center',
   },
   label: {
     width: '85%',
-    paddingVertical: 20,
     color: colors.grey,
   },
 });

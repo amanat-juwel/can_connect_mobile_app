@@ -88,14 +88,15 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginLeft: 0,
     marginRight: 0,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   label: {
-    width: '85%',
-    paddingVertical: 20,
+    flex: 1,
     color: colors.grey,
   },
   iconContainer: {
-    padding: 10,
+    paddingRight: 10,
   },
   modal: {
     marginTop: 60,

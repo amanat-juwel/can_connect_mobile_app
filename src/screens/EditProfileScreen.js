@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   }),
   state: Yup.object().required(),
   city: Yup.object().required(),
-  postal_code: Yup.number().required(),
+  postal_code: Yup.string().required(),
   street_address: Yup.string().required(),
 });
 

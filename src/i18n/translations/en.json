@@ -78,5 +78,18 @@
   "Bottles":"Bottles",
   "Cans":"Cans",
   "Cartons":"Cartons",
-  "Mix Bag":"Mix Bag"
+  "Mix Bag":"Mix Bag",
+  "recycleText":"Recycle",
+  "PickupDetailsText":"Pickup Details",
+  "PickupDateText":"Pickup Date",
+  "PickupDateErrorMessage":"Pickup Date is Required",
+  "PickupTimeText":"Pickup Time",
+  "PickupTimeErrorMessage":"Pickup Time is Required",
+  "RequestText":"Request",
+  "ContactDetailsText":"Contact Details",
+  "nameText":"Name",
+  "nameErrorMessage": "Name is Required",
+  "additionalDetailsText": "Additional Details (Optional)",
+  "notePlaceHolderText":"Add a note",
+  "noteErrorMessage":"Note is Mandatory"
 }
