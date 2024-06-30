@@ -6,7 +6,6 @@ import colors from '../constants/colors';
 const RequestorHomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.topRectangle} />
       <Text>Requestor Home Screen</Text>
       <Button
         title="Go to Recycle Screen"
@@ -24,13 +23,6 @@ const RequestorHomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  topRectangle: {
-    width: '100%',
-    height: 25,
-    backgroundColor: colors.primary,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
 });
 

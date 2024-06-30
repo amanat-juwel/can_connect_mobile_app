@@ -54,6 +54,13 @@ const AppNavigator = ({ user }) => {
           headerRight: HeaderNotificationIcon,
           headerRightContainerStyle: { paddingEnd: 15 },
           unmountOnBlur: true,
+          headerStyle: {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+            height: 125,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+          },
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="home-outline"
