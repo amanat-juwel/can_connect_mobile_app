@@ -12,3 +12,18 @@ export function isAdult(dobString) {
 
   return age >= adultAge;
 }
+
+export function formatDate(dateString) {
+  const date = new Date(dateString.replace(' ', 'T'));
+
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  };
+
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+}
