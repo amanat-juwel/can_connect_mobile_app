@@ -12,6 +12,7 @@ import CustomLabel from '../components/CustomLabel';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
 import {
+  CustomErrorMessage,
   CustomForm,
   CustomFormField,
   CustomFormPicker,
@@ -22,6 +23,9 @@ import CustomFormDatePicker from '../components/forms/CustomFormDatePicker';
 import publicApi from '../api/public';
 import useAuth from '../auth/useAuth';
 import { MaterialIcons } from '@expo/vector-icons';
+import CustomPopUpMap from '../components/CustomPopUpMap';
+import CustomCheckBox from '../components/CustomCheckBox';
+import requestorApi from '../api/requestor';
 
 const validationSchema = Yup.object().shape({
   preferred_pick_date: Yup.string().required(),
@@ -43,7 +47,11 @@ const RecycleScreen = ({ navigation, route }) => {
 
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [location, setLocation] = useState();
+  const [isDonation, setIsDonation] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(null);
+  const [showMap, setShowMap] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+  const [requestFailed, setRequestFailed] = useState();
 
   const { t } = useTranslation();
 
@@ -69,8 +77,31 @@ const RecycleScreen = ({ navigation, route }) => {
     console.log(date);
   };
 
-  const createRequest = (data) => {
-    console.log('data', data);
+  const createRequest = async (data) => {
+    const { state, city, ...otherFields } = data;
+    const payload = {
+      ...otherFields,
+      state_id: state.id,
+      city_id: city.id,
+      items: route.params.items,
+      location_latitude: markerPosition?.latitude,
+      location_longitude: markerPosition?.longitude,
+      is_donation: isDonation ? 1 : 0,
+    };
+
+    console.log('payload', payload);
+
+    const result = await requestorApi.storeRequest(payload);
+    console.log('result', result.data);
+    if (!result.ok || !result.data.success) {
+      setErrorMessage(result.data.errorMessage[0]);
+      setRequestFailed(true);
+      return;
+    }
+    setRequestFailed(false);
+    console.log('request', result.data.data);
+
+    // navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
   };
 
   const initialFormValues = {
@@ -146,6 +177,15 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
+        <CustomPopUpMap
+          setMarkerPosition={setMarkerPosition}
+          markerPosition={markerPosition}
+          onClose={() => {
+            setShowMap(false);
+          }}
+          modalVisible={showMap}
+          title={t('SelectLocationText')}
+        />
         <View style={styles.rowContainer}>
           <View style={{ width: '50%', paddingEnd: 4 }}>
             <CustomFormField
@@ -165,19 +205,24 @@ const RecycleScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.mapRow}>
-          <TouchableOpacity style={styles.leftContainer}>
+          <TouchableOpacity
+            style={styles.leftContainer}
+            onPress={() => {
+              setShowMap(true);
+            }}
+          >
             <MaterialIcons
               name="location-pin"
               size={24}
               color={colors.primary}
             />
             <Text style={styles.text}>
-              {location ? t('changeLocation') : t('selectOnMapText')}
+              {markerPosition ? t('changeLocation') : t('selectOnMapText')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setLocation(null);
+              setMarkerPosition(null);
             }}
           >
             <Text style={styles.clearText}>{t('ClearText')}</Text>
@@ -229,6 +274,14 @@ const RecycleScreen = ({ navigation, route }) => {
           multiline
           numberOfLines={4}
         />
+        <View style={styles.donationContainer}>
+          <CustomCheckBox
+            title={t('DonationText')}
+            isChecked={isDonation}
+            onPress={setIsDonation}
+          />
+        </View>
+        <CustomErrorMessage error={errorMessage} visible={requestFailed} />
         <CustomSubmitButton label={t('RequestText')} />
       </CustomForm>
     </ScrollView>
@@ -265,6 +318,13 @@ const styles = StyleSheet.create({
   clearText: {
     color: colors.primary,
     paddingEnd: 10,
+  },
+  donationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '100%',
   },
 });
 

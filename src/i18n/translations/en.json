@@ -94,5 +94,7 @@
   "noteErrorMessage":"Note is Mandatory",
   "selectOnMapText": "Select on Map",
   "changeLocation": "Change Location",
-  "ClearText":"Clear"
+  "ClearText":"Clear",
+  "SelectLocationText":"Select Location",
+  "DonationText": "This is a Donation"
 }
