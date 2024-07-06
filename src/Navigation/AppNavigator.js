@@ -32,6 +32,7 @@ const AppNavigator = ({ user }) => {
           headerShown: [
             routes.NOTIFICATION_SCREEN,
             routes.RECYCLE_SCREEN,
+            routes.PICKUP_APPOINTMENT_SCREEN,
           ].includes(routeName)
             ? false
             : true,

@@ -101,7 +101,9 @@ const RecycleScreen = ({ navigation, route }) => {
     setRequestFailed(false);
     console.log('request', result.data.data);
 
-    // navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
+    navigation.navigate(routes.PICKUP_APPOINTMENT_SCREEN, {
+      sku: result.data.data.sku,
+    });
   };
 
   const initialFormValues = {

@@ -44,6 +44,22 @@ const RequestorNavigator = () => {
       <Stack.Screen
         name={routes.PICKUP_APPOINTMENT_SCREEN}
         component={PickupAppointmentScreen}
+        options={() => ({
+          animationEnabled: false,
+          headerShown: true,
+          headerTitle: t('PickupSuccessHeader'),
+          headerTitleAlign: 'center',
+          headerTitleStyle: { color: colors.white },
+          headerLeft: null,
+          headerStyle: {
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          },
+        })}
       />
       <Stack.Screen
         name={routes.NOTIFICATION_SCREEN}

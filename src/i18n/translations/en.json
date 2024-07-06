@@ -96,5 +96,10 @@
   "changeLocation": "Change Location",
   "ClearText":"Clear",
   "SelectLocationText":"Select Location",
-  "DonationText": "This is a Donation"
+  "DonationText": "This is a Donation",
+  "PickupSuccessHeader":"Success!",
+  "pickupAppointmentButtonText":"Ok, Got it!",
+  "pickupAppointmentCreateConfirmation":"Request Submitted Successfully!",
+  "PrimaryDescription":"Thank you for your pickup request. Our team will review the details and get back to you shortly.",
+  "SecondaryDescription":"You will receive an email confirmation with the details of your request. Please make sure to check your inbox and spam folder."
 }
