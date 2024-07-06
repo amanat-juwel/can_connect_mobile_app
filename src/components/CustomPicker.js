@@ -30,6 +30,7 @@ const CustomPicker = ({
     setModalVisible(false);
     onSelectItem(item);
   };
+
   return (
     <>
       <TouchableWithoutFeedback
@@ -40,7 +41,7 @@ const CustomPicker = ({
         <View
           style={[styles.container, { height, width, marginBottom, marginTop }]}
         >
-          <Text style={styles.label}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.label}>
             {selectedItem ? selectedItem.name : label}
           </Text>
           <View style={styles.iconContainer}>
@@ -88,14 +89,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginLeft: 0,
     marginRight: 0,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   label: {
-    width: '85%',
-    paddingVertical: 20,
+    flex: 1,
     color: colors.grey,
+    overflow: 'hidden',
   },
   iconContainer: {
-    padding: 10,
+    paddingRight: 10,
   },
   modal: {
     marginTop: 60,

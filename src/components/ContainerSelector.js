@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 10,
-    height: 200,
+    height: 190,
   },
   imageContainer: {
     width: '100%',

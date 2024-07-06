@@ -29,7 +29,13 @@ const AppNavigator = ({ user }) => {
           },
           headerTintColor: colors.white,
           headerTitleAlign: 'center',
-          headerShown: routeName === routes.NOTIFICATION_SCREEN ? false : true,
+          headerShown: [
+            routes.NOTIFICATION_SCREEN,
+            routes.RECYCLE_SCREEN,
+            routes.PICKUP_APPOINTMENT_SCREEN,
+          ].includes(routeName)
+            ? false
+            : true,
           tabBarStyle: {
             backgroundColor:
               route.name === routes.PROFILE ? colors.primary : colors.white,
