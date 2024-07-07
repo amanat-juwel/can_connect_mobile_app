@@ -14,6 +14,7 @@ import ProfileNavigator from './ProfileNavigator';
 import { useTranslation } from 'react-i18next';
 import { HeaderNotificationIcon } from './HeaderNotificationIcon';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import HistoryNavigator from './HistoryNavigator';
 
 const Tab = createBottomTabNavigator();
 const AppNavigator = ({ user }) => {
@@ -113,9 +114,10 @@ const AppNavigator = ({ user }) => {
         }}
       />
       <Tab.Screen
-        name={routes.HISTORY_SCREEN}
-        component={HistoryScreen}
+        name={routes.HISTORY}
+        component={HistoryNavigator}
         options={{
+          headerShown: false,
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="refresh" color={color} size={size} />

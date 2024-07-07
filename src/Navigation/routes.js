@@ -13,6 +13,7 @@ export default Object.freeze({
   PROFILE_SCREEN: 'ProfileScreen',
   HOME: 'Home',
   PROFILE: 'Profile',
+  HISTORY: 'History',
   COLLECTOR_QUESTIONNAIRE: 'CollectorQuestionnaire',
   PICKUP_APPOINTMENT_SCREEN: 'PickupAppointmentScreen',
   FORGOT_PASSWORD: 'ForgotPassword',
