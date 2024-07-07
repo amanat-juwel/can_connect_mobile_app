@@ -108,5 +108,11 @@
   "accepted": "Accepted",
   "cancelled": "Cancelled",
   "completed": "Completed",
-  "requestDetailsText":"Request Details"
+  "requestDetailsText":"Request Details",
+  "PickupDateFromText":"Pickup Date From",
+  "PickupDateToText":"Pickup Date To",
+  "ApplyText":"Apply",
+  "statusPickerLabel": "Select Status",
+  "ApplyFilterText":"Apply Filter",
+  "HideFilterText":"Hide Filter"
 }

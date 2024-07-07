@@ -6,6 +6,7 @@ import colors from '../constants/colors';
 import commonApi from '../api/common';
 import HistoryItem from '../components/HistoryItem';
 import CustomButton from '../components/CustomButton';
+import FilterComponent from '../components/FilterComponent';
 
 const limit = 5;
 
@@ -59,12 +60,34 @@ const HistoryScreen = ({ navigation }) => {
     });
   };
 
+  const applyFilter = (filterPayload) => {
+    const { state, city, status, ...otherProps } = filterPayload;
+    setPayload((prev) => {
+      const newPayload = {
+        ...prev,
+        ...otherProps,
+        offset: 0,
+        state_id: state?.id || '',
+        city_id: city?.id || '',
+        status: status?.name.toLowerCase() || '',
+      };
+
+      getHistory(newPayload);
+      console.log(newPayload);
+
+      return newPayload;
+    });
+  };
+
   const showDetails = (id) => {
     navigation.navigate(routes.PICKUP_APPOINTMENT_SCREEN, { sku: id });
   };
 
   return (
     <View style={styles.container}>
+      <View style={styles.filterContainer}>
+        <FilterComponent applyFilter={applyFilter} />
+      </View>
       <View style={styles.itemContainer}>
         {history.length === 0 ? (
           <View style={styles.textContainer}>
@@ -116,6 +139,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: colors.white,
   },
+  filterContainer: {
+    width: '100%',
+  },
   textContainer: {
     alignSelf: 'center',
     marginVertical: 20,
@@ -126,17 +152,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   itemContainer: {
-    flex: 1,
+    flex: 3,
     width: '100%',
   },
   navigationContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    position: 'absolute',
-    bottom: 0,
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingVertical: 10,
     backgroundColor: colors.white,
   },
   button: {
