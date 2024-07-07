@@ -38,10 +38,6 @@ const RequestorNavigator = () => {
         })}
       />
       <Stack.Screen
-        name={routes.DASHBOARD_SCREEN}
-        component={DashboardScreen}
-      />
-      <Stack.Screen
         name={routes.PICKUP_APPOINTMENT_SCREEN}
         component={PickupAppointmentScreen}
         options={() => ({

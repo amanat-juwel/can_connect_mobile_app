@@ -5,6 +5,7 @@ const getNotificationCountEndpoint = '/notification-count';
 const getDashboardDataEndpoint = '/dashboard';
 const getHomePageEndpoint = '/homepage';
 const getHistoryEndpoint = '/request-list';
+const getRequestListEndpoint = '/request-list';
 
 const getNotifications = () => {
   return client.get(getNotificationsEndpoint);
@@ -26,10 +27,15 @@ const getHistory = (payload) => {
   return client.get(getHistoryEndpoint, payload);
 };
 
+const getRequestList = (payload) => {
+  return client.get(getRequestListEndpoint, payload);
+};
+
 export default {
   getNotifications,
   getNotificationCount,
   getDashboardData,
   getHomePage,
   getHistory,
+  getRequestList,
 };
