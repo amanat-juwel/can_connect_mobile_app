@@ -6,7 +6,7 @@ import NotificationScreen from '../screens/NotificationScreen';
 import colors from '../constants/colors';
 import { HeaderWhiteBackButton } from './HeaderWhiteBackButton';
 import { useTranslation } from 'react-i18next';
-import CollectorHomeScreen from '../screens/CollectorHomeScreen1';
+import CollectorHomeScreen from '../screens/CollectorHomeScreen';
 
 const Stack = createStackNavigator();
 

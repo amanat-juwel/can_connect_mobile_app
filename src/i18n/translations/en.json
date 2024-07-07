@@ -114,5 +114,7 @@
   "ApplyText":"Apply",
   "statusPickerLabel": "Select Status",
   "ApplyFilterText":"Apply Filter",
-  "HideFilterText":"Hide Filter"
+  "HideFilterText":"Hide Filter",
+  "noRequestText":"No Requests Available."
+
 }

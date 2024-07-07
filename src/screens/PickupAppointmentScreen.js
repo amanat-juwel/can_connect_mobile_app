@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import routes from '../Navigation/routes';
 import colors from '../constants/colors';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const PickupAppointmentScreen = ({}) => {
   const { t } = useTranslation();
@@ -21,10 +22,10 @@ const PickupAppointmentScreen = ({}) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
-        <SuccessImage
-          source={require('../../assets/images/CheckMarks-Pickup Appointment.png')}
-          width={180}
-          height={180}
+        <MaterialIcons
+          name="check-circle-outline"
+          size={160}
+          color={colors.primary}
         />
         <Text style={styles.textHeader}>
           {t('pickupAppointmentCreateConfirmation')}
