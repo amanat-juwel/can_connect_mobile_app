@@ -1,10 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
+import colors from '../constants/colors';
 
 const CustomLinkButton = ({
   text,
   onPress,
-  LinkColor = 'blue',
+  LinkColor = colors.blue,
   fontSize = 14,
   fontWeight = 'normal',
 }) => {

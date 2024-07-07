@@ -2,12 +2,17 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import colors from '../constants/colors';
 
-const CustomButton = ({ label, onPress, disabled = false }) => {
+const CustomButton = ({
+  label,
+  onPress,
+  disabled = false,
+  color = colors.primary,
+}) => {
   return (
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: disabled ? colors.grey : colors.primary },
+        { backgroundColor: disabled ? colors.grey : color },
       ]}
       onPress={onPress}
       disabled={disabled}
