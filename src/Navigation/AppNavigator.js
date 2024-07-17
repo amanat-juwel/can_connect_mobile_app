@@ -40,6 +40,7 @@ const AppNavigator = ({ user }) => {
           tabBarStyle: {
             backgroundColor:
               route.name === routes.PROFILE ? colors.primary : colors.white,
+            height: 60,
           },
           tabBarActiveTintColor:
             route.name === routes.PROFILE ? colors.white : colors.primary,

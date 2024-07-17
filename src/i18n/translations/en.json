@@ -115,6 +115,7 @@
   "statusPickerLabel": "Select Status",
   "ApplyFilterText":"Apply Filter",
   "HideFilterText":"Hide Filter",
-  "noRequestText":"No Requests Available."
+  "noRequestText":"No Requests Available.",
+  "HistoryTitleText":"Job ID -"
 
 }

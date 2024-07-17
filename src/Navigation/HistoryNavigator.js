@@ -9,6 +9,7 @@ import colors from '../constants/colors';
 import { useTranslation } from 'react-i18next';
 import RequestorHomeScreen from '../screens/RequestorHomeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
+import HistoryDetailsScreen from '../screens/HistoryDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -40,8 +41,8 @@ const HistoryNavigator = () => {
         })}
       />
       <Stack.Screen
-        name={routes.PICKUP_APPOINTMENT_SCREEN}
-        component={PickupAppointmentScreen}
+        name={routes.HISTORY_DETAILS_SCREEN}
+        component={HistoryDetailsScreen}
         options={() => ({
           animationEnabled: false,
           headerShown: true,
