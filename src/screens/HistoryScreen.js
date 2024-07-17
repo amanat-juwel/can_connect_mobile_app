@@ -80,7 +80,8 @@ const HistoryScreen = ({ navigation }) => {
   };
 
   const showDetails = (id) => {
-    navigation.navigate(routes.PICKUP_APPOINTMENT_SCREEN, { sku: id });
+    const request = history.find((item) => item.sku === id);
+    navigation.navigate(routes.HISTORY_DETAILS_SCREEN, { request: request });
   };
 
   return (

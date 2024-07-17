@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CustomButton from '../components/CustomButton';
-import SuccessImage from '../components/SuccessImage';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import routes from '../Navigation/routes';

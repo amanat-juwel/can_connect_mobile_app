@@ -19,4 +19,5 @@ export default Object.freeze({
   FORGOT_PASSWORD: 'ForgotPassword',
   EDIT_PROFILE: 'EditProfile',
   NOTIFICATION_SCREEN: 'NotificationScreen',
+  HISTORY_DETAILS_SCREEN: 'HistoryDetailsScreen',
 });

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 40,
     width: '100%',
     paddingHorizontal: 20,
   },
