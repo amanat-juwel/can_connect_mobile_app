@@ -116,6 +116,9 @@
   "ApplyFilterText":"Apply Filter",
   "HideFilterText":"Hide Filter",
   "noRequestText":"No Requests Available.",
-  "HistoryTitleText":"Job ID -"
-
+  "HistoryTitleText":"Job ID -",
+  "ItemListText":"Item List",
+  "TrackText":"Request Track",
+  "CancelRequestText":"Cancel Request",
+  "CompleteRequestText":"Complete Request"
 }
