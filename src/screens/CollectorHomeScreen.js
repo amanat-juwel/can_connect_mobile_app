@@ -83,7 +83,8 @@ const CollectorHomeScreen = ({ navigation }) => {
   };
 
   const showDetails = (id) => {
-    navigation.navigate(routes.PICKUP_APPOINTMENT_SCREEN, { sku: id });
+    const request = requestList.find((item) => item.sku === id);
+    navigation.navigate(routes.REQUEST_DETAILS_SCREEN, { request: request });
   };
 
   return (
