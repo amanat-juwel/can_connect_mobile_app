@@ -40,7 +40,7 @@
   "postalCodeText": "Postal Code",
   "streetAddressText": "Street Address",
   "collectorText": "Collector",
-  "requestorText": "Requestor",
+  "requestorText": "Donor",
   "alreadyHaveAccountText": "Already have an account?",
   "agreementText": "By signing up you agree to all the",
   "termsAndConditionText": "Terms & Conditions",
@@ -121,5 +121,6 @@
   "TrackText": "Request Track",
   "CancelRequestText": "Cancel Request",
   "CompleteRequestText": "Complete Request",
-  "AcceptRequestText": "Accept Request"
+  "AcceptRequestText": "Accept Request",
+  "goBackText": "Go Back"
 }

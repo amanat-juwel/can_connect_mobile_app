@@ -108,7 +108,8 @@ const CollectorQuestionnaire = ({ route }) => {
 
   const handleDobChange = (dob) => {
     setIsMinor(!isAdult(dob));
-    setShowQuestionnaire(true);
+    // setShowQuestionnaire(true);
+    setShowQuestionnaire(false);
   };
 
   return (
