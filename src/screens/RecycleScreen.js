@@ -47,7 +47,7 @@ const RecycleScreen = ({ navigation, route }) => {
 
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [isDonation, setIsDonation] = useState(false);
+  const [isDonation, setIsDonation] = useState(true);
   const [markerPosition, setMarkerPosition] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
@@ -230,7 +230,6 @@ const RecycleScreen = ({ navigation, route }) => {
             <Text style={styles.clearText}>{t('ClearText')}</Text>
           </TouchableOpacity>
         </View>
-
         <CustomLabel
           text={t('ContactDetailsText')}
           color={colors.primary}
@@ -261,7 +260,6 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
-
         <CustomLabel
           text={t('additionalDetailsText')}
           color={colors.primary}
@@ -276,13 +274,7 @@ const RecycleScreen = ({ navigation, route }) => {
           multiline
           numberOfLines={4}
         />
-        <View style={styles.donationContainer}>
-          <CustomCheckBox
-            title={t('DonationText')}
-            isChecked={isDonation}
-            onPress={setIsDonation}
-          />
-        </View>
+        111111 */}
         <CustomErrorMessage error={errorMessage} visible={requestFailed} />
         <CustomSubmitButton label={t('RequestText')} />
       </CustomForm>

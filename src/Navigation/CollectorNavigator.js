@@ -1,12 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import routes from './routes';
-import PickupAppointmentScreen from '../screens/PickupAppointmentScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import colors from '../constants/colors';
 import { HeaderWhiteBackButton } from './HeaderWhiteBackButton';
 import { useTranslation } from 'react-i18next';
 import CollectorHomeScreen from '../screens/CollectorHomeScreen';
+import RequestDetailsScreen from '../screens/RequestDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -21,8 +21,8 @@ const CollectorNavigator = () => {
         component={DashboardScreen}
       />
       <Stack.Screen
-        name={routes.PICKUP_APPOINTMENT_SCREEN}
-        component={PickupAppointmentScreen}
+        name={routes.REQUEST_DETAILS_SCREEN}
+        component={RequestDetailsScreen}
       />
       <Stack.Screen
         name={routes.NOTIFICATION_SCREEN}

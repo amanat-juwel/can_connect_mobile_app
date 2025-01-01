@@ -11,7 +11,8 @@ import collectorApi from '../api/Collector';
 import { Icon } from 'react-native-elements';
 import routes from '../Navigation/routes';
 
-const HistoryDetailsScreen = ({ route, navigation }) => {
+const RequestDetailsScreen = ({ route, navigation }) => {
+  console.log('route.params', route.params);
   const request = route.params?.request;
   const [requestTrail, setRequestTrail] = useState();
   const { t } = useTranslation();
@@ -24,39 +25,16 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
     }
   };
 
-  const getChipColor = () => {
-    const colorMap = {
-      pending: colors.orange,
-      accepted: colors.primary,
-      cancelled: colors.red,
-      completed: colors.darkGreen,
-    };
-    return colorMap[request.status];
-  };
-
-  const cancelRequest = async () => {
-    const result = await requestorApi.cancelRequest({
+  const acceptRequest = async () => {
+    const result = await collectorApi.acceptRequest({
       sku: request.sku,
-      status: 'cancelled',
+      status: 'accepted',
     });
+    console.log('acceptRequest result', result.data);
     if (result.ok && result.data.success) {
       navigation.navigate({
-        name: routes.HISTORY_SCREEN,
-        key: `${routes.HISTORY_SCREEN}-${Date.now()}`,
-      });
-    }
-  };
-
-  const completeRequest = async () => {
-    const result = await collectorApi.completeRequest({
-      sku: request.sku,
-      status: 'completed',
-    });
-    console.log('completeRequest result', result.data);
-    if (result.ok && result.data.success) {
-      navigation.navigate({
-        name: routes.HISTORY_SCREEN,
-        key: `${routes.HISTORY_SCREEN}-${Date.now()}`,
+        name: routes.HOME_SCREEN,
+        key: `${routes.HOME_SCREEN}-${Date.now()}`,
       });
     }
   };
@@ -66,19 +44,13 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
       getRequestTrailData({ sku: request.sku });
     }
   }, []);
-
-  console.log('requestTrail', requestTrail);
+  console.log('request, request', request);
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
         <Text
           style={styles.textHeader}
         >{`${t('HistoryTitleText')} ${request.sku}`}</Text>
-        <View style={styles.statusContainer}>
-          <View style={[styles.chip, { backgroundColor: getChipColor() }]}>
-            <Text style={styles.chipText}>{t(request.status)}</Text>
-          </View>
-        </View>
         <View style={styles.dateTimeContainer}>
           <View style={styles.dateContainer}>
             <View>
@@ -203,22 +175,11 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
           </View>
         </View>
       </View>
-
-      {user && user?.category === userType.REQUESTOR ? (
+      {request.status === 'pending' && (
         <View style={styles.bottomView}>
           <CustomButton
-            label={t('CancelRequestText')}
-            color={colors.red}
-            onPress={cancelRequest}
-            disabled={request.status === 'cancelled'}
-          />
-        </View>
-      ) : (
-        <View style={styles.bottomView}>
-          <CustomButton
-            label={t('CompleteRequestText')}
-            onPress={completeRequest}
-            disabled={request.status === 'completed'}
+            label={t('AcceptRequestText')}
+            onPress={acceptRequest}
           />
         </View>
       )}
@@ -352,4 +313,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HistoryDetailsScreen;
+export default RequestDetailsScreen;

@@ -20,4 +20,5 @@ export default Object.freeze({
   EDIT_PROFILE: 'EditProfile',
   NOTIFICATION_SCREEN: 'NotificationScreen',
   HISTORY_DETAILS_SCREEN: 'HistoryDetailsScreen',
+  REQUEST_DETAILS_SCREEN: 'RequestDetailsScreen',
 });

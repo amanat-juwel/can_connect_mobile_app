@@ -23,7 +23,7 @@ const HistoryScreen = ({ navigation }) => {
   const { t } = useTranslation();
 
   const getHistory = async (payload) => {
-    console.log('payload', payload);
+    console.log('payload history', payload);
     const result = await commonApi.getHistory(payload);
     if (result.ok && result.data.success) {
       setHistory(result.data.data.result);
@@ -73,7 +73,7 @@ const HistoryScreen = ({ navigation }) => {
       };
 
       getHistory(newPayload);
-      console.log(newPayload);
+      console.log('newPayload',newPayload);
 
       return newPayload;
     });
