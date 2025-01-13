@@ -230,6 +230,7 @@ const RecycleScreen = ({ navigation, route }) => {
             <Text style={styles.clearText}>{t('ClearText')}</Text>
           </TouchableOpacity>
         </View>
+
         <CustomLabel
           text={t('ContactDetailsText')}
           color={colors.primary}
@@ -260,6 +261,7 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
+
         <CustomLabel
           text={t('additionalDetailsText')}
           color={colors.primary}
@@ -274,7 +276,13 @@ const RecycleScreen = ({ navigation, route }) => {
           multiline
           numberOfLines={4}
         />
-        111111 */}
+        {/* <View style={styles.donationContainer}>
+          <CustomCheckBox
+            title={t('DonationText')}
+            isChecked={isDonation}
+            onPress={setIsDonation}
+          />
+        </View> */}
         <CustomErrorMessage error={errorMessage} visible={requestFailed} />
         <CustomSubmitButton label={t('RequestText')} />
       </CustomForm>
