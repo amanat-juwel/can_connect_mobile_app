@@ -23,7 +23,6 @@ const CollectorHomeScreen = ({ navigation, route }) => {
   const { t } = useTranslation();
 
   const getRequestList = async (payload) => {
-    console.log('payload', payload);
     const result = await commonApi.getRequestList(payload);
     if (result.ok && result.data.success) {
       setRequestList(result.data.data.result);
@@ -76,7 +75,6 @@ const CollectorHomeScreen = ({ navigation, route }) => {
       };
 
       getRequestList(newPayload);
-      console.log(newPayload);
 
       return newPayload;
     });
@@ -117,7 +115,7 @@ const CollectorHomeScreen = ({ navigation, route }) => {
                 id={item.sku}
                 items={item.items}
                 date={`${item.preferred_pick_date} ${item.preferred_pick_time}`}
-                address={`${item.street_address}, ${item.city.name}, ${item.state.name}, ${item.postal_code}`}
+                address={`${item.street_address}, ${item.postal_code}`}
                 onPress={showDetails}
               />
             )}

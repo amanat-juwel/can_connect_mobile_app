@@ -15,6 +15,7 @@ import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import useAuth from '../auth/useAuth';
 import routes from '../Navigation/routes';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -75,11 +76,9 @@ const EditProfileScreen = () => {
   };
 
   const updateProfile = async (payload) => {
-    console.log('user', user);
     const result = await registrationApi.updateProfile(payload);
     if (!result.ok || !result.data.success) return setUpdateFailed(true);
     setUpdateFailed(false);
-    console.log('result.data', result.data);
     setContextUser(result.data.data.user);
     navigation.navigate(routes.PROFILE_SCREEN);
   };
@@ -100,7 +99,7 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps={'handled'}>
       <View style={styles.container}>
         <View style={styles.textContainer}></View>
         <View style={styles.formContainer}>
@@ -144,7 +143,7 @@ const EditProfileScreen = () => {
                 errorMessage={t('confirmPasswordErrorMessage')}
               />
 
-              <CustomFormPicker
+              {/* <CustomFormPicker
                 name="state"
                 items={states}
                 label={t('statePickerLabel')}
@@ -157,7 +156,7 @@ const EditProfileScreen = () => {
                 name="city"
                 items={cities}
                 label={t('cityPickerLabel')}
-              />
+              /> */}
 
               <CustomFormField
                 name="postal_code"
@@ -165,7 +164,13 @@ const EditProfileScreen = () => {
                 errorMessage={t('postalCodeErrorMessage')}
               />
 
-              <CustomFormField
+              {/* <CustomFormField
+                name="street_address"
+                placeholder={t('streetAddressText')}
+                errorMessage={t('streetAddressErrorMessage')}
+              /> */}
+
+              <CustomGoogleAutoCompleteFormField
                 name="street_address"
                 placeholder={t('streetAddressText')}
                 errorMessage={t('streetAddressErrorMessage')}

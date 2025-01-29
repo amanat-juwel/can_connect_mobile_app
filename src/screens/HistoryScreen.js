@@ -24,7 +24,6 @@ const HistoryScreen = ({ navigation, route }) => {
   const { t } = useTranslation();
 
   const getHistory = async (payload) => {
-    console.log('payload history', payload);
     const result = await commonApi.getHistory(payload);
     if (result.ok && result.data.success) {
       setHistory(result.data.data.result);
@@ -74,7 +73,6 @@ const HistoryScreen = ({ navigation, route }) => {
       };
 
       getHistory(newPayload);
-      console.log('newPayload', newPayload);
 
       return newPayload;
     });
@@ -111,7 +109,7 @@ const HistoryScreen = ({ navigation, route }) => {
               <HistoryItem
                 id={item.sku}
                 date={`${item.preferred_pick_date} ${item.preferred_pick_time}`}
-                address={`${item.street_address}, ${item.city.name}, ${item.state.name}, ${item.postal_code}`}
+                address={`${item.street_address}, ${item.postal_code}`}
                 status={item.status}
                 onPress={showDetails}
               />

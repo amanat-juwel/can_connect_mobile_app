@@ -26,12 +26,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import CustomPopUpMap from '../components/CustomPopUpMap';
 import CustomCheckBox from '../components/CustomCheckBox';
 import requestorApi from '../api/requestor';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   preferred_pick_date: Yup.string().required(),
   preferred_pick_time: Yup.string().required(),
-  state: Yup.object().required(),
-  city: Yup.object().required(),
+  // state: Yup.object().required(),
+  // city: Yup.object().required(),
   postal_code: Yup.string().required(),
   street_address: Yup.string().required(),
   name: Yup.string().required(),
@@ -89,17 +90,13 @@ const RecycleScreen = ({ navigation, route }) => {
       is_donation: isDonation ? 1 : 0,
     };
 
-    console.log('payload', payload);
-
     const result = await requestorApi.storeRequest(payload);
-    console.log('result', result.data);
     if (!result.ok || !result.data.success) {
       setErrorMessage(result.data.errorMessage[0]);
       setRequestFailed(true);
       return;
     }
     setRequestFailed(false);
-    console.log('request', result.data.data);
 
     navigation.navigate(routes.PICKUP_APPOINTMENT_SCREEN, {
       sku: result.data.data.sku,
@@ -124,7 +121,7 @@ const RecycleScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps={'handled'}>
       <CustomForm
         initialValues={initialFormValues}
         onSubmit={createRequest}
@@ -159,7 +156,7 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
-        <View style={styles.rowContainer}>
+        {/* <View style={styles.rowContainer}>
           <View style={{ width: '50%', paddingEnd: 4 }}>
             <CustomFormPicker
               name="state"
@@ -178,7 +175,7 @@ const RecycleScreen = ({ navigation, route }) => {
               height={40}
             />
           </View>
-        </View>
+        </View> */}
         <CustomPopUpMap
           setMarkerPosition={setMarkerPosition}
           markerPosition={markerPosition}
@@ -188,7 +185,7 @@ const RecycleScreen = ({ navigation, route }) => {
           modalVisible={showMap}
           title={t('SelectLocationText')}
         />
-        <View style={styles.rowContainer}>
+        {/* <View style={styles.rowContainer}>
           <View style={{ width: '50%', paddingEnd: 4 }}>
             <CustomFormField
               name="postal_code"
@@ -205,8 +202,23 @@ const RecycleScreen = ({ navigation, route }) => {
               height={40}
             />
           </View>
+        </View> */}
+        <View>
+          <CustomFormField
+            name="postal_code"
+            placeholder={t('postalCodeText')}
+            errorMessage={t('postalCodeErrorMessage')}
+            height={40}
+          />
         </View>
-        <View style={styles.mapRow}>
+        <View>
+          <CustomGoogleAutoCompleteFormField
+            name="street_address"
+            placeholder={t('streetAddressText')}
+            errorMessage={t('streetAddressErrorMessage')}
+          />
+        </View>
+        {/* <View style={styles.mapRow}>
           <TouchableOpacity
             style={styles.leftContainer}
             onPress={() => {
@@ -229,7 +241,7 @@ const RecycleScreen = ({ navigation, route }) => {
           >
             <Text style={styles.clearText}>{t('ClearText')}</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <CustomLabel
           text={t('ContactDetailsText')}

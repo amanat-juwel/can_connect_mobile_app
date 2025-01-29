@@ -20,6 +20,8 @@ import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import authApi from '../api/auth';
 import CustomPopUpWebView from '../components/CustomPopUpWebView';
+import CustomGoogleAutoCompleteField from '../components/CustomGoogleAutoCompleteField';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -105,7 +107,6 @@ const CreateAccountScreen = () => {
 
   const registerRequestor = async (payload) => {
     const result = await registrationApi.registerUser(payload);
-    console.log('result', result.data);
     if (!result.ok || !result.data.success) {
       setErrorMessage(result.data.errorMessage[0]);
       setRegistrationFailed(true);
@@ -116,7 +117,6 @@ const CreateAccountScreen = () => {
       payload.phone,
       payload.email,
     );
-    console.log('requestOtpResult', requestOtpResult.data);
 
     if (!requestOtpResult.ok || !requestOtpResult.data.success)
       return setRegistrationFailed(true);
@@ -143,7 +143,7 @@ const CreateAccountScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps={'handled'}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <CanConnectLogo />
@@ -221,7 +221,13 @@ const CreateAccountScreen = () => {
               errorMessage={t('postalCodeErrorMessage')}
             />
 
-            <CustomFormField
+            {/* <CustomFormField
+              name="street_address"
+              placeholder={t('streetAddressText')}
+              errorMessage={t('streetAddressErrorMessage')}
+            /> */}
+
+            <CustomGoogleAutoCompleteFormField
               name="street_address"
               placeholder={t('streetAddressText')}
               errorMessage={t('streetAddressErrorMessage')}

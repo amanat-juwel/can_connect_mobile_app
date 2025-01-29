@@ -9,6 +9,7 @@ import AuthContext from './src/auth/context';
 import authStorage from './src/auth/storage';
 import * as SplashScreen from 'expo-splash-screen';
 import { View } from 'react-native';
+import 'react-native-get-random-values';
 
 SplashScreen.preventAutoHideAsync();
 
