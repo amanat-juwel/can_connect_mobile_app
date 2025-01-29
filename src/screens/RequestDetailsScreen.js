@@ -12,9 +12,9 @@ import { Icon } from 'react-native-elements';
 import routes from '../Navigation/routes';
 
 const RequestDetailsScreen = ({ route, navigation }) => {
-  console.log('route.params', route.params);
   const request = route.params?.request;
   const [requestTrail, setRequestTrail] = useState();
+  const [distance, getDistance] = useState();
   const { t } = useTranslation();
   const { user } = useAuth();
 
@@ -25,16 +25,23 @@ const RequestDetailsScreen = ({ route, navigation }) => {
     }
   };
 
+  const getDistanceData = async (sku) => {
+    const result = await collectorApi.getDistance(sku);
+    if (result.ok && result.data.success) {
+      getDistance(result.data.data.distance.text);
+    }
+  };
+
   const acceptRequest = async () => {
     const result = await collectorApi.acceptRequest({
       sku: request.sku,
       status: 'accepted',
     });
-    console.log('acceptRequest result', result.data);
     if (result.ok && result.data.success) {
       navigation.navigate({
         name: routes.HOME_SCREEN,
         key: `${routes.HOME_SCREEN}-${Date.now()}`,
+        params: { showToast: true },
       });
     }
   };
@@ -42,9 +49,10 @@ const RequestDetailsScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (user && user?.category === userType.REQUESTOR) {
       getRequestTrailData({ sku: request.sku });
+    } else {
+      getDistanceData({ sku: request.sku });
     }
   }, []);
-  console.log('request, request', request);
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
@@ -171,7 +179,15 @@ const RequestDetailsScreen = ({ route, navigation }) => {
             <MaterialIcons name="location-pin" size={18} color={colors.black} />
             <Text
               style={styles.text}
-            >{`${request.street_address}, ${request.city.name}, ${request.state.name}, ${request.postal_code}`}</Text>
+            >{`${request.street_address}, ${request.postal_code}`}</Text>
+          </View>
+          <View style={styles.row}>
+            <MaterialIcons
+              name="social-distance"
+              size={18}
+              color={colors.black}
+            />
+            <Text style={styles.text}>{distance || '...'}</Text>
           </View>
         </View>
       </View>

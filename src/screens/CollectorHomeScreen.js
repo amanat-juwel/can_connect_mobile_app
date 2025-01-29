@@ -7,15 +7,15 @@ import commonApi from '../api/common';
 import CustomButton from '../components/CustomButton';
 import FilterComponent from '../components/FilterComponent';
 import CollectorHomeItem from '../components/CollectorHomeItem';
+import ToastManager, { Toast } from 'toastify-react-native';
 
 const limit = 5;
 
-const CollectorHomeScreen = ({ navigation }) => {
+const CollectorHomeScreen = ({ navigation, route }) => {
   const [requestList, setRequestList] = useState([]);
   const [meta, setMeta] = useState({});
   const [payload, setPayload] = useState({
     offset: 0,
-    self_only: false,
     limit: limit,
     sort_by: 'id',
     order_by: 'DESC',
@@ -23,7 +23,6 @@ const CollectorHomeScreen = ({ navigation }) => {
   const { t } = useTranslation();
 
   const getRequestList = async (payload) => {
-    console.log('payload', payload);
     const result = await commonApi.getRequestList(payload);
     if (result.ok && result.data.success) {
       setRequestList(result.data.data.result);
@@ -76,7 +75,6 @@ const CollectorHomeScreen = ({ navigation }) => {
       };
 
       getRequestList(newPayload);
-      console.log(newPayload);
 
       return newPayload;
     });
@@ -87,12 +85,23 @@ const CollectorHomeScreen = ({ navigation }) => {
     navigation.navigate(routes.REQUEST_DETAILS_SCREEN, { request: request });
   };
 
+  useEffect(() => {
+    const { showToast } = route.params || {};
+    if (showToast) {
+      Toast.success(t('acceptRequestSuccessText'));
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
         <FilterComponent applyFilter={applyFilter} includeStatus={false} />
       </View>
       <View style={styles.itemContainer}>
+        <ToastManager />
+        <View style={styles.textContainer}>
+          <Text style={styles.pageHeadingLabel}>{t('activeJobsText')}</Text>
+        </View>
         {requestList.length === 0 ? (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noRequestText')}</Text>
@@ -106,7 +115,7 @@ const CollectorHomeScreen = ({ navigation }) => {
                 id={item.sku}
                 items={item.items}
                 date={`${item.preferred_pick_date} ${item.preferred_pick_time}`}
-                address={`${item.street_address}, ${item.city.name}, ${item.state.name}, ${item.postal_code}`}
+                address={`${item.street_address}, ${item.postal_code}`}
                 onPress={showDetails}
               />
             )}
@@ -153,6 +162,11 @@ const styles = StyleSheet.create({
   headingLabel: {
     fontSize: 18,
     fontWeight: '500',
+    marginTop: 10,
+  },
+  pageHeadingLabel: {
+    fontSize: 22,
+    fontWeight: '800',
     marginTop: 10,
   },
   itemContainer: {

@@ -41,7 +41,7 @@ const AppNavigator = ({ user }) => {
             backgroundColor:
               route.name === routes.PROFILE ? colors.primary : colors.white,
             height: 60,
-             paddingBottom: 5,
+            paddingBottom: 5,
           },
           tabBarActiveTintColor:
             route.name === routes.PROFILE ? colors.white : colors.primary,
@@ -132,7 +132,9 @@ const AppNavigator = ({ user }) => {
                 fontWeight: focused ? 'bold' : 'normal',
               }}
             >
-              {t('historyText')}
+              {user.category === userType.REQUESTOR
+                ? t('myRequestText')
+                : t('myJobsText')}
             </Text>
           ),
         }}

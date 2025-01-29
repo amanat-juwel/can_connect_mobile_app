@@ -52,11 +52,11 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
       sku: request.sku,
       status: 'completed',
     });
-    console.log('completeRequest result', result.data);
     if (result.ok && result.data.success) {
       navigation.navigate({
         name: routes.HISTORY_SCREEN,
         key: `${routes.HISTORY_SCREEN}-${Date.now()}`,
+        params: { showToast: true },
       });
     }
   };
@@ -67,7 +67,6 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
     }
   }, []);
 
-  console.log('requestTrail', requestTrail);
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
@@ -199,7 +198,7 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
             <MaterialIcons name="location-pin" size={18} color={colors.black} />
             <Text
               style={styles.text}
-            >{`${request.street_address}, ${request.city.name}, ${request.state.name}, ${request.postal_code}`}</Text>
+            >{`${request.street_address}, ${request.postal_code}`}</Text>
           </View>
         </View>
       </View>

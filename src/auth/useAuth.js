@@ -11,7 +11,6 @@ export default useAuth = () => {
   };
 
   const setContextUser = (user) => {
-    console.log('result.data.user', user);
     setUser(user);
   };
 

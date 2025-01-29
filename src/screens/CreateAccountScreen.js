@@ -20,6 +20,8 @@ import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import authApi from '../api/auth';
 import CustomPopUpWebView from '../components/CustomPopUpWebView';
+import CustomGoogleAutoCompleteField from '../components/CustomGoogleAutoCompleteField';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -30,8 +32,8 @@ const validationSchema = Yup.object().shape({
     .required(),
   password: Yup.string().required(),
   c_password: Yup.string().required(),
-  state: Yup.object().required(),
-  city: Yup.object().required(),
+  // state: Yup.object().required(),
+  // city: Yup.object().required(),
   postal_code: Yup.string().required(),
   street_address: Yup.string().required(),
 });
@@ -91,8 +93,8 @@ const CreateAccountScreen = () => {
     const { state, city, ...otherFields } = data;
     const payload = {
       ...otherFields,
-      state_id: state.id,
-      city_id: city.id,
+      // state_id: state.id,
+      // city_id: city.id,
       category: userType,
     };
 
@@ -105,7 +107,6 @@ const CreateAccountScreen = () => {
 
   const registerRequestor = async (payload) => {
     const result = await registrationApi.registerUser(payload);
-    console.log('result', result.data);
     if (!result.ok || !result.data.success) {
       setErrorMessage(result.data.errorMessage[0]);
       setRegistrationFailed(true);
@@ -116,7 +117,6 @@ const CreateAccountScreen = () => {
       payload.phone,
       payload.email,
     );
-    console.log('requestOtpResult', requestOtpResult.data);
 
     if (!requestOtpResult.ok || !requestOtpResult.data.success)
       return setRegistrationFailed(true);
@@ -143,7 +143,7 @@ const CreateAccountScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps={'handled'}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <CanConnectLogo />
@@ -201,7 +201,7 @@ const CreateAccountScreen = () => {
               errorMessage={t('confirmPasswordErrorMessage')}
             />
 
-            <CustomFormPicker
+            {/* <CustomFormPicker
               name="state"
               items={states}
               label={t('statePickerLabel')}
@@ -213,7 +213,7 @@ const CreateAccountScreen = () => {
               name="city"
               items={cities}
               label={t('cityPickerLabel')}
-            />
+            /> */}
 
             <CustomFormField
               name="postal_code"
@@ -221,7 +221,13 @@ const CreateAccountScreen = () => {
               errorMessage={t('postalCodeErrorMessage')}
             />
 
-            <CustomFormField
+            {/* <CustomFormField
+              name="street_address"
+              placeholder={t('streetAddressText')}
+              errorMessage={t('streetAddressErrorMessage')}
+            /> */}
+
+            <CustomGoogleAutoCompleteFormField
               name="street_address"
               placeholder={t('streetAddressText')}
               errorMessage={t('streetAddressErrorMessage')}
