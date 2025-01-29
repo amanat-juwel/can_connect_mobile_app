@@ -125,5 +125,7 @@
   "CancelRequestText": "Cancel Request",
   "CompleteRequestText": "Complete Request",
   "AcceptRequestText": "Accept Request",
-  "goBackText": "Go Back"
+  "goBackText": "Go Back",
+  "acceptRequestSuccessText": "Job Accepted!",
+  "completeRequestSuccessText": "Job Completed!"
 }

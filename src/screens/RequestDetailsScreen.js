@@ -35,6 +35,7 @@ const RequestDetailsScreen = ({ route, navigation }) => {
       navigation.navigate({
         name: routes.HOME_SCREEN,
         key: `${routes.HOME_SCREEN}-${Date.now()}`,
+        params: { showToast: true },
       });
     }
   };

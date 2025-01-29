@@ -7,10 +7,11 @@ import commonApi from '../api/common';
 import CustomButton from '../components/CustomButton';
 import FilterComponent from '../components/FilterComponent';
 import CollectorHomeItem from '../components/CollectorHomeItem';
+import ToastManager, { Toast } from 'toastify-react-native';
 
 const limit = 5;
 
-const CollectorHomeScreen = ({ navigation }) => {
+const CollectorHomeScreen = ({ navigation, route }) => {
   const [requestList, setRequestList] = useState([]);
   const [meta, setMeta] = useState({});
   const [payload, setPayload] = useState({
@@ -86,12 +87,20 @@ const CollectorHomeScreen = ({ navigation }) => {
     navigation.navigate(routes.REQUEST_DETAILS_SCREEN, { request: request });
   };
 
+  useEffect(() => {
+    const { showToast } = route.params || {};
+    if (showToast) {
+      Toast.success(t('acceptRequestSuccessText'));
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
         <FilterComponent applyFilter={applyFilter} includeStatus={false} />
       </View>
       <View style={styles.itemContainer}>
+        <ToastManager />
         <View style={styles.textContainer}>
           <Text style={styles.pageHeadingLabel}>{t('activeJobsText')}</Text>
         </View>

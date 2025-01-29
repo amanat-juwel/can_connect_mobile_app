@@ -7,10 +7,11 @@ import commonApi from '../api/common';
 import HistoryItem from '../components/HistoryItem';
 import CustomButton from '../components/CustomButton';
 import FilterComponent from '../components/FilterComponent';
+import ToastManager, { Toast } from 'toastify-react-native';
 
 const limit = 5;
 
-const HistoryScreen = ({ navigation }) => {
+const HistoryScreen = ({ navigation, route }) => {
   const [history, setHistory] = useState([]);
   const [meta, setMeta] = useState({});
   const [payload, setPayload] = useState({
@@ -73,7 +74,7 @@ const HistoryScreen = ({ navigation }) => {
       };
 
       getHistory(newPayload);
-      console.log('newPayload',newPayload);
+      console.log('newPayload', newPayload);
 
       return newPayload;
     });
@@ -84,12 +85,20 @@ const HistoryScreen = ({ navigation }) => {
     navigation.navigate(routes.HISTORY_DETAILS_SCREEN, { request: request });
   };
 
+  useEffect(() => {
+    const { showToast } = route.params || {};
+    if (showToast) {
+      Toast.success(t('completeRequestSuccessText'));
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
         <FilterComponent applyFilter={applyFilter} />
       </View>
       <View style={styles.itemContainer}>
+        <ToastManager />
         {history.length === 0 ? (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noHistoryText')}</Text>

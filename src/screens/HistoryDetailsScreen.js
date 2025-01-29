@@ -57,6 +57,7 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
       navigation.navigate({
         name: routes.HISTORY_SCREEN,
         key: `${routes.HISTORY_SCREEN}-${Date.now()}`,
+        params: { showToast: true },
       });
     }
   };
