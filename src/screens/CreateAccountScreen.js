@@ -30,8 +30,8 @@ const validationSchema = Yup.object().shape({
     .required(),
   password: Yup.string().required(),
   c_password: Yup.string().required(),
-  state: Yup.object().required(),
-  city: Yup.object().required(),
+  // state: Yup.object().required(),
+  // city: Yup.object().required(),
   postal_code: Yup.string().required(),
   street_address: Yup.string().required(),
 });
@@ -91,8 +91,8 @@ const CreateAccountScreen = () => {
     const { state, city, ...otherFields } = data;
     const payload = {
       ...otherFields,
-      state_id: state.id,
-      city_id: city.id,
+      // state_id: state.id,
+      // city_id: city.id,
       category: userType,
     };
 
@@ -201,7 +201,7 @@ const CreateAccountScreen = () => {
               errorMessage={t('confirmPasswordErrorMessage')}
             />
 
-            <CustomFormPicker
+            {/* <CustomFormPicker
               name="state"
               items={states}
               label={t('statePickerLabel')}
@@ -213,7 +213,7 @@ const CreateAccountScreen = () => {
               name="city"
               items={cities}
               label={t('cityPickerLabel')}
-            />
+            /> */}
 
             <CustomFormField
               name="postal_code"

@@ -15,7 +15,6 @@ const CollectorHomeScreen = ({ navigation }) => {
   const [meta, setMeta] = useState({});
   const [payload, setPayload] = useState({
     offset: 0,
-    self_only: false,
     limit: limit,
     sort_by: 'id',
     order_by: 'DESC',
@@ -93,6 +92,9 @@ const CollectorHomeScreen = ({ navigation }) => {
         <FilterComponent applyFilter={applyFilter} includeStatus={false} />
       </View>
       <View style={styles.itemContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.pageHeadingLabel}>{t('activeJobsText')}</Text>
+        </View>
         {requestList.length === 0 ? (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noRequestText')}</Text>
@@ -153,6 +155,11 @@ const styles = StyleSheet.create({
   headingLabel: {
     fontSize: 18,
     fontWeight: '500',
+    marginTop: 10,
+  },
+  pageHeadingLabel: {
+    fontSize: 22,
+    fontWeight: '800',
     marginTop: 10,
   },
   itemContainer: {
