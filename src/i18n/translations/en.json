@@ -127,5 +127,6 @@
   "AcceptRequestText": "Accept Request",
   "goBackText": "Go Back",
   "acceptRequestSuccessText": "Job Accepted!",
-  "completeRequestSuccessText": "Job Completed!"
+  "completeRequestSuccessText": "Job Completed!",
+  "distanceDescriptionText": " away from your location"
 }

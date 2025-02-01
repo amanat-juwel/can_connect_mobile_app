@@ -187,7 +187,9 @@ const RequestDetailsScreen = ({ route, navigation }) => {
               size={18}
               color={colors.black}
             />
-            <Text style={styles.text}>{distance || '...'}</Text>
+            <Text style={styles.text}>
+              {distance ? distance + t('distanceDescriptionText') : '...'}
+            </Text>
           </View>
         </View>
       </View>
