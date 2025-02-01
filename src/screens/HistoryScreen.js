@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import routes from '../Navigation/routes';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
@@ -8,6 +14,7 @@ import HistoryItem from '../components/HistoryItem';
 import CustomButton from '../components/CustomButton';
 import FilterComponent from '../components/FilterComponent';
 import ToastManager, { Toast } from 'toastify-react-native';
+import LoadingComponent from '../components/LoadingComponent';
 
 const limit = 5;
 
@@ -21,10 +28,14 @@ const HistoryScreen = ({ navigation, route }) => {
     sort_by: 'id',
     order_by: 'DESC',
   });
+  const [loading, setLoading] = useState(true);
+
   const { t } = useTranslation();
 
   const getHistory = async (payload) => {
+    setLoading(true);
     const result = await commonApi.getHistory(payload);
+    setLoading(false);
     if (result.ok && result.data.success) {
       setHistory(result.data.data.result);
       setMeta(result.data.data.meta);
@@ -92,12 +103,17 @@ const HistoryScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.filterContainer}>
         <FilterComponent applyFilter={applyFilter} />
       </View>
       <View style={styles.itemContainer}>
         <ToastManager />
-        {history.length === 0 ? (
+        {history.length === 0 && !loading ? (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noHistoryText')}</Text>
           </View>

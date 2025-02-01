@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
 import commonApi from '../api/common';
 import NotificationComponent from '../components/NotificationComponent';
+import LoadingComponent from '../components/LoadingComponent';
 
 const NotificationScreen = () => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation();
 
   const getNotifications = async () => {
+    setLoading(true);
+
     const result = await commonApi.getNotifications();
+    setLoading(false);
+
     if (result.ok && result.data.success) {
       setNotifications(result.data.data);
     }
@@ -23,8 +35,13 @@ const NotificationScreen = () => {
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.formContainer}>
-        {notifications.length === 0 && (
+        {notifications.length === 0 && !loading && (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noNotificationsText')}</Text>
           </View>

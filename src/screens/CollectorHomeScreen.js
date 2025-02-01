@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import routes from '../Navigation/routes';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
@@ -8,6 +14,7 @@ import CustomButton from '../components/CustomButton';
 import FilterComponent from '../components/FilterComponent';
 import CollectorHomeItem from '../components/CollectorHomeItem';
 import ToastManager, { Toast } from 'toastify-react-native';
+import LoadingComponent from '../components/LoadingComponent';
 
 const limit = 5;
 
@@ -20,10 +27,13 @@ const CollectorHomeScreen = ({ navigation, route }) => {
     sort_by: 'id',
     order_by: 'DESC',
   });
+  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
   const getRequestList = async (payload) => {
+    setLoading(true);
     const result = await commonApi.getRequestList(payload);
+    setLoading(false);
     if (result.ok && result.data.success) {
       setRequestList(result.data.data.result);
       setMeta(result.data.data.meta);
@@ -94,6 +104,11 @@ const CollectorHomeScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.filterContainer}>
         <FilterComponent applyFilter={applyFilter} includeStatus={false} />
       </View>
@@ -102,7 +117,7 @@ const CollectorHomeScreen = ({ navigation, route }) => {
         <View style={styles.textContainer}>
           <Text style={styles.pageHeadingLabel}>{t('activeJobsText')}</Text>
         </View>
-        {requestList.length === 0 ? (
+        {requestList.length === 0 && !loading ? (
           <View style={styles.textContainer}>
             <Text style={styles.headingLabel}>{t('noRequestText')}</Text>
           </View>
@@ -128,14 +143,14 @@ const CollectorHomeScreen = ({ navigation, route }) => {
             <CustomButton
               label={t('previousText')}
               onPress={handlePrev}
-              disabled={meta?.offset === 0}
+              disabled={meta?.offset === 0 || loading}
             />
           </View>
           <View style={styles.button}>
             <CustomButton
               label={t('nextText')}
               onPress={handleNext}
-              disabled={meta?.has_more !== 1}
+              disabled={meta?.has_more !== 1 || loading}
             />
           </View>
         </View>
