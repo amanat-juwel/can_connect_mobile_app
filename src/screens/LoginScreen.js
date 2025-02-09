@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +24,7 @@ import {
   CustomFormField,
   CustomErrorMessage,
 } from '../components/forms';
+import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
   id: emailOrPhoneSchema,
@@ -28,6 +34,7 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = () => {
   const [loginFailed, setLoginFailed] = useState();
   const [isRememberMeChecked, setRememberMeChecked] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const { login } = useAuth();
@@ -35,7 +42,9 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleLogIn = async ({ id, password }) => {
+    setLoading(true);
     const result = await authApi.login(id, password);
+    setLoading(false);
     if (!result.ok || !result.data.success) return setLoginFailed(true);
     setLoginFailed(false);
     login(result.data, isRememberMeChecked);
@@ -43,6 +52,11 @@ const LoginScreen = () => {
 
   return (
     <ScrollView>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <CanConnectLogo />

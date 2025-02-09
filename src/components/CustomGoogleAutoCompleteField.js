@@ -34,6 +34,7 @@ const CustomGoogleAutoCompleteField = ({
   return (
     <View style={styles.container}>
       <GooglePlacesAutocomplete
+        debounce={300}
         ref={ref}
         disableScroll={true}
         placeholder={placeholder}
@@ -47,6 +48,7 @@ const CustomGoogleAutoCompleteField = ({
         query={{
           key: GOOGLE_API_KEY,
           language: 'en',
+          components: 'country:au',
         }}
         textInputProps={{
           onBlur,

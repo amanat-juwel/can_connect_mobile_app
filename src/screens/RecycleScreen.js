@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import routes from '../Navigation/routes';
 import CustomLabel from '../components/CustomLabel';
@@ -27,6 +28,7 @@ import CustomPopUpMap from '../components/CustomPopUpMap';
 import CustomCheckBox from '../components/CustomCheckBox';
 import requestorApi from '../api/requestor';
 import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
   preferred_pick_date: Yup.string().required(),
@@ -53,6 +55,7 @@ const RecycleScreen = ({ navigation, route }) => {
   const [showMap, setShowMap] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
   const [requestFailed, setRequestFailed] = useState();
+  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
 
@@ -89,8 +92,10 @@ const RecycleScreen = ({ navigation, route }) => {
       location_longitude: markerPosition?.longitude,
       is_donation: isDonation ? 1 : 0,
     };
-
+    setLoading(true);
     const result = await requestorApi.storeRequest(payload);
+    setLoading(false);
+
     if (!result.ok || !result.data.success) {
       setErrorMessage(result.data.errorMessage[0]);
       setRequestFailed(true);
@@ -122,6 +127,11 @@ const RecycleScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps={'handled'}>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <CustomForm
         initialValues={initialFormValues}
         onSubmit={createRequest}

@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import CustomLinkButton from '../components/CustomLinkButton';
@@ -14,6 +19,7 @@ import * as Yup from 'yup';
 import { emailOrPhoneSchema, isEmail } from '../utility/validation.helper';
 import authApi from '../api/auth';
 import colors from '../constants/colors';
+import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
   id: emailOrPhoneSchema,
@@ -22,14 +28,17 @@ const validationSchema = Yup.object().shape({
 const VerifyPhoneNumberScreen = () => {
   const [otpRequestFailed, setOtpRequestFailed] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const navigation = useNavigation();
 
   const handleSubmit = async ({ id }) => {
+    setLoading(true);
     const result = isEmail(id)
       ? await authApi.requestOtp('', id)
       : await authApi.requestOtp(id);
+    setLoading(false);
     if (!result.ok || !result.data.success) {
       setOtpRequestFailed(true);
       setErrorMessage(result.data.errorMessage[0]);
@@ -41,6 +50,11 @@ const VerifyPhoneNumberScreen = () => {
 
   return (
     <ScrollView>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.container}>
         <CustomForm
           initialValues={{ id: '' }}

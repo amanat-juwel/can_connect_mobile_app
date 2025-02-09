@@ -20,7 +20,6 @@ const NotificationScreen = () => {
 
   const getNotifications = async () => {
     setLoading(true);
-
     const result = await commonApi.getNotifications();
     setLoading(false);
 
