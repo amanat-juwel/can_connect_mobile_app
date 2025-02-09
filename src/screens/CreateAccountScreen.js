@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import CustomCheckBox from '../components/CustomCheckBox';
 import { useNavigation } from '@react-navigation/native';
 import CanConnectLogo from '../components/CanConnectLogo';
@@ -22,6 +28,7 @@ import authApi from '../api/auth';
 import CustomPopUpWebView from '../components/CustomPopUpWebView';
 import CustomGoogleAutoCompleteField from '../components/CustomGoogleAutoCompleteField';
 import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -62,6 +69,7 @@ const CreateAccountScreen = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [tnCVisible, setTnCVisible] = useState(false);
   const [policies, setPolicies] = useState();
+  const [loading, setLoading] = useState(false);
 
   const getStates = async () => {
     const result = await publicApi.getStates();
@@ -106,7 +114,10 @@ const CreateAccountScreen = () => {
   };
 
   const registerRequestor = async (payload) => {
+    setLoading(true);
     const result = await registrationApi.registerUser(payload);
+    setLoading(false);
+
     if (!result.ok || !result.data.success) {
       setErrorMessage(result.data.errorMessage[0]);
       setRegistrationFailed(true);
@@ -144,6 +155,11 @@ const CreateAccountScreen = () => {
 
   return (
     <ScrollView keyboardShouldPersistTaps={'handled'}>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <CanConnectLogo />

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import routes from '../Navigation/routes';
 import CanConnectLogo from '../components/CanConnectLogo';
 import colors from '../constants/colors';
@@ -19,6 +25,7 @@ import registrationApi from '../api/registration';
 import authApi from '../api/auth';
 import { useNavigation } from '@react-navigation/native';
 import CustomLinkButton from '../components/CustomLinkButton';
+import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
   dob: Yup.string().required(),
@@ -51,6 +58,7 @@ const CollectorQuestionnaire = ({ route }) => {
   const [isEligible, setIsEligible] = useState(true);
   const [isMinor, setIsMinor] = useState(false);
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getQuestionnaire = async () => {
     const result = await publicApi.getQuestionnaire();
@@ -85,7 +93,10 @@ const CollectorQuestionnaire = ({ route }) => {
   };
 
   const registerCollector = async (payload) => {
+    setLoading(true);
     const result = await registrationApi.registerUser(payload);
+    setLoading(false);
+
     if (!result.ok || !result.data.success) return setRegistrationFailed(true);
     setRegistrationFailed(false);
     const requestOtpResult = await authApi.requestOtp(
@@ -114,6 +125,11 @@ const CollectorQuestionnaire = ({ route }) => {
 
   return (
     <ScrollView>
+      {loading && (
+        <TouchableWithoutFeedback>
+          <LoadingComponent />
+        </TouchableWithoutFeedback>
+      )}
       <View style={styles.container}>
         <View style={styles.imageContainer}>
           <CanConnectLogo />
