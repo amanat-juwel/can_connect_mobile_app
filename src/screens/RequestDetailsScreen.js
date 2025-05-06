@@ -58,7 +58,7 @@ const RequestDetailsScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <Text
           style={styles.textHeader}
-        >{`${t('HistoryTitleText')} ${request.sku}`}</Text>
+        >{`${t('CollectorHistoryTitleText')} ${request.sku}`}</Text>
         <View style={styles.dateTimeContainer}>
           <View style={styles.dateContainer}>
             <View>
@@ -111,7 +111,7 @@ const RequestDetailsScreen = ({ route, navigation }) => {
               >{`${item.qty} ${item.unit} of ${item.type}`}</Text>
             </View>
           ))}
-          {request.is_donation === 1 && (
+          {/* {request.is_donation === 1 && (
             <View style={[styles.row, { marginTop: 10 }]}>
               <MaterialIcons
                 name="volunteer-activism"
@@ -120,7 +120,7 @@ const RequestDetailsScreen = ({ route, navigation }) => {
               />
               <Text style={styles.text}>{t('DonationText')}</Text>
             </View>
-          )}
+          )} */}
           {request.note?.length > 0 && (
             <View style={[styles.row, { marginTop: 10 }]}>
               <MaterialIcons name="note" size={18} color={colors.primary} />
@@ -198,6 +198,11 @@ const RequestDetailsScreen = ({ route, navigation }) => {
           <CustomButton
             label={t('AcceptRequestText')}
             onPress={acceptRequest}
+            customButtonStyle={{
+              backgroundColor: colors.lightYellow,
+              borderColor: colors.darkYellow,
+              borderWidth: 2,
+            }}
           />
         </View>
       )}

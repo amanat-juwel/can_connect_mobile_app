@@ -67,12 +67,15 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
     }
   }, []);
 
+  const titleText =
+    user?.category === userType.REQUESTOR
+      ? t('RequestorHistoryTitleText')
+      : t('CollectorHistoryTitleText');
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
-        <Text
-          style={styles.textHeader}
-        >{`${t('HistoryTitleText')} ${request.sku}`}</Text>
+        <Text style={styles.textHeader}>{`${titleText} ${request.sku}`}</Text>
         <View style={styles.statusContainer}>
           <View style={[styles.chip, { backgroundColor: getChipColor() }]}>
             <Text style={styles.chipText}>{t(request.status)}</Text>
@@ -130,7 +133,7 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
               >{`${item.qty} ${item.unit} of ${item.type}`}</Text>
             </View>
           ))}
-          {request.is_donation === 1 && (
+          {/* {request.is_donation === 1 && (
             <View style={[styles.row, { marginTop: 10 }]}>
               <MaterialIcons
                 name="volunteer-activism"
@@ -139,7 +142,7 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
               />
               <Text style={styles.text}>{t('DonationText')}</Text>
             </View>
-          )}
+          )} */}
           {request.note?.length > 0 && (
             <View style={[styles.row, { marginTop: 10 }]}>
               <MaterialIcons name="note" size={18} color={colors.primary} />

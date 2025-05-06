@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  Image,
-  ScrollView,
-} from 'react-native';
+import { View, StyleSheet, Image, ScrollView } from 'react-native';
 import routes from '../Navigation/routes';
-import colors from '../constants/colors';
 import commonApi from '../api/common';
 import publicApi from '../api/public';
 import CustomButton from '../components/CustomButton';
@@ -50,8 +42,14 @@ const RequestorHomeScreen = ({ navigation }) => {
   const onSubtract = (containerType) => {
     setItemMap((itemMap) => {
       const newMap = { ...itemMap };
-      newMap[containerType] =
-        newMap[containerType] > 0 ? newMap[containerType] - 1 : 0;
+
+      if (newMap[containerType] > 0) {
+        newMap[containerType] = newMap[containerType] - 1;
+        if (newMap[containerType] === 0) {
+          delete newMap[containerType];
+        }
+      }
+
       return newMap;
     });
   };
@@ -108,7 +106,11 @@ const RequestorHomeScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <CustomButton label={t('nextText')} onPress={handleNext} />
+          <CustomButton
+            label={t('nextText')}
+            onPress={handleNext}
+            disabled={Object.keys(itemMap).length === 0}
+          />
         </View>
       </View>
     </ScrollView>

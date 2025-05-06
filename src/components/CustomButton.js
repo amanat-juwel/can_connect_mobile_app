@@ -7,12 +7,14 @@ const CustomButton = ({
   onPress,
   disabled = false,
   color = colors.primary,
+  customButtonStyle,
 }) => {
   return (
     <TouchableOpacity
       style={[
         styles.button,
         { backgroundColor: disabled ? colors.grey : color },
+        { ...customButtonStyle },
       ]}
       onPress={onPress}
       disabled={disabled}

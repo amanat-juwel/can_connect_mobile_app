@@ -8,4 +8,6 @@ export default {
   darkGreen: '#1f7035',
   orange: '#ed9f0e',
   blue: 'blue',
+  lightYellow: '#f0ad4e',
+  darkYellow: '#eea236',
 };
