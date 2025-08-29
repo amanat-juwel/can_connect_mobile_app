@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import colors from '../constants/colors';
@@ -12,8 +12,51 @@ const ProfileScreen = ({ navigation }) => {
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    await authApi.logout();
-    logout();
+    try {
+      // Show confirmation dialog
+      Alert.alert(
+        t('logoutText') || 'Logout',
+        t('logoutConfirmationText') || 'Are you sure you want to logout?',
+        [
+          {
+            text: t('cancelText') || 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: t('logoutText') || 'Logout',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                // Clear any navigation state first to prevent BackHandler errors
+                if (navigation.canGoBack()) {
+                  navigation.popToTop();
+                }
+                
+                // Small delay to allow navigation cleanup
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Perform logout API call
+                await authApi.logout();
+                
+                // Additional delay for cleanup
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Finally logout
+                logout();
+              } catch (error) {
+                console.warn('Logout error:', error);
+                // Force logout even if API call fails
+                logout();
+              }
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.warn('Logout error:', error);
+      // Fallback logout
+      logout();
+    }
   };
 
   const handleEdit = () => {

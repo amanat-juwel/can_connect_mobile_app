@@ -1,49 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  Button,
-  ScrollView,
   StyleSheet,
+  ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
-import routes from '../Navigation/routes';
-import CustomLabel from '../components/CustomLabel';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
-import {
-  CustomErrorMessage,
-  CustomForm,
-  CustomFormField,
-  CustomFormPicker,
-  CustomSubmitButton,
-} from '../components/forms';
-import * as Yup from 'yup';
-import CustomFormDatePicker from '../components/forms/CustomFormDatePicker';
-import publicApi from '../api/public';
-import useAuth from '../auth/useAuth';
-import { MaterialIcons } from '@expo/vector-icons';
+import CustomForm from '../components/forms/CustomForm';
+import CustomLabel from '../components/CustomLabel';
+import CustomFormField from '../components/forms/CustomFormField';
+import CustomFormPicker from '../components/forms/CustomFormPicker';
+import SystemDatePicker from '../components/forms/SystemDatePicker';
+import CustomErrorMessage from '../components/forms/CustomErrorMessage';
+import CustomSubmitButton from '../components/forms/CustomSubmitButton';
 import CustomPopUpMap from '../components/CustomPopUpMap';
-import CustomCheckBox from '../components/CustomCheckBox';
-import requestorApi from '../api/requestor';
-import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 import LoadingComponent from '../components/LoadingComponent';
+import useAuth from '../auth/useAuth';
+import routes from '../Navigation/routes';
+import requestorApi from '../api/requestor';
+import publicApi from '../api/public';
+import validationSchema from '../utility/validation.helper';
+import { MaterialIcons } from '@expo/vector-icons';
+import CustomCheckBox from '../components/CustomCheckBox';
+//import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
-const validationSchema = Yup.object().shape({
-  preferred_pick_date: Yup.string().required(),
-  preferred_pick_time: Yup.string().required(),
-  // state: Yup.object().required(),
-  // city: Yup.object().required(),
-  postal_code: Yup.string().required(),
-  street_address: Yup.string().required(),
-  name: Yup.string().required(),
-  email: Yup.string().email().required(),
-  phone: Yup.string()
-    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/)
-    .required(),
-  note: Yup.string(),
-});
 
 const RecycleScreen = ({ navigation, route }) => {
   const { user } = useAuth();
@@ -145,7 +129,7 @@ const RecycleScreen = ({ navigation, route }) => {
         />
         <View style={styles.rowContainer}>
           <View style={{ width: '50%', paddingEnd: 4 }}>
-            <CustomFormDatePicker
+            <SystemDatePicker
               name="preferred_pick_date"
               label={t('PickupDateText')}
               errorMessage={t('PickupDateErrorMessage')}
@@ -156,7 +140,7 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
           <View style={{ width: '50%', paddingStart: 4 }}>
-            <CustomFormDatePicker
+            <SystemDatePicker
               name="preferred_pick_time"
               label={t('PickupTimeText')}
               errorMessage={t('PickupTimeErrorMessage')}
@@ -222,10 +206,11 @@ const RecycleScreen = ({ navigation, route }) => {
           />
         </View>
         <View>
-          <CustomGoogleAutoCompleteFormField
+          <CustomFormField
             name="street_address"
             placeholder={t('streetAddressText')}
             errorMessage={t('streetAddressErrorMessage')}
+            height={40}
           />
         </View>
         {/* <View style={styles.mapRow}>

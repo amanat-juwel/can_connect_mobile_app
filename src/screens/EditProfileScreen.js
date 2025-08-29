@@ -15,7 +15,7 @@ import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import useAuth from '../auth/useAuth';
 import routes from '../Navigation/routes';
-import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+//import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -83,7 +83,7 @@ const EditProfileScreen = () => {
     navigation.navigate(routes.PROFILE_SCREEN);
   };
 
-  let initialFormValues = {
+  const initialFormValues = user ? {
     first_name: user.first_name,
     last_name: user.last_name,
     password: '',
@@ -96,7 +96,15 @@ const EditProfileScreen = () => {
     },
     postal_code: user.postal_code,
     street_address: user.street_address,
-  };
+  } : {};
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView keyboardShouldPersistTaps={'handled'}>
@@ -170,11 +178,11 @@ const EditProfileScreen = () => {
                 errorMessage={t('streetAddressErrorMessage')}
               /> */}
 
-              <CustomGoogleAutoCompleteFormField
+              {/* <CustomGoogleAutoCompleteFormField
                 name="street_address"
                 placeholder={t('streetAddressText')}
                 errorMessage={t('streetAddressErrorMessage')}
-              />
+              /> */}
 
               <CustomErrorMessage
                 error={t('profileUpdateFailedMessage')}

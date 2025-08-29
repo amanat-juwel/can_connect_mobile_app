@@ -27,7 +27,7 @@ import registrationApi from '../api/registration';
 import authApi from '../api/auth';
 import CustomPopUpWebView from '../components/CustomPopUpWebView';
 import CustomGoogleAutoCompleteField from '../components/CustomGoogleAutoCompleteField';
-import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+//import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 import LoadingComponent from '../components/LoadingComponent';
 
 const validationSchema = Yup.object().shape({
@@ -243,11 +243,11 @@ const CreateAccountScreen = () => {
               errorMessage={t('streetAddressErrorMessage')}
             /> */}
 
-            <CustomGoogleAutoCompleteFormField
+            {/* <CustomGoogleAutoCompleteFormField
               name="street_address"
               placeholder={t('streetAddressText')}
               errorMessage={t('streetAddressErrorMessage')}
-            />
+            /> */}
 
             <View
               style={{

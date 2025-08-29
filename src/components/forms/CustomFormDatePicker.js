@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useFormikContext } from 'formik';
 import CustomErrorMessage from './CustomErrorMessage';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { StyleSheet, Text, TouchableWithoutFeedback, View, Platform } from 'react-native';
 import colors from '../../constants/colors';
+import { safeFormatDate, isDateValid } from '../../utility/date.helper';
 
 const CustomFormDatePicker = ({
   name,
@@ -18,6 +19,7 @@ const CustomFormDatePicker = ({
   ...otherProps
 }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const { setFieldValue, errors, touched, values } = useFormikContext();
 
@@ -29,30 +31,48 @@ const CustomFormDatePicker = ({
     setDatePickerVisibility(false);
   };
 
-  const getFormattedTime = (isoTime) => {
-    const date = new Date(`1970-01-01T${isoTime}`);
+  // Handle date/time change using system picker
+  const handleDateChange = (event, date) => {
+    if (Platform.OS === 'android') {
+      setDatePickerVisibility(false);
+    }
+    
+    if (date) {
+      setSelectedDate(date);
+      
+      // Validate the date safely
+      if (!isDateValid(date)) {
+        console.warn('Invalid date received from system picker');
+        return;
+      }
 
-    const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    };
+      let result = '';
+      
+      if (mode === 'date') {
+        result = safeFormatDate(date, 'date');
+      } else if (mode === 'time') {
+        result = safeFormatDate(date, 'time');
+      }
 
-    return date.toLocaleTimeString(undefined, options);
+      if (result) {
+        if (onchange) onchange(result);
+        setFieldValue(name, result);
+      }
+    }
   };
 
-  const handleConfirm = (dateTime) => {
-    let result = dateTime;
-    if (mode === 'date') {
-      result = dateTime.toISOString().split('T')[0];
+  // Safe display value that won't cause errors
+  const getDisplayValue = () => {
+    try {
+      const value = values[name];
+      if (value && value !== '' && typeof value === 'string') {
+        return value;
+      }
+      return label;
+    } catch (error) {
+      console.warn('Display value error:', error);
+      return label;
     }
-    if (mode === 'time') {
-      result = getFormattedTime(dateTime.toISOString().split('T')[1]);
-    }
-
-    if (onchange) onchange(result);
-    setFieldValue(name, result);
-    hideDatePicker();
   };
 
   return (
@@ -62,17 +82,23 @@ const CustomFormDatePicker = ({
           style={[styles.container, { height, width, marginBottom, marginTop }]}
         >
           <Text style={styles.label}>
-            {values[name] ? values[name] : label}
+            {getDisplayValue()}
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode={mode}
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-        {...otherProps}
-      />
+      
+      {/* System-provided date/time picker */}
+      {isDatePickerVisible && (
+        <DateTimePicker
+          value={selectedDate}
+          mode={mode}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={handleDateChange}
+          style={Platform.OS === 'ios' ? styles.iosPicker : undefined}
+          {...otherProps}
+        />
+      )}
+      
       <CustomErrorMessage
         error={errors[name] && errorMessage}
         visible={touched[name]}
@@ -95,6 +121,10 @@ const styles = StyleSheet.create({
   label: {
     width: '85%',
     color: colors.grey,
+  },
+  iosPicker: {
+    width: '100%',
+    marginTop: 10,
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import colors from '../constants/colors';
 import { useTranslation } from 'react-i18next';
-import CustomFormDatePicker from './forms/CustomFormDatePicker';
+import SystemDatePicker from './forms/SystemDatePicker';
 import {
   CustomForm,
   CustomFormField,
@@ -87,7 +87,7 @@ const FilterComponent = ({ applyFilter, includeStatus = true }) => {
         <CustomForm initialValues={initialFormValues} onSubmit={applyFilter}>
           <View style={styles.rowContainer}>
             <View style={styles.columnLeft}>
-              <CustomFormDatePicker
+              <SystemDatePicker
                 name="preferred_pick_date_from"
                 label={t('PickupDateFromText')}
                 errorMessage={t('PickupDateErrorMessage')}
@@ -96,7 +96,7 @@ const FilterComponent = ({ applyFilter, includeStatus = true }) => {
               />
             </View>
             <View style={styles.columnRight}>
-              <CustomFormDatePicker
+              <SystemDatePicker
                 name="preferred_pick_date_to"
                 label={t('PickupDateToText')}
                 errorMessage={t('PickupTimeErrorMessage')}

@@ -19,7 +19,7 @@ import {
 } from '../components/forms';
 import * as Yup from 'yup';
 import CustomCheckBox from '../components/CustomCheckBox';
-import CustomFormDatePicker from '../components/forms/CustomFormDatePicker';
+import SystemDatePicker from '../components/forms/SystemDatePicker';
 import { isAdult } from '../utility/date.helper';
 import registrationApi from '../api/registration';
 import authApi from '../api/auth';
@@ -75,9 +75,9 @@ const CollectorQuestionnaire = ({ route }) => {
     getQuestionnaire();
   }, []);
 
-  const filteredQuestions = questionnaire.filter(
+  const filteredQuestions = questionnaire ? questionnaire.filter(
     (question) => Boolean(question.is_minor_question) === isMinor,
-  );
+  ) : null;
 
   const handleSignUp = async (data) => {
     let payload = { ...route.params?.payload, ...data };
@@ -143,7 +143,7 @@ const CollectorQuestionnaire = ({ route }) => {
             onSubmit={handleSignUp}
             validationSchema={validationSchema}
           >
-            <CustomFormDatePicker
+            <SystemDatePicker
               name="dob"
               label={t('dateOfBirthText')}
               errorMessage={t('dobErrorMessage')}

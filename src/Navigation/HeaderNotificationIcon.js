@@ -23,7 +23,12 @@ export const HeaderNotificationIcon = ({}) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(routes.NOTIFICATION_SCREEN)}
+      onPress={() => {
+        // Navigate to the HOME tab first, then to the NotificationScreen
+        navigation.navigate(routes.HOME, {
+          screen: routes.NOTIFICATION_SCREEN
+        });
+      }}
       style={{ marginRight: 10 }}
     >
       <View style={{ position: 'relative' }}>

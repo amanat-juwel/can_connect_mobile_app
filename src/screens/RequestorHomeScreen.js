@@ -65,13 +65,13 @@ const RequestorHomeScreen = ({ navigation }) => {
   }, []);
 
   const handleNext = () => {
-    const items = Object.keys(itemMap)
+    const items = itemMap ? Object.keys(itemMap)
       .filter((key) => itemMap[key] !== 0)
       .map((key) => ({
         type: key,
         qty: String(itemMap[key]),
         unit: unit,
-      }));
+      })) : null;
 
     if (items.length < 1) return;
 
