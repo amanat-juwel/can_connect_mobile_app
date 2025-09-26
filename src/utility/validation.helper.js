@@ -9,7 +9,7 @@ export const emailOrPhoneSchema = Yup.string()
   .required()
   .test(
     'email-or-phone',
-    'Must be a valid Email or Phone Number',
+    'Must be a valid Email',
     function (value) {
       const { path, createError } = this;
 
@@ -22,7 +22,7 @@ export const emailOrPhoneSchema = Yup.string()
 
       return createError({
         path,
-        message: 'Must be a valid Email or Phone Number',
+        message: 'Must be a valid Email',
       });
     },
   );

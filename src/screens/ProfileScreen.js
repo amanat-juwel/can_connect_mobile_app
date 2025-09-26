@@ -14,7 +14,6 @@ import useAuth from '../auth/useAuth';
 import colors from '../constants/colors';
 import CustomIconButton from '../components/CustomIconButton';
 import { useTranslation } from 'react-i18next';
-import routes from '../Navigation/routes';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
@@ -39,25 +38,22 @@ const ProfileScreen = ({ navigation }) => {
             style: 'destructive',
             onPress: async () => {
               try {
-                // Clear any navigation state first to prevent BackHandler errors
-                if (navigation.canGoBack()) {
-                  navigation.popToTop();
+                // Perform logout API call first
+                try {
+                  await authApi.logout();
+                } catch (apiError) {
+                  console.warn('Logout API error (continuing anyway):', apiError);
                 }
                 
-                // Small delay to allow navigation cleanup
+                // Small delay to allow API cleanup
                 await new Promise(resolve => setTimeout(resolve, 100));
                 
-                // Perform logout API call
-                await authApi.logout();
-                
-                // Additional delay for cleanup
-                await new Promise(resolve => setTimeout(resolve, 100));
-                
-                // Finally logout
+                // Simply logout - this will clear user context and automatically switch to AuthNavigator
+                // No need to manually navigate since App.js will handle the switch based on user state
                 logout();
               } catch (error) {
-                console.warn('Logout error:', error);
-                // Force logout even if API call fails
+                console.warn('Logout process error:', error);
+                // Force logout even if everything fails
                 logout();
               }
             },

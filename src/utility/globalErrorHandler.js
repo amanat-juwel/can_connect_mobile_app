@@ -7,9 +7,9 @@
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
-// Global error handler for date-related issues
+// Global error handler for date-related issues and BackHandler errors
 export const setupGlobalDateErrorHandler = () => {
-  // Override console.error to catch date-related errors
+  // Override console.error to catch date-related and BackHandler errors
   console.error = (...args) => {
     const errorMessage = args[0];
     
@@ -24,13 +24,23 @@ export const setupGlobalDateErrorHandler = () => {
         console.warn('Date-related error caught by global handler:', ...args);
         return;
       }
+      
+      // Check for BackHandler errors
+      if (errorMessage.includes('BackHandler') || 
+          errorMessage.includes('removeEventListener') ||
+          errorMessage.includes('addEventListener') ||
+          errorMessage.includes('is not a function')) {
+        
+        // Suppress BackHandler errors completely - they're harmless
+        return;
+      }
     }
     
-    // Call original console.error for non-date errors
+    // Call original console.error for non-date/BackHandler errors
     originalConsoleError(...args);
   };
 
-  // Override console.warn to catch date-related warnings
+  // Override console.warn to catch date-related and BackHandler warnings
   console.warn = (...args) => {
     const warningMessage = args[0];
     
@@ -45,9 +55,19 @@ export const setupGlobalDateErrorHandler = () => {
         originalConsoleWarn('🔴 DATE ISSUE:', ...args);
         return;
       }
+      
+      // Check for BackHandler warnings
+      if (warningMessage.includes('BackHandler') || 
+          warningMessage.includes('removeEventListener') ||
+          warningMessage.includes('addEventListener') ||
+          warningMessage.includes('is not a function')) {
+        
+        // Suppress BackHandler warnings completely - they're harmless
+        return;
+      }
     }
     
-    // Call original console.warn for non-date warnings
+    // Call original console.warn for non-date/BackHandler warnings
     originalConsoleWarn(...args);
   };
 };

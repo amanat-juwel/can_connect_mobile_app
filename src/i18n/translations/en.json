@@ -10,7 +10,7 @@
   "doNotHaveAccountText": "Don't have an account?",
   "createAccountText": "Create Account",
   "noInternetMessage": "No Internet Connection",
-  "idErrorMessage": "Must be a valid Email or Phone Number",
+  "idErrorMessage": "Must be a valid Email",
   "passwordErrorMessage": "Password is required",
   "loginFailedMessage": "Authentication failed",
   "loginUsingPasswordMessage": "Login Using Password",

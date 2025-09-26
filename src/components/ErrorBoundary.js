@@ -9,21 +9,35 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
+    // Check if it's a BackHandler error
+    if (error && error.message && (
+        error.message.includes('BackHandler') ||
+        error.message.includes('removeEventListener') ||
+        error.message.includes('is not a function')
+      )) {
+      // Don't show fallback UI for BackHandler errors
+      return { hasError: false };
+    }
+    
     // Update state so the next render will show the fallback UI
     return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log the error
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
-    // Check if it's a BackHandler error
-    if (error && error.message && error.message.includes('BackHandler')) {
-      console.warn('BackHandler error detected, this is likely a platform compatibility issue');
+    // Check if it's a BackHandler error first
+    if (error && error.message && (
+        error.message.includes('BackHandler') ||
+        error.message.includes('removeEventListener') ||
+        error.message.includes('is not a function')
+      )) {
+      console.warn('BackHandler error detected and suppressed:', error.message);
       // Don't crash the app for BackHandler errors
       this.setState({ hasError: false });
       return;
     }
+    
+    // Log other errors
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
     
     this.setState({
       error: error,

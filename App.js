@@ -8,10 +8,11 @@ import OfflineNotice from './src/components/OfflineNotice';
 import AuthContext from './src/auth/context';
 import authStorage from './src/auth/storage';
 import * as SplashScreen from 'expo-splash-screen';
-import { View } from 'react-native';
+import { View, BackHandler } from 'react-native';
 import 'react-native-get-random-values';
 import ErrorBoundary from './src/components/ErrorBoundary';
 import './src/utility/globalErrorHandler';
+import './src/utility/backHandlerPatch';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -52,9 +53,11 @@ const App = () => {
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <AuthContext.Provider value={{ user, setUser }}>
-        <NavigationContainer theme={navigationTheme}>
-          {user ? <AppNavigator user={user} /> : <AuthNavigator />}
-        </NavigationContainer>
+        <ErrorBoundary>
+          <NavigationContainer theme={navigationTheme}>
+            {user ? <AppNavigator user={user} /> : <AuthNavigator />}
+          </NavigationContainer>
+        </ErrorBoundary>
         <OfflineNotice />
       </AuthContext.Provider>
     </View>
