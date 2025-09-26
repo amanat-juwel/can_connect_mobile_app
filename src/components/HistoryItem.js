@@ -11,7 +11,7 @@ const HistoryItem = ({ id, date, address, status, onPress }) => {
   const getChipColor = () => {
     const colorMap = {
       pending: colors.orange,
-      accepted: colors.primary,
+      accepted: colors.orange,
       cancelled: colors.red,
       completed: colors.darkGreen,
     };

@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   // Header Section
   headerSection: {
     backgroundColor: colors.primary,
-    paddingTop: 60,
+    paddingTop: 0,
     paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
   versionContainer: {
     alignItems: 'center',
     paddingVertical: 20,
+    paddingTop: 60,
     paddingBottom: 40,
   },
   versionText: {

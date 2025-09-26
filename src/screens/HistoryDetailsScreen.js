@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ScrollView, 
+  TouchableOpacity,
+  Dimensions 
+} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { useTranslation } from 'react-i18next';
 import colors from '../constants/colors';
@@ -8,14 +15,51 @@ import useAuth from '../auth/useAuth';
 import userType from '../constants/userType';
 import requestorApi from '../api/requestor';
 import collectorApi from '../api/Collector';
-import { Icon } from 'react-native-elements';
 import routes from '../Navigation/routes';
+
+const { width } = Dimensions.get('window');
 
 const HistoryDetailsScreen = ({ route, navigation }) => {
   const request = route.params?.request;
   const [requestTrail, setRequestTrail] = useState();
   const { t } = useTranslation();
   const { user } = useAuth();
+
+  // Early return if no request data
+  if (!request) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerSection}>
+          <Text style={styles.requestId}>No Request Data</Text>
+        </View>
+      </View>
+    );
+  }
+
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      return dateString;
+    }
+  };
+
+  const formatTime = (timeString) => {
+    try {
+      const [hours, minutes] = timeString.split(':');
+      const hour = parseInt(hours);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour % 12 || 12;
+      const displayMinutes = minutes.padStart(2, '0');
+      return `${displayHour}:${displayMinutes} ${ampm}`;
+    } catch (error) {
+      return timeString;
+    }
+  };
 
   const getRequestTrailData = async (sku) => {
     const result = await requestorApi.getRequestTrail(sku);
@@ -27,7 +71,7 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
   const getChipColor = () => {
     const colorMap = {
       pending: colors.orange,
-      accepted: colors.primary,
+      accepted: colors.orange,
       cancelled: colors.red,
       completed: colors.darkGreen,
     };
@@ -69,288 +113,441 @@ const HistoryDetailsScreen = ({ route, navigation }) => {
 
   const titleText =
     user?.category === userType.REQUESTOR
-      ? t('RequestorHistoryTitleText')
-      : t('CollectorHistoryTitleText');
+      ? t('RequestorHistoryTitleText') || 'Request Details'
+      : t('CollectorHistoryTitleText') || 'Request Details';
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-      <View style={styles.container}>
-        <Text style={styles.textHeader}>{`${titleText} ${request.sku}`}</Text>
-        <View style={styles.statusContainer}>
-          <View style={[styles.chip, { backgroundColor: getChipColor() }]}>
-            <Text style={styles.chipText}>{t(request.status)}</Text>
-          </View>
-        </View>
-        <View style={styles.dateTimeContainer}>
-          <View style={styles.dateContainer}>
-            <View>
-              <Text style={styles.label}>Date</Text>
-              <View style={styles.dateContent}>
-                <Icon
-                  name="calendar-blank-outline"
-                  type="material-community"
-                  size={20}
-                  color="#5D5D5D"
-                  style={styles.icon}
-                />
-                <Text style={styles.date}>
-                  {route.params?.request.preferred_pick_date}
-                </Text>
-              </View>
+    <View style={styles.container}>
+      {/* Header Section */}
+      <View style={styles.headerSection}>
+        <View style={styles.headerContent}>
+          <View style={styles.requestInfo}>
+            <Text style={styles.requestId}>ID# {request.sku}</Text>
+            <View style={[styles.statusChip, { backgroundColor: getChipColor() }]}>
+              <Text style={styles.statusText}>{request.status}</Text>
             </View>
-          </View>
-          <View style={styles.dateContainer}>
-            <View>
-              <Text style={styles.label}>Time</Text>
-              <View style={styles.dateContent}>
-                <Icon
-                  name="clock-outline"
-                  type="material-community"
-                  size={20}
-                  color="#5D5D5D"
-                  style={styles.icon}
-                />
-                <Text style={styles.date}>
-                  {route.params?.request.preferred_pick_time}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('ItemListText')}</Text>
-        </View>
-        <View style={styles.leftAlignedContainer}>
-          {request.items.map((item) => (
-            <View key={item.item_id} style={styles.row}>
-              <MaterialCommunityIcons
-                name="recycle-variant"
-                size={18}
-                color={colors.primary}
-              />
-              <Text
-                style={styles.text}
-              >{`${item.qty} ${item.unit} of ${item.type}`}</Text>
-            </View>
-          ))}
-          {/* {request.is_donation === 1 && (
-            <View style={[styles.row, { marginTop: 10 }]}>
-              <MaterialIcons
-                name="volunteer-activism"
-                size={18}
-                color={colors.primary}
-              />
-              <Text style={styles.text}>{t('DonationText')}</Text>
-            </View>
-          )} */}
-          {request.note?.length > 0 && (
-            <View style={[styles.row, { marginTop: 10 }]}>
-              <MaterialIcons name="note" size={18} color={colors.primary} />
-              <Text style={styles.text}>{request.note}</Text>
-            </View>
-          )}
-        </View>
-        {requestTrail && requestTrail.length > 0 && (
-          <View style={styles.textContainer}>
-            <Text style={styles.headingLabel}>{t('TrackText')}</Text>
-          </View>
-        )}
-        {requestTrail && requestTrail.length > 0 && (
-          <View style={styles.leftAlignedContainer}>
-            {requestTrail.map((item) => (
-              <View key={item.created_at} style={styles.trackRow}>
-                <View style={styles.tractIcon}>
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={18}
-                    color={colors.primary}
-                  />
-                </View>
-
-                <View style={styles.trackTextContainer}>
-                  <Text style={styles.text}>{item.readable_created_time}</Text>
-                  <Text style={styles.text}>{item.text}</Text>
-                </View>
-              </View>
-            ))}
-          </View>
-        )}
-        <View style={styles.textContainer}>
-          <Text style={styles.headingLabel}>{t('ContactDetailsText')}</Text>
-        </View>
-        <View style={styles.leftAlignedContainer}>
-          <View style={styles.row}>
-            <MaterialIcons
-              name="account-circle"
-              size={18}
-              color={colors.black}
-            />
-            <Text
-              style={styles.text}
-            >{`${request.requestor.first_name} ${request.requestor.last_name}`}</Text>
-          </View>
-          <View style={styles.row}>
-            <MaterialIcons name="phone" size={18} color={colors.black} />
-            <Text style={styles.text}>{`${request.requestor.phone}`}</Text>
-          </View>
-          <View style={styles.row}>
-            <MaterialIcons name="email" size={18} color={colors.black} />
-            <Text style={styles.text}>{`${request.requestor.email}`}</Text>
-          </View>
-          <View style={styles.row}>
-            <MaterialIcons name="location-pin" size={18} color={colors.black} />
-            <Text
-              style={styles.text}
-            >{`${request.street_address}, ${request.postal_code}`}</Text>
           </View>
         </View>
       </View>
 
-      {user && user?.category === userType.REQUESTOR ? (
-        <View style={styles.bottomView}>
-          <CustomButton
-            label={t('CancelRequestText')}
-            color={colors.red}
-            onPress={cancelRequest}
-            disabled={request.status === 'cancelled'}
-          />
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Date & Time Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <MaterialIcons name="schedule" size={24} color={colors.primary} />
+            <Text style={styles.cardTitle}>Pickup Schedule</Text>
+          </View>
+          <View style={styles.dateTimeRow}>
+            <View style={styles.dateTimeItem}>
+              <MaterialIcons name="calendar-today" size={18} color={colors.medium} />
+              <Text style={styles.dateTimeLabel}>Date: </Text>
+              <Text style={styles.dateTimeValue}>{formatDate(request.preferred_pick_date)}</Text>
+            </View>
+            <View style={styles.dateTimeItem}>
+              <MaterialIcons name="access-time" size={18} color={colors.medium} />
+              <Text style={styles.dateTimeLabel}>Time: </Text>
+              <Text style={styles.dateTimeValue}>{formatTime(request.preferred_pick_time)}</Text>
+            </View>
+          </View>
         </View>
-      ) : (
-        <View style={styles.bottomView}>
-          <CustomButton
-            label={t('CompleteRequestText')}
-            onPress={completeRequest}
-            disabled={request.status === 'completed'}
-          />
+
+        {/* Items Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <MaterialCommunityIcons name="recycle-variant" size={24} color={colors.primary} />
+            <Text style={styles.cardTitle}>Items to Collect</Text>
+          </View>
+          <View style={styles.itemsList}>
+            {request.items && request.items.length > 0 ? (
+              request.items.map((item, index) => (
+                <View key={item.item_id || index} style={styles.itemRow}>
+                  <View style={styles.itemIcon}>
+                    <MaterialCommunityIcons
+                      name="recycle-variant"
+                      size={16}
+                      color={colors.primary}
+                    />
+                  </View>
+                  <Text style={styles.itemText}>
+                    {item.qty} {item.unit} of {item.type}
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noItemsText}>No items specified</Text>
+            )}
+            {request.note?.length > 0 && (
+              <View style={styles.noteContainer}>
+                <MaterialIcons name="note" size={16} color={colors.medium} />
+                <Text style={styles.noteText}>{request.note}</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* Tracking Timeline */}
+        {requestTrail && requestTrail.length > 0 && (
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <MaterialIcons name="timeline" size={24} color={colors.primary} />
+              <Text style={styles.cardTitle}>Request Timeline</Text>
+            </View>
+            <View style={styles.timeline}>
+              {requestTrail.map((item, index) => (
+                <View key={item.created_at} style={styles.timelineItem}>
+                  <View style={styles.timelineIcon}>
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={20}
+                      color={colors.primary}
+                    />
+                  </View>
+                  <View style={styles.timelineContent}>
+                    <Text style={styles.timelineTime}>{item.readable_created_time}</Text>
+                    <Text style={styles.timelineText}>{item.text}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Contact Details Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <MaterialIcons name="contact-phone" size={24} color={colors.primary} />
+            <Text style={styles.cardTitle}>Contact Details</Text>
+          </View>
+          <View style={styles.contactList}>
+            <View style={styles.contactRow}>
+              <MaterialIcons name="person" size={20} color={colors.medium} />
+              <View style={styles.contactInfo}>
+                <Text style={styles.contactLabel}>Name</Text>
+                <Text style={styles.contactValue}>
+                  {request.requestor.first_name} {request.requestor.last_name}
+                </Text>
+              </View>
+            </View>
+            
+            <View style={styles.contactRow}>
+              <MaterialIcons name="phone" size={20} color={colors.medium} />
+              <View style={styles.contactInfo}>
+                <Text style={styles.contactLabel}>Phone</Text>
+                <Text style={styles.contactValue}>{request.requestor.phone}</Text>
+              </View>
+            </View>
+            
+            <View style={styles.contactRow}>
+              <MaterialIcons name="email" size={20} color={colors.medium} />
+              <View style={styles.contactInfo}>
+                <Text style={styles.contactLabel}>Email</Text>
+                <Text style={styles.contactValue}>{request.requestor.email}</Text>
+              </View>
+            </View>
+            
+            <View style={styles.contactRow}>
+              <MaterialIcons name="location-on" size={20} color={colors.medium} />
+              <View style={styles.contactInfo}>
+                <Text style={styles.contactLabel}>Address</Text>
+                <Text style={styles.contactValue}>
+                  {request.street_address}, {request.postal_code}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Action Button */}
+      {user && user?.category === userType.REQUESTOR && request.status !== 'cancelled' && (
+        <View style={styles.actionSection}>
+          <TouchableOpacity style={styles.cancelButton} onPress={cancelRequest}>
+            <MaterialIcons name="cancel" size={24} color={colors.white} />
+            <Text style={styles.cancelButtonText}>
+              {t('CancelRequestText') || 'Cancel Request'}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
-    </ScrollView>
+      
+      {user && user?.category !== userType.REQUESTOR && request.status !== 'completed' && (
+        <View style={styles.actionSection}>
+          <TouchableOpacity style={styles.completeButton} onPress={completeRequest}>
+            <MaterialIcons name="check-circle" size={24} color={colors.white} />
+            <Text style={styles.completeButtonText}>
+              {t('CompleteRequestText') || 'Complete Request'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-  },
   container: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    padding: 10,
-  },
-  textHeader: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: colors.primary,
-    marginHorizontal: 10,
-  },
-  primaryDescription: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: colors.black,
-    marginTop: 30,
-    marginHorizontal: 10,
-  },
-  secondaryDescription: {
-    textAlign: 'center',
-    fontSize: 16,
-    color: colors.grey,
-    marginTop: 40,
-    marginHorizontal: 20,
-  },
-  bottomView: {
-    marginTop: 20,
-    width: '100%',
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  dateTimeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '90%',
-    marginTop: 20,
-  },
-  dateContainer: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+  },
+  
+  // Header Section
+  headerSection: {
+    backgroundColor: colors.primary,
+    paddingTop: 10,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 10,
-    marginHorizontal: 10,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: '#5D5D5D',
+  headerContent: {
+    alignItems: 'center',
   },
-  dateContent: {
+  requestInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    justifyContent: 'space-between',
+    width: '100%',
   },
-  icon: {
-    marginRight: 10,
+  requestId: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.white,
   },
-  statusContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
+  statusChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
-  chip: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    width: 90,
-    height: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  chipText: {
+  statusText: {
     color: colors.white,
     fontSize: 14,
     fontWeight: '600',
+    textTransform: 'capitalize',
   },
-  textContainer: {
-    alignSelf: 'flex-start',
-    marginTop: 10,
+  
+  // Scroll View
+  scrollView: {
+    flex: 1,
   },
-  headingLabel: {
-    fontSize: 22,
-    fontWeight: '500',
-    marginTop: 10,
-    marginBottom: 5,
-    color: colors.primary,
+  scrollViewContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
   },
-  row: {
+  
+  // Card Styles
+  card: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 12,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.black,
+    marginLeft: 10,
+  },
+  
+  // Date & Time
+  dateTimeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dateTimeItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    padding: 12,
+    marginHorizontal: 4,
+  },
+  dateTimeLabel: {
+    fontSize: 12,
+    color: colors.medium,
+    marginLeft: 6,
+    fontWeight: '500',
+  },
+  dateTimeValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.black,
+    marginLeft: 4,
+  },
+  
+  // Items List
+  itemsList: {
+    marginTop: 8,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  itemIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 167, 90, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  itemText: {
+    fontSize: 16,
+    color: colors.black,
+    flex: 1,
+  },
+  noItemsText: {
+    fontSize: 14,
+    color: colors.medium,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingVertical: 20,
+  },
+  noteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+  },
+  noteText: {
+    fontSize: 14,
+    color: colors.medium,
+    marginLeft: 8,
+    flex: 1,
+    fontStyle: 'italic',
+  },
+  
+  // Timeline
+  timeline: {
+    marginTop: 8,
+  },
+  timelineItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  timelineIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 167, 90, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  timelineContent: {
+    flex: 1,
+    paddingTop: 4,
+  },
+  timelineTime: {
+    fontSize: 12,
+    color: colors.medium,
     marginBottom: 4,
   },
-  text: {
-    marginStart: 8,
-    fontSize: 16,
-    fontWeight: '500',
+  timelineText: {
+    fontSize: 14,
     color: colors.black,
+    lineHeight: 20,
   },
-  leftAlignedContainer: {
-    alignSelf: 'flex-start',
+  
+  // Contact Details
+  contactList: {
+    marginTop: 8,
   },
-  trackRow: {
+  contactRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
-  tractIcon: {
+  contactInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  contactLabel: {
+    fontSize: 12,
+    color: colors.medium,
+    marginBottom: 2,
+  },
+  contactValue: {
+    fontSize: 16,
+    color: colors.black,
+    fontWeight: '500',
+  },
+  
+  // Action Section
+  actionSection: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderTopColor: '#e9ecef',
+  },
+  cancelButton: {
+    backgroundColor: colors.red,
+    borderRadius: 12,
+    paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  trackTextContainer: {
-    marginStart: 8,
-    flexDirection: 'column',
+  cancelButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  completeButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  completeButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
 });
 
