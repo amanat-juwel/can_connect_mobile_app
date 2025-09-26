@@ -5,6 +5,10 @@ import {
   FlatList,
   Text,
   TouchableWithoutFeedback,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+  Dimensions,
 } from 'react-native';
 import routes from '../Navigation/routes';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +19,10 @@ import FilterComponent from '../components/FilterComponent';
 import CollectorHomeItem from '../components/CollectorHomeItem';
 import ToastManager, { Toast } from 'toastify-react-native';
 import LoadingComponent from '../components/LoadingComponent';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import useAuth from '../auth/useAuth';
 
+const { width } = Dimensions.get('window');
 const limit = 5;
 
 const CollectorHomeScreen = ({ navigation, route }) => {
@@ -28,16 +35,28 @@ const CollectorHomeScreen = ({ navigation, route }) => {
     order_by: 'DESC',
   });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
-  const getRequestList = async (payload) => {
-    setLoading(true);
+  const getRequestList = async (payload, isRefresh = false) => {
+    if (isRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
     const result = await commonApi.getRequestList(payload);
     setLoading(false);
+    setRefreshing(false);
     if (result.ok && result.data.success) {
       setRequestList(result.data.data.result);
       setMeta(result.data.data.meta);
     }
+  };
+
+  const onRefresh = () => {
+    getRequestList(payload, true);
   };
 
   useEffect(() => {
@@ -102,57 +121,140 @@ const CollectorHomeScreen = ({ navigation, route }) => {
     }
   }, []);
 
+  const getTotalRequests = () => {
+    return requestList.length;
+  };
+
+  const getPendingRequests = () => {
+    return requestList.filter(item => item.status === 'pending').length;
+  };
+
+  const getAcceptedRequests = () => {
+    return requestList.filter(item => item.status === 'accepted').length;
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <LoadingComponent />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {loading && (
-        <TouchableWithoutFeedback>
-          <LoadingComponent />
-        </TouchableWithoutFeedback>
-      )}
-      <View style={styles.filterContainer}>
-        <FilterComponent applyFilter={applyFilter} includeStatus={false} />
-      </View>
-      <View style={styles.itemContainer}>
-        <ToastManager />
-        <View style={styles.textContainer}>
-          <Text style={styles.pageHeadingLabel}>{t('activeJobsText')}</Text>
+      <ToastManager />
+      
+      {/* Title and Filter Section */}
+      <View style={styles.titleFilterSection}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.sectionTitle}>
+            {t('activeJobsText') || 'Active Jobs'}
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            {requestList.length} {requestList.length === 1 ? 'job' : 'jobs'} available
+          </Text>
         </View>
-        {requestList.length === 0 && !loading ? (
-          <View style={styles.textContainer}>
-            <Text style={styles.headingLabel}>{t('noRequestText')}</Text>
+        <TouchableOpacity 
+          style={[styles.filterButton, showFilters && styles.filterButtonActive]} 
+          onPress={() => setShowFilters(!showFilters)}
+        >
+          <MaterialIcons 
+            name="filter-list" 
+            size={24} 
+            color={showFilters ? colors.white : colors.primary} 
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Filter Section */}
+      {showFilters && (
+        <View style={styles.filterSection}>
+          <FilterComponent applyFilter={applyFilter} includeStatus={false} />
+        </View>
+      )}
+
+      {/* Content Section */}
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
+          />
+        }
+      >
+
+        {/* Jobs List */}
+        {requestList.length === 0 ? (
+          <View style={styles.emptyState}>
+            <MaterialCommunityIcons 
+              name="recycle-variant" 
+              size={80} 
+              color={colors.medium} 
+            />
+            <Text style={styles.emptyStateTitle}>
+              {t('noRequestText') || 'No Jobs Available'}
+            </Text>
+            <Text style={styles.emptyStateSubtitle}>
+              Check back later for new collection requests
+            </Text>
+            <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
+              <MaterialIcons name="refresh" size={20} color={colors.white} />
+              <Text style={styles.refreshButtonText}>Refresh</Text>
+            </TouchableOpacity>
           </View>
         ) : (
-          <FlatList
-            data={requestList}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+          <View style={styles.jobsList}>
+            {requestList.map((item, index) => (
               <CollectorHomeItem
+                key={item.id.toString()}
                 id={item.sku}
                 items={item.items}
                 date={`${item.preferred_pick_date} ${item.preferred_pick_time}`}
                 address={`${item.street_address}, ${item.postal_code}`}
                 onPress={showDetails}
+                status={item.status}
               />
-            )}
-          />
+            ))}
+          </View>
         )}
-      </View>
+      </ScrollView>
+
+      {/* Pagination */}
       {requestList.length !== 0 && (
-        <View style={styles.navigationContainer}>
-          <View style={styles.button}>
-            <CustomButton
-              label={t('previousText')}
-              onPress={handlePrev}
-              disabled={meta?.offset === 0 || loading}
-            />
+        <View style={styles.paginationContainer}>
+          <TouchableOpacity
+            style={[styles.paginationButton, meta?.offset === 0 && styles.paginationButtonDisabled]}
+            onPress={handlePrev}
+            disabled={meta?.offset === 0 || loading}
+          >
+            <MaterialIcons name="chevron-left" size={24} color={meta?.offset === 0 ? colors.medium : colors.primary} />
+            <Text style={[styles.paginationButtonText, meta?.offset === 0 && styles.paginationButtonTextDisabled]}>
+              {t('previousText') || 'Previous'}
+            </Text>
+          </TouchableOpacity>
+          
+          <View style={styles.paginationInfo}>
+            <Text style={styles.paginationText}>
+              Page {Math.floor(meta?.offset / limit) + 1} of {Math.ceil(meta?.total / limit) || 1}
+            </Text>
           </View>
-          <View style={styles.button}>
-            <CustomButton
-              label={t('nextText')}
-              onPress={handleNext}
-              disabled={meta?.has_more !== 1 || loading}
-            />
-          </View>
+          
+          <TouchableOpacity
+            style={[styles.paginationButton, meta?.has_more !== 1 && styles.paginationButtonDisabled]}
+            onPress={handleNext}
+            disabled={meta?.has_more !== 1 || loading}
+          >
+            <Text style={[styles.paginationButtonText, meta?.has_more !== 1 && styles.paginationButtonTextDisabled]}>
+              {t('nextText') || 'Next'}
+            </Text>
+            <MaterialIcons name="chevron-right" size={24} color={meta?.has_more !== 1 ? colors.medium : colors.primary} />
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -162,42 +264,149 @@ const CollectorHomeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 0,
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: colors.white,
+    backgroundColor: '#f8f9fa',
   },
-  filterContainer: {
-    width: '100%',
-  },
-  textContainer: {
-    alignSelf: 'center',
-    marginVertical: 20,
-  },
-  headingLabel: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginTop: 10,
-  },
-  pageHeadingLabel: {
-    fontSize: 22,
-    fontWeight: '800',
-    marginTop: 10,
-  },
-  itemContainer: {
-    flex: 3,
-    width: '100%',
-  },
-  navigationContainer: {
+  
+  // Title and Filter Section
+  titleFilterSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
-    paddingVertical: 10,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
     backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
   },
-  button: {
+  titleContainer: {
     flex: 1,
-    marginHorizontal: 10,
+  },
+  filterButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#f8f9fa',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  filterButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  
+  // Filter Section
+  filterSection: {
+    backgroundColor: colors.white,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+  },
+  
+  // Scroll View
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+  
+  // Section Title (moved to top)
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: 4,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: colors.medium,
+  },
+  
+  // Empty State
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 40,
+  },
+  emptyStateTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyStateSubtitle: {
+    fontSize: 14,
+    color: colors.medium,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  refreshButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  refreshButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  
+  // Jobs List
+  jobsList: {
+    marginTop: 8,
+  },
+  
+  // Pagination
+  paginationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderTopColor: '#e9ecef',
+  },
+  paginationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#f8f9fa',
+  },
+  paginationButtonDisabled: {
+    backgroundColor: '#f8f9fa',
+    opacity: 0.5,
+  },
+  paginationButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary,
+    marginHorizontal: 4,
+  },
+  paginationButtonTextDisabled: {
+    color: colors.medium,
+  },
+  paginationInfo: {
+    alignItems: 'center',
+  },
+  paginationText: {
+    fontSize: 12,
+    color: colors.medium,
   },
 });
 
