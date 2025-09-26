@@ -1,11 +1,23 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Alert, 
+  ScrollView, 
+  TouchableOpacity, 
+  Image,
+  Dimensions 
+} from 'react-native';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
 import colors from '../constants/colors';
 import CustomIconButton from '../components/CustomIconButton';
 import { useTranslation } from 'react-i18next';
 import routes from '../Navigation/routes';
+import { MaterialIcons } from '@expo/vector-icons';
+
+const { width } = Dimensions.get('window');
 
 const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
@@ -68,80 +80,241 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topComponent}>
-        <View style={styles.nameContainer}>
-          <Text
-            style={styles.userName}
-          >{`${user.first_name} ${user.last_name}`}</Text>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Header Section with Profile Picture */}
+      <View style={styles.headerSection}>
+        <View style={styles.profileImageContainer}>
+          <View style={styles.profileImagePlaceholder}>
+            <MaterialIcons name="person" size={60} color={colors.white} />
+          </View>
+          {/* <TouchableOpacity style={styles.editImageButton}>
+            <MaterialIcons name="camera-alt" size={20} color={colors.primary} />
+          </TouchableOpacity> */}
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.emailAndPhone}>{user.email}</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.emailAndPhone}>{user.phone}</Text>
+        
+        <View style={styles.userInfoContainer}>
+          <Text style={styles.userName}>
+            {`${user.first_name} ${user.last_name}`}
+          </Text>
+          <Text style={styles.userEmail}>{user.email}</Text>
+          <Text style={styles.userPhone}>{user.phone}</Text>
         </View>
       </View>
-      <View style={styles.middleComponent}>
-        <CustomIconButton
-          label={t('editProfileText')}
-          onPress={handleEdit}
-          iconName="edit-note"
-          buttonType="top"
-        />
-        <CustomIconButton
-          label={t('notificationText')}
-          onPress={handleNotification}
-          iconName="notifications"
-          buttonType="bottom"
-        />
+
+      {/* Action Cards Section */}
+      <View style={styles.cardsSection}>
+        {/* Edit Profile Card */}
+        <TouchableOpacity style={styles.actionCard} onPress={handleEdit}>
+          <View style={styles.cardIconContainer}>
+            <MaterialIcons name="edit" size={24} color={colors.primary} />
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>{t('editProfileText') || 'Edit Profile'}</Text>
+            <Text style={styles.cardSubtitle}>Update your personal information</Text>
+          </View>
+          <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
+        </TouchableOpacity>
+
+        {/* Notifications Card */}
+        <TouchableOpacity style={styles.actionCard} onPress={handleNotification}>
+          <View style={styles.cardIconContainer}>
+            <MaterialIcons name="notifications" size={24} color={colors.primary} />
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>{t('notificationText') || 'Notifications'}</Text>
+            <Text style={styles.cardSubtitle}>See all notifications</Text>
+          </View>
+          <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
+        </TouchableOpacity>
+
+        {/* Settings Card */}
+        {/* <TouchableOpacity style={styles.actionCard}>
+          <View style={styles.cardIconContainer}>
+            <MaterialIcons name="settings" size={24} color={colors.primary} />
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>Settings</Text>
+            <Text style={styles.cardSubtitle}>App preferences and configuration</Text>
+          </View>
+          <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
+        </TouchableOpacity> */}
+
+        {/* Help & Support Card */}
+        {/* <TouchableOpacity style={styles.actionCard}>
+          <View style={styles.cardIconContainer}>
+            <MaterialIcons name="help" size={24} color={colors.primary} />
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle}>Help & Support</Text>
+            <Text style={styles.cardSubtitle}>Get help and contact support</Text>
+          </View>
+          <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
+        </TouchableOpacity> */}
       </View>
-      <View style={styles.bottomComponent}>
-        <CustomIconButton
-          label={t('logoutText')}
-          onPress={handleLogout}
-          iconName="logout"
-        />
+
+      {/* Logout Section */}
+      <View style={styles.logoutSection}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <MaterialIcons name="logout" size={24} color={colors.red} />
+          <Text style={styles.logoutText}>{t('logoutText') || 'Logout'}</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+
+      {/* App Version */}
+      <View style={styles.versionContainer}>
+        <Text style={styles.versionText}>Version 1.0.0</Text>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    justifyContent: 'space-between',
+    backgroundColor: '#f8f9fa',
+  },
+  
+  // Header Section
+  headerSection: {
     backgroundColor: colors.primary,
+    paddingTop: 60,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
-  nameContainer: {
-    alignSelf: 'center',
-    marginBottom: 4,
+  profileImageContainer: {
+    position: 'relative',
+    marginBottom: 20,
   },
-  textContainer: {
-    alignSelf: 'center',
+  profileImagePlaceholder: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 4,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  editImageButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  userInfoContainer: {
+    alignItems: 'center',
   },
   userName: {
-    fontSize: 26,
-    fontWeight: '500',
+    fontSize: 28,
+    fontWeight: 'bold',
     color: colors.white,
+    marginBottom: 8,
+    textAlign: 'center',
   },
-  emailAndPhone: {
+  userEmail: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  userPhone: {
     fontSize: 14,
-    fontWeight: '500',
-    color: colors.white,
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
   },
-  topComponent: {
+
+  // Cards Section
+  cardsSection: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  actionCard: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(0, 167, 90, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  cardContent: {
     flex: 1,
   },
-  middleComponent: {
-    flex: 3,
-    justifyContent: 'flex-start',
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.black,
+    marginBottom: 4,
   },
-  bottomComponent: {
-    flex: 1,
-    justifyContent: 'flex-end',
+  cardSubtitle: {
+    fontSize: 14,
+    color: colors.medium,
+  },
+
+  // Logout Section
+  logoutSection: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  logoutButton: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.red,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.red,
+    marginLeft: 8,
+  },
+
+  // Version Section
+  versionContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingBottom: 40,
+  },
+  versionText: {
+    fontSize: 12,
+    color: colors.medium,
   },
 });
 
