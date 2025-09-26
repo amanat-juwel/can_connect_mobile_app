@@ -21,23 +21,29 @@ const HistoryItem = ({ id, date, address, status, onPress }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(id)}>
       <View style={styles.historyContainer}>
-        <View style={styles.row}>
-          <MaterialIcons name="tag" size={16} color={colors.black} />
-          <Text style={styles.label}>{`${id}`}</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.idContainer}>
+            <MaterialIcons name="tag" size={16} color={colors.primary} />
+            <Text style={styles.label}>{`#${id}`}</Text>
+          </View>
+          <View style={[styles.chip, { backgroundColor: getChipColor() }]}>
+            <Text style={styles.chipText}>{t(status)}</Text>
+          </View>
         </View>
-        <View style={styles.row}>
-          <MaterialIcons name="calendar-today" size={12} color={colors.black} />
-          <Text style={styles.date}>{formatDate(date)}</Text>
+        
+        <View style={styles.infoRow}>
+          <MaterialIcons name="calendar-today" size={16} color={colors.medium} />
+          <Text style={styles.infoText}>{formatDate(date)}</Text>
         </View>
-        <View style={styles.row}>
-          <MaterialIcons name="location-pin" size={12} color={colors.black} />
-          <Text style={styles.date}>{address}</Text>
+        
+        <View style={styles.infoRow}>
+          <MaterialIcons name="location-pin" size={16} color={colors.medium} />
+          <Text style={styles.infoText} numberOfLines={2}>{address}</Text>
         </View>
       </View>
-      <View style={styles.statusContainer}>
-        <View style={[styles.chip, { backgroundColor: getChipColor() }]}>
-          <Text style={styles.chipText}>{t(status)}</Text>
-        </View>
+      
+      <View style={styles.arrowContainer}>
+        <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
       </View>
     </TouchableOpacity>
   );
@@ -47,53 +53,67 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
     backgroundColor: colors.white,
-    borderColor: colors.primary,
-    borderWidth: 1,
-    borderRadius: 8,
-    marginTop: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  label: {
-    marginStart: 8,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  date: {
-    marginStart: 8,
-    fontSize: 12,
-    color: colors.grey,
-  },
-  iconContainer: {
-    marginRight: 10,
+    borderRadius: 12,
+    marginBottom: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   historyContainer: {
     flex: 1,
-    paddingRight: 15,
+    paddingRight: 12,
   },
-  statusContainer: {
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  idContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  label: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.black,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  infoText: {
+    marginLeft: 12,
+    fontSize: 14,
+    color: colors.grey,
+    flex: 1,
+    lineHeight: 20,
+  },
+  arrowContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   chip: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    width: 90,
-    height: 35,
-    justifyContent: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    minWidth: 80,
     alignItems: 'center',
   },
   chipText: {
     color: colors.white,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
+    textTransform: 'capitalize',
   },
 });
 
