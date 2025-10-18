@@ -2,9 +2,9 @@
   "expo": {
     "name": "can-connect",
     "slug": "can-connect",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/cc-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splashScreen.png",
@@ -16,11 +16,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.amanatjuwel.canconnect",
+      "versionCode": 3,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/images/cc-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.amanatjuwel.canconnect"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +32,6 @@
         "projectId": "f0087393-37bd-4ffc-8a57-bf8bc5a8e7d7"
       }
     },
-    "sdkVersion": "53.0.0"
+    "sdkVersion": "54.0.0"
   }
 }

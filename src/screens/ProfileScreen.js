@@ -15,6 +15,7 @@ import colors from '../constants/colors';
 import CustomIconButton from '../components/CustomIconButton';
 import { useTranslation } from 'react-i18next';
 import { MaterialIcons } from '@expo/vector-icons';
+import routes from '../Navigation/routes';
 
 const { width } = Dimensions.get('window');
 
