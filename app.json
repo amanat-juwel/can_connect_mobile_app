@@ -11,9 +11,15 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.amanatjuwel.canconnect",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.amanatjuwel.canconnect",
@@ -26,7 +32,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-secure-store"],
+    "plugins": [
+      "expo-secure-store"
+    ],
     "extra": {
       "eas": {
         "projectId": "f0087393-37bd-4ffc-8a57-bf8bc5a8e7d7"

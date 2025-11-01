@@ -26,10 +26,10 @@ const validationSchema = Yup.object().shape({
     then: (schema) => schema.required(),
     otherwise: (schema) => schema,
   }),
-  state: Yup.object().required(),
-  city: Yup.object().required(),
-  postal_code: Yup.string().required(),
-  street_address: Yup.string().required(),
+  //state: Yup.object().required(),
+  //city: Yup.object().required(),
+  //postal_code: Yup.string(),
+  //street_address: Yup.string().required(),
 });
 
 const EditProfileScreen = () => {
@@ -166,17 +166,17 @@ const EditProfileScreen = () => {
                 label={t('cityPickerLabel')}
               /> */}
 
-              <CustomFormField
+              {/* <CustomFormField
                 name="postal_code"
                 placeholder={t('postalCodeText')}
                 errorMessage={t('postalCodeErrorMessage')}
-              />
+              /> */}
 
-              {/* <CustomFormField
+              <CustomFormField
                 name="street_address"
                 placeholder={t('streetAddressText')}
                 errorMessage={t('streetAddressErrorMessage')}
-              /> */}
+              />
 
               {/* <CustomGoogleAutoCompleteFormField
                 name="street_address"

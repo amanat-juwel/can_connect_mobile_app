@@ -1,13 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import routes from './routes';
-import RecycleScreen from '../screens/RecycleScreen';
-import PickupAppointmentScreen from '../screens/PickupAppointmentScreen';
-import DashboardScreen from '../screens/DashboardScreen';
-import NotificationScreen from '../screens/NotificationScreen';
 import { HeaderWhiteBackButton } from './HeaderWhiteBackButton';
 import colors from '../constants/colors';
 import { useTranslation } from 'react-i18next';
-import RequestorHomeScreen from '../screens/RequestorHomeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import HistoryDetailsScreen from '../screens/HistoryDetailsScreen';
 

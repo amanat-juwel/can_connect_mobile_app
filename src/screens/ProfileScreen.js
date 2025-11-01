@@ -76,6 +76,51 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(routes.NOTIFICATION_SCREEN);
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      // Show confirmation dialog
+      Alert.alert(
+        t('deleteAccountText') || 'Delete Account',
+        t('deleteAccountConfirmationText') || 'Are you sure you want to delete your account? This action cannot be undone.',
+        [
+          {
+            text: t('cancelText') || 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: t('deleteAccountText') || 'Delete Account',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                // Perform delete account API call first
+                try {
+                  await authApi.deleteAccount();
+                } catch (apiError) {
+                  console.warn('Delete account API error (continuing anyway):', apiError);
+                }
+                
+                // Small delay to allow API cleanup
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Simply logout - this will clear user context and automatically switch to AuthNavigator
+                // No need to manually navigate since App.js will handle the switch based on user state
+                logout();
+              } catch (error) {
+                console.warn('Delete account process error:', error);
+                // Force logout even if everything fails
+                logout();
+              }
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.warn('Delete account error:', error);
+      // Fallback logout
+      logout();
+    }
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header Section with Profile Picture */}
@@ -147,6 +192,14 @@ const ProfileScreen = ({ navigation }) => {
           </View>
           <MaterialIcons name="chevron-right" size={24} color={colors.medium} />
         </TouchableOpacity> */}
+      </View>
+
+      {/* Delete Account Section */}
+      <View style={styles.logoutSection}>
+        <TouchableOpacity style={styles.deleteAccountButton} onPress={handleDeleteAccount}>
+          <MaterialIcons name="delete-forever" size={24} color={colors.red} />
+          <Text style={styles.deleteAccountText}>{t('deleteAccountText') || 'Delete Account'}</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Logout Section */}
@@ -297,6 +350,30 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   logoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.red,
+    marginLeft: 8,
+  },
+  deleteAccountButton: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.red,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  deleteAccountText: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.red,

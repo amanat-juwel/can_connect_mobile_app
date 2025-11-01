@@ -6,6 +6,7 @@ const logoutEndpoint = '/logout';
 const requestOtpEndpoint = '/otp-request';
 const otpLoginEndpoint = '/otp-login';
 const forgotPasswordEndpoint = '/forgot-password';
+const deleteAccountEndpoint = '/delete-account';
 
 const login = (id, password) => {
   const idType = isEmail(id) ? 'email' : 'phone';
@@ -20,6 +21,10 @@ const login = (id, password) => {
 
 const logout = () => {
   return client.post(logoutEndpoint);
+};
+
+const deleteAccount = () => {
+  return client.post(deleteAccountEndpoint);
 };
 
 const requestOtp = (phone = '', email = '') => {
@@ -52,6 +57,7 @@ export default {
   login,
   loginByOtp,
   logout,
+  deleteAccount,
   requestOtp,
   requestForgotPassword,
 };

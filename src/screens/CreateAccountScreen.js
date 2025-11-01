@@ -35,14 +35,15 @@ const validationSchema = Yup.object().shape({
   last_name: Yup.string().required(),
   email: Yup.string().email().required(),
   phone: Yup.string()
-    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/)
-    .required(),
+    .matches(/^(\+?\d{1,3}[- ]?)?\d{10}$/),
   password: Yup.string().required(),
-  c_password: Yup.string().required(),
+  c_password: Yup.string()
+    .required()
+    .oneOf([Yup.ref('password')], 'Passwords must match'),
   // state: Yup.object().required(),
   // city: Yup.object().required(),
-  postal_code: Yup.string().required(),
-  street_address: Yup.string().required(),
+  //postal_code: Yup.string().required(),
+  //street_address: Yup.string().required(),
 });
 
 const initialFormValues = {
@@ -54,8 +55,8 @@ const initialFormValues = {
   c_password: '',
   state: null,
   city: null,
-  postal_code: null,
-  street_address: '',
+  //postal_code: null,
+  //street_address: '',
 };
 
 const CreateAccountScreen = () => {
@@ -63,7 +64,7 @@ const CreateAccountScreen = () => {
   const navigation = useNavigation();
 
   const [registrationFailed, setRegistrationFailed] = useState();
-  const [userType, setUserType] = useState(userTypes.COLLECTOR);
+  const [userType, setUserType] = useState(userTypes.REQUESTOR);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [errorMessage, setErrorMessage] = useState();
@@ -132,7 +133,7 @@ const CreateAccountScreen = () => {
     if (!requestOtpResult.ok || !requestOtpResult.data.success)
       return setRegistrationFailed(true);
     setRegistrationFailed(false);
-    navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
+    navigation.navigate(routes.OTP_SCREEN, { id: payload.email });
   };
 
   const showTermsAndConditions = () => {
@@ -231,11 +232,11 @@ const CreateAccountScreen = () => {
               label={t('cityPickerLabel')}
             /> */}
 
-            <CustomFormField
+            {/* <CustomFormField
               name="postal_code"
               placeholder={t('postalCodeText')}
               errorMessage={t('postalCodeErrorMessage')}
-            />
+            /> */}
 
             {/* <CustomFormField
               name="street_address"
@@ -258,19 +259,18 @@ const CreateAccountScreen = () => {
             >
               <View style={{ width: '50%', paddingEnd: 4 }}>
                 <CustomCheckBox
-                  title={t('collectorText')}
-                  isChecked={userType === userTypes.COLLECTOR}
-                  onPress={handleUserType}
-                />
-              </View>
-              <View style={{ width: '50%', paddingEnd: 4 }}>
-                <CustomCheckBox
                   title={t('requestorText')}
                   isChecked={userType === userTypes.REQUESTOR}
                   onPress={handleUserType}
                 />
               </View>
-            </View>
+              <View style={{ width: '50%', paddingEnd: 4 }}>
+                <CustomCheckBox
+                  title={t('collectorText')}
+                  isChecked={userType === userTypes.COLLECTOR}
+                  onPress={handleUserType}
+                />
+              </View>            </View>
             <CustomErrorMessage
               error={errorMessage}
               visible={registrationFailed}

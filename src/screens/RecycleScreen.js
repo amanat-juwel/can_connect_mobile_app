@@ -197,14 +197,14 @@ const RecycleScreen = ({ navigation, route }) => {
             />
           </View>
         </View> */}
-        <View>
+        {/* <View>
           <CustomFormField
             name="postal_code"
             placeholder={t('postalCodeText')}
             errorMessage={t('postalCodeErrorMessage')}
             height={40}
           />
-        </View>
+        </View> */}
         <View>
           <CustomFormField
             name="street_address"

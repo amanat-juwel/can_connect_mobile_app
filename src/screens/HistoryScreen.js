@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import routes from '../Navigation/routes';
 import { useTranslation } from 'react-i18next';
+import { useFocusEffect } from '@react-navigation/native';
 import colors from '../constants/colors';
 import commonApi from '../api/common';
 import HistoryItem from '../components/HistoryItem';
@@ -37,8 +38,14 @@ const HistoryScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const payloadRef = useRef(payload);
 
   const { t } = useTranslation();
+  
+  // Keep ref updated with latest payload
+  useEffect(() => {
+    payloadRef.current = payload;
+  }, [payload]);
 
   const getHistory = async (payload, isRefresh = false) => {
     if (isRefresh) {
@@ -60,10 +67,6 @@ const HistoryScreen = ({ navigation, route }) => {
     setPayload(refreshPayload);
     getHistory(refreshPayload, true);
   };
-
-  useEffect(() => {
-    getHistory(payload);
-  }, []);
 
   const handleNext = () => {
     if (meta?.has_more !== 1) {
@@ -119,6 +122,12 @@ const HistoryScreen = ({ navigation, route }) => {
       Toast.success(t('completeRequestSuccessText'));
     }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getHistory(payloadRef.current);
+    }, [])
+  );
 
   const getStatusCounts = () => {
     const counts = history.reduce((acc, item) => {
@@ -209,7 +218,7 @@ const HistoryScreen = ({ navigation, route }) => {
             </Text>
             <TouchableOpacity 
               style={styles.createRequestButton}
-              onPress={() => navigation.navigate(routes.RECYCLE_SCREEN)}
+              onPress={() => navigation.navigate(routes.HOME)}
             >
               <MaterialIcons name="add" size={20} color={colors.white} />
               <Text style={styles.createRequestText}>Create Request</Text>
@@ -223,7 +232,7 @@ const HistoryScreen = ({ navigation, route }) => {
               <HistoryItem
                 id={item.sku}
                 date={`${item.preferred_pick_date} ${item.preferred_pick_time}`}
-                address={`${item.street_address}, ${item.postal_code}`}
+                address={`${item.street_address}`}
                 status={item.status}
                 onPress={showDetails}
               />
