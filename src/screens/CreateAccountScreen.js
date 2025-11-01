@@ -270,7 +270,8 @@ const CreateAccountScreen = () => {
                   isChecked={userType === userTypes.COLLECTOR}
                   onPress={handleUserType}
                 />
-              </View>            </View>
+              </View>
+            </View>
             <CustomErrorMessage
               error={errorMessage}
               visible={registrationFailed}
