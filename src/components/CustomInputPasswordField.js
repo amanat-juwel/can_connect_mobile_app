@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 15,
+    color: colors.black,
   },
   iconContainer: {
     padding: 10,
