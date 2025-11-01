@@ -26,7 +26,7 @@ import publicApi from '../api/public';
 import validationSchema from '../utility/validation.helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import CustomCheckBox from '../components/CustomCheckBox';
-//import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 
 const RecycleScreen = ({ navigation, route }) => {
@@ -206,7 +206,7 @@ const RecycleScreen = ({ navigation, route }) => {
           />
         </View> */}
         <View>
-          <CustomFormField
+          <CustomGoogleAutoCompleteFormField
             name="street_address"
             placeholder={t('streetAddressText')}
             errorMessage={t('streetAddressErrorMessage')}

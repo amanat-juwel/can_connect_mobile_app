@@ -1,15 +1,15 @@
-import React from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
 import colors from '../constants/colors';
 
-// You should move this to an environment variable or config file
+// Google API key
 const GOOGLE_API_KEY = 'AIzaSyC6uJ4YFx6pq0vE8FWm6uJyDYAoXQi0XkI';
+const PLACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
 const CustomGoogleAutoCompleteField = ({
   placeholder,
   onChangeText,
-  value,
+  value = '',
   onBlur,
   errorMessage,
   height = 50,
@@ -17,149 +17,150 @@ const CustomGoogleAutoCompleteField = ({
   marginBottom = 15,
   marginTop = 0,
 }) => {
-  const ref = React.useRef();
-  const [apiFailed, setApiFailed] = React.useState(false);
+  const [inputValue, setInputValue] = useState(value);
+  const [predictions, setPredictions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const timeoutRef = React.useRef(null);
 
-  const handlePlaceSelect = React.useCallback(
-    (data, details = null) => {
-      try {
-        if (data && data.description) {
-          onChangeText(data.description);
-          if (onBlur) onBlur();
-        }
-      } catch (error) {
-        console.warn('Error handling place selection:', error);
-        // Fallback to manual entry
-        if (data && data.description) {
-          onChangeText(data.description);
-        }
-      }
-    },
-    [onChangeText, onBlur],
-  );
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  const handleError = React.useCallback((error) => {
-    console.warn('Google Places API Error:', error);
-    // Switch to fallback text input
-    setApiFailed(true);
-  }, []);
+  const fetchPredictions = useCallback(async (query) => {
+    if (!query || query.length < 2) {
+      setPredictions([]);
+      setShowSuggestions(false);
+      return;
+    }
 
-  const handleFallbackChange = React.useCallback((text) => {
-    onChangeText(text);
-  }, [onChangeText]);
-
-  React.useEffect(() => {
     try {
-      if (ref.current && value && !apiFailed) {
-        ref.current.setAddressText(value);
+      const response = await fetch(
+        `${PLACES_API_BASE_URL}?input=${encodeURIComponent(query)}&key=${GOOGLE_API_KEY}&language=en&components=country:au`
+      );
+      const data = await response.json();
+
+      if (data.status === 'OK' && data.predictions) {
+        setPredictions(data.predictions);
+        setShowSuggestions(true);
+      } else {
+        setPredictions([]);
+        setShowSuggestions(false);
       }
     } catch (error) {
-      console.warn('Error setting address text:', error);
-      setApiFailed(true);
+      console.warn('Google Places API Error:', error);
+      setPredictions([]);
+      setShowSuggestions(false);
     }
-  }, [value, apiFailed]);
+  }, []);
 
-  // Fallback to regular text input if Google Places API fails
-  if (apiFailed) {
-    return (
-      <View style={[styles.container, { height, width, marginBottom, marginTop }]}>
+  const handleTextChange = useCallback((text) => {
+    setInputValue(text);
+    onChangeText(text);
+    
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      fetchPredictions(text);
+    }, 300);
+  }, [onChangeText, fetchPredictions]);
+
+  const handleSelectPrediction = useCallback((prediction) => {
+    const address = prediction.description;
+    setInputValue(address);
+    onChangeText(address);
+    setShowSuggestions(false);
+    setPredictions([]);
+    if (onBlur) onBlur();
+  }, [onChangeText, onBlur]);
+
+  const handleBlur = useCallback(() => {
+    // Delay hiding suggestions to allow tapping on them
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+    if (onBlur) onBlur();
+  }, [onBlur]);
+
+  return (
+    <View style={[styles.container, { marginBottom, marginTop }]}>
+      <View style={[styles.inputContainer, { height }]}>
         <TextInput
-          style={styles.fallbackInput}
-          placeholder={placeholder || 'Enter address manually'}
-          value={value}
-          onChangeText={handleFallbackChange}
-          onBlur={onBlur}
+          style={[styles.input, { height }]}
+          placeholder={placeholder || 'Enter address'}
+          value={inputValue}
+          onChangeText={handleTextChange}
+          onBlur={handleBlur}
+          onFocus={() => {
+            if (predictions.length > 0) {
+              setShowSuggestions(true);
+            }
+          }}
           placeholderTextColor={colors.medium || '#999'}
         />
       </View>
-    );
-  }
-
-  return (
-    <View style={[styles.container, { height, width, marginBottom, marginTop }]}>
-      <GooglePlacesAutocomplete
-        ref={ref}
-        placeholder={placeholder || 'Enter address'}
-        minLength={2}
-        debounce={300}
-        disableScroll={false}
-        fetchDetails={false}
-        onPress={handlePlaceSelect}
-        onNotFound={() => console.log('No results found')}
-        onFail={handleError}
-        query={{
-          key: GOOGLE_API_KEY,
-          language: 'en',
-        }}
-        textInputProps={{
-          onBlur,
-          placeholderTextColor: colors.medium || '#999',
-          style: styles.input,
-        }}
-        enablePoweredByContainer={false}
-        styles={{
-          container: styles.autoCompleteContainer,
-          textInput: styles.textInput,
-          listView: styles.listView,
-        }}
-        keyboardShouldPersistTaps="handled"
-        listViewDisplayed="auto"
-        renderRow={(data) => (
-          <View style={styles.row}>
-            <Text style={styles.description}>
-              {data.description}
-            </Text>
-          </View>
-        )}
-      />
+      {showSuggestions && predictions.length > 0 && (
+        <View style={styles.listContainer}>
+          {predictions.slice(0, 5).map((item, index) => (
+            <TouchableOpacity
+              key={item.place_id || index}
+              style={styles.predictionItem}
+              onPress={() => handleSelectPrediction(item)}
+            >
+              <Text style={styles.predictionText}>{item.description}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
+    zIndex: 1,
+  },
+  inputContainer: {
     borderColor: colors.primary,
     borderWidth: 1,
     borderRadius: 10,
-    zIndex: 1,
-  },
-  autoCompleteContainer: {
-    flex: 0,
-  },
-  textInput: {
-    height: '100%',
-    paddingLeft: 20,
-    borderRadius: 10,
-    color: '#000',
-    fontSize: 16,
-    backgroundColor: 'transparent',
+    overflow: 'hidden',
   },
   input: {
-    height: 50,
-    paddingLeft: 20,
-    borderRadius: 10,
+    flex: 1,
+    paddingHorizontal: 20,
     color: '#000',
     fontSize: 16,
   },
-  listView: {
+  listContainer: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
     backgroundColor: 'white',
-    borderRadius: 5,
-    elevation: 3,
-    zIndex: 999,
-  },
-  row: {
-    padding: 13,
-    height: 44,
-  },
-  description: {
-    fontSize: 14,
-  },
-  fallbackInput: {
-    height: 50,
-    paddingLeft: 20,
     borderRadius: 10,
+    marginTop: 4,
+    maxHeight: 200,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,
+    overflow: 'hidden',
+  },
+  predictionItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  predictionText: {
+    fontSize: 14,
     color: '#000',
-    fontSize: 16,
   },
 });
 

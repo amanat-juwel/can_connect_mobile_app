@@ -28,7 +28,7 @@ const CustomGoogleAutoCompleteFormField = ({
       <CustomGoogleAutoCompleteField
         onBlur={handleBlur}
         onChangeText={handleChange}
-        value={values[name]}
+        value={values[name] || ''}
         {...otherProps}
       />
       <CustomErrorMessage

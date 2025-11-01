@@ -15,7 +15,7 @@ import publicApi from '../api/public';
 import registrationApi from '../api/registration';
 import useAuth from '../auth/useAuth';
 import routes from '../Navigation/routes';
-//import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
+import CustomGoogleAutoCompleteFormField from '../components/forms/CustomGoogleAutoCompleteFormField';
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required(),
@@ -65,9 +65,16 @@ const EditProfileScreen = () => {
     const payload = {
       ...otherFields,
       phone: user.phone,
-      state_id: state.id,
-      city_id: city.id,
     };
+    
+    // Only add state_id and city_id if they exist
+    if (state && state.id) {
+      payload.state_id = state.id;
+    }
+    if (city && city.id) {
+      payload.city_id = city.id;
+    }
+    
     if (password && c_password) {
       payload.password = password;
       payload.c_password = c_password;
@@ -172,17 +179,17 @@ const EditProfileScreen = () => {
                 errorMessage={t('postalCodeErrorMessage')}
               /> */}
 
-              <CustomFormField
-                name="street_address"
-                placeholder={t('streetAddressText')}
-                errorMessage={t('streetAddressErrorMessage')}
-              />
-
-              {/* <CustomGoogleAutoCompleteFormField
+              {/* <CustomFormField
                 name="street_address"
                 placeholder={t('streetAddressText')}
                 errorMessage={t('streetAddressErrorMessage')}
               /> */}
+
+              <CustomGoogleAutoCompleteFormField
+                name="street_address"
+                placeholder={t('streetAddressText')}
+                errorMessage={t('streetAddressErrorMessage')}
+              />
 
               <CustomErrorMessage
                 error={t('profileUpdateFailedMessage')}
