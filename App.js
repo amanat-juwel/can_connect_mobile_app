@@ -13,6 +13,7 @@ import 'react-native-get-random-values';
 import ErrorBoundary from './src/components/ErrorBoundary';
 import './src/utility/globalErrorHandler';
 import './src/utility/backHandlerPatch';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -51,16 +52,18 @@ const App = () => {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <AuthContext.Provider value={{ user, setUser }}>
-        <ErrorBoundary>
-          <NavigationContainer theme={navigationTheme}>
-            {user ? <AppNavigator user={user} /> : <AuthNavigator />}
-          </NavigationContainer>
-        </ErrorBoundary>
-        <OfflineNotice />
-      </AuthContext.Provider>
-    </View>
+    <SafeAreaProvider>
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <AuthContext.Provider value={{ user, setUser }}>
+          <ErrorBoundary>
+            <NavigationContainer theme={navigationTheme}>
+              {user ? <AppNavigator user={user} /> : <AuthNavigator />}
+            </NavigationContainer>
+          </ErrorBoundary>
+          <OfflineNotice />
+        </AuthContext.Provider>
+      </View>
+    </SafeAreaProvider>
   );
 };
 

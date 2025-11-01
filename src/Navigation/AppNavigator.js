@@ -4,7 +4,7 @@ import routes from './routes';
 import HistoryScreen from '../screens/HistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Text } from 'react-native';
+import { Text, Platform } from 'react-native';
 import colors from '../constants/colors';
 import DashboardScreen from '../screens/DashboardScreen';
 import RequestorNavigator from './RequestorNavigator';
@@ -15,10 +15,12 @@ import { useTranslation } from 'react-i18next';
 import { HeaderNotificationIcon } from './HeaderNotificationIcon';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HistoryNavigator from './HistoryNavigator';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 const AppNavigator = ({ user }) => {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -40,8 +42,8 @@ const AppNavigator = ({ user }) => {
           tabBarStyle: {
             backgroundColor:
               route.name === routes.PROFILE ? colors.primary : colors.white,
-            height: 60,
-            paddingBottom: 5,
+            height: 60 + insets.bottom,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : insets.bottom + 5,
           },
           tabBarActiveTintColor:
             route.name === routes.PROFILE ? colors.white : colors.primary,
