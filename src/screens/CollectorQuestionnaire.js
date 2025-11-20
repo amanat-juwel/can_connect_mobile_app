@@ -106,7 +106,7 @@ const CollectorQuestionnaire = ({ route }) => {
     if (!requestOtpResult.ok || !requestOtpResult.data.success)
       return setRegistrationFailed(true);
     setRegistrationFailed(false);
-    navigation.navigate(routes.OTP_SCREEN, { id: payload.phone });
+    navigation.navigate(routes.OTP_SCREEN, { id: payload.email });
   };
 
   const handleAnswer = (id, newAnswer) => {
