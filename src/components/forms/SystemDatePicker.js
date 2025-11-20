@@ -24,14 +24,21 @@ const SystemDatePicker = ({
 
   const { setFieldValue, errors, touched, values } = useFormikContext();
 
-  // Safe display value
   const getDisplayValue = () => {
     try {
       const value = values[name];
-      if (value && value !== '' && typeof value === 'string') {
-        return value;
+      if (!value || value === '' || typeof value !== 'string') {
+        return label;
       }
-      return label;
+
+      if (mode === 'date') {
+        const [year, month, day] = value.split('-');
+        if (year && month && day) {
+          return `${day}/${month}/${year}`;
+        }
+      }
+
+      return value;
     } catch (error) {
       return label;
     }

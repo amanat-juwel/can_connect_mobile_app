@@ -74,7 +74,7 @@ const FilterComponent = ({ applyFilter, includeStatus = true }) => {
           <MaterialIcons
             name={showFilter ? 'filter-list-off' : 'filter-list'}
             size={16}
-            color={colors.blue}
+            color={colors.darkGreen}
           />
           <CustomLinkButton
             text={showFilter ? t('HideFilterText') : t('ApplyFilterText')}
@@ -105,7 +105,7 @@ const FilterComponent = ({ applyFilter, includeStatus = true }) => {
               />
             </View>
           </View>
-          <View style={styles.rowContainer}>
+          {/* <View style={styles.rowContainer}>
             <View style={styles.columnLeft}>
               <CustomFormPicker
                 name="state"
@@ -124,16 +124,16 @@ const FilterComponent = ({ applyFilter, includeStatus = true }) => {
                 height={40}
               />
             </View>
-          </View>
+          </View> */}
           <View style={styles.rowContainer}>
-            <View style={styles.columnLeft}>
+            {/* <View style={styles.columnLeft}>
               <CustomFormField
                 name="postal_code"
                 placeholder={t('postalCodeText')}
                 errorMessage={t('postalCodeErrorMessage')}
                 height={40}
               />
-            </View>
+            </View> */}
             <View style={styles.columnRight}>
               {includeStatus && (
                 <CustomFormPicker
